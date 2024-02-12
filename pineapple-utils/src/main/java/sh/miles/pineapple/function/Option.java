@@ -3,6 +3,7 @@ package sh.miles.pineapple.function;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -11,6 +12,12 @@ import java.util.function.Function;
  * @param <E> the entry type
  */
 public sealed class Option<E> permits Option.None, Option.Some {
+
+    public void ifPresent(@NotNull final Consumer<E> consumer) {
+        if (this instanceof Option.Some<E> some) {
+            consumer.accept(some.some);
+        }
+    }
 
     /**
      * Maps the given option to another value if available. Otherwise None is returned

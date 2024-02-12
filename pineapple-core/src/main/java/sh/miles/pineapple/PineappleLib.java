@@ -3,6 +3,7 @@ package sh.miles.pineapple;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.config.adapter.ConfigurationManager;
+import sh.miles.pineapple.gui.manage.GuiManager;
 import sh.miles.pineapple.menu.manage.MenuManager;
 import sh.miles.pineapple.nms.annotations.NMS;
 import sh.miles.pineapple.nms.api.PineappleNMS;
@@ -24,7 +25,7 @@ public final class PineappleLib {
     private final Plugin plugin;
     private PineappleNMS nmsProvider;
     private final ConfigurationManager configurationManager;
-    private final MenuManager menuManager;
+    private final GuiManager guiManager;
 
     /**
      * Creates a new instance of PineappleLib
@@ -39,7 +40,7 @@ public final class PineappleLib {
             this.nmsProvider = NMSLoader.INSTANCE.getPineapple();
         }
         this.configurationManager = new ConfigurationManager();
-        this.menuManager = new MenuManager(plugin);
+        this.guiManager = new GuiManager(plugin);
     }
 
     /**
@@ -51,11 +52,12 @@ public final class PineappleLib {
     }
 
     /**
-     * @return The MenuManager
+     * @return the gui manager
      * @since 1.0.0-SNAPSHOT
      */
-    public static MenuManager getMenuManager() {
-        return instance.menuManager;
+    @NotNull
+    public static GuiManager getGuiManager() {
+        return instance.guiManager;
     }
 
     /**

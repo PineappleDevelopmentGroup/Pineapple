@@ -1,4 +1,4 @@
-package sh.miles.pineapple.menu.manage;
+package sh.miles.pineapple.gui.manage;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -7,6 +7,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import sh.miles.pineapple.menu.manage.MenuManager;
 
 /**
  * Listener implementation medium for Bukkit
@@ -17,27 +18,27 @@ import org.jetbrains.annotations.NotNull;
  * @since 1.0.0-SNAPSHOT
  */
 @ApiStatus.Internal
-class MenuListener implements Listener {
+class GuiListener implements Listener {
 
-    private final MenuManager manager;
+    private final GuiManager manager;
 
-    public MenuListener(MenuManager manager) {
+    public GuiListener(GuiManager manager) {
         this.manager = manager;
     }
 
     @EventHandler
     public void onClick(@NotNull final InventoryClickEvent event) {
-        manager.getMenu(event.getInventory()).ifPresent(menu -> menu.handleClick(event));
+        manager.getGui(event.getInventory()).ifPresent(menu -> menu.handleClick(event));
     }
 
     @EventHandler
     public void onOpen(@NotNull final InventoryOpenEvent event) {
-        manager.getMenu(event.getInventory()).ifPresent(menu -> menu.handleOpen(event));
+        manager.getGui(event.getInventory()).ifPresent(menu -> menu.handleOpen(event));
     }
 
     @EventHandler
     public void onClose(@NotNull final InventoryCloseEvent event) {
-        manager.getMenu(event.getInventory()).ifPresent(menu -> menu.handleClose(event));
+        manager.getGui(event.getInventory()).ifPresent(menu -> menu.handleClose(event));
     }
 
 }
