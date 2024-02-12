@@ -79,8 +79,7 @@ publishing {
     }
 
     repositories {
-        maven {
-            this.url = uri("https://maven.miles.sh/libraries")
+        maven("https://maven.miles.sh/libraries") {
             credentials {
                 this.username = System.getenv("PINEAPPLE_REPOSILITE_USERNAME")
                 this.password = System.getenv("PINEAPPLE_REPOSILITE_PASSWORD")
