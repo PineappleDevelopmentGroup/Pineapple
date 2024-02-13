@@ -4,7 +4,6 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.config.adapter.ConfigurationManager;
 import sh.miles.pineapple.gui.manage.GuiManager;
-import sh.miles.pineapple.menu.manage.MenuManager;
 import sh.miles.pineapple.nms.annotations.NMS;
 import sh.miles.pineapple.nms.api.PineappleNMS;
 import sh.miles.pineapple.nms.loader.NMSLoader;

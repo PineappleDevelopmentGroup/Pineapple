@@ -7,7 +7,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import sh.miles.pineapple.menu.manage.MenuManager;
 
 /**
  * Listener implementation medium for Bukkit
