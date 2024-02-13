@@ -18,10 +18,10 @@ dependencyResolutionManagement {
     }
 }
 
-include("pineapple-utils", "pineapple-nms", "pineapple-nms:api", "pineapple-core")
+include("pineapple-utils", "pineapple-nms", "pineapple-core")
 
 file("pineapple-nms").listFiles()?.forEach { project ->
-    if (project.resolve("build.gradle.kts").exists()) {
-        include(project.name)
+    if (project.resolve("build.gradle.kts").exists()) run {
+        include("pineapple-nms:${project.name}")
     }
 }

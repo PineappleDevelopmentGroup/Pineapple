@@ -10,3 +10,8 @@ dependencies {
     }
 }
 
+tasks.register("upgradeNMS", PineappleNMS::class) {
+    group = "nms"
+    description = "upgrades the NMS version"
+}
+
