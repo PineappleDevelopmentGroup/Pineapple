@@ -21,7 +21,11 @@ import kotlin.io.path.writeText
 open class PineappleNMS : DefaultTask() {
 
     private val illogicalRelocationVersion = mapOf(
-        "1.20.2" to "v1_20_R2", "1.20.3" to "v1_20_R3", "1.20.4" to "v1_20_R3"
+        "1.20" to "v1_20_R1",
+        "1.20.1" to "v1_20_R1",
+        "1.20.2" to "v1_20_R2",
+        "1.20.3" to "v1_20_R3",
+        "1.20.4" to "v1_20_R3"
     )
 
     @get:Input
