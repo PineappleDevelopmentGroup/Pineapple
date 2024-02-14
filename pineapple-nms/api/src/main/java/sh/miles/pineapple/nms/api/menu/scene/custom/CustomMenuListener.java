@@ -9,6 +9,8 @@ import sh.miles.pineapple.nms.api.menu.scene.custom.CustomMenuContext.MergeResul
 
 /**
  * Gives a variety of methods that can be listened to react to Menu changes
+ *
+ * @since 1.0.0-SNAPSHOT
  */
 @ApiStatus.OverrideOnly
 public interface CustomMenuListener {
@@ -21,6 +23,7 @@ public interface CustomMenuListener {
      * @param player  the player
      * @param rawSlot the destination raw slot index
      * @return the given quick move result
+     * @since 1.0.0-SNAPSHOT
      */
     default QuickMoveResult quickMoveItem(@NotNull final CustomMenuContext context, @NotNull final HumanEntity player, final int rawSlot) {
         ItemStack result = new ItemStack(Material.AIR);
@@ -61,6 +64,7 @@ public interface CustomMenuListener {
      * @param context the menu context
      * @param player  the player
      * @return true to continue the session, false to determine the session is invalid and close the menu
+     * @since 1.0.0-SNAPSHOT
      */
     default boolean dictateValidity(@NotNull final CustomMenuContext context, @NotNull final HumanEntity player) {
         return true;
@@ -73,6 +77,7 @@ public interface CustomMenuListener {
      *
      * @param rawSlot the raw slot
      * @return the given custom slot listener
+     * @since 1.0.0-SNAPSHOT
      */
     @NotNull
     default CustomSlotListener getSlotListener(final int rawSlot) {
@@ -80,15 +85,42 @@ public interface CustomMenuListener {
     }
 
 
+    /**
+     * The result of a inventory quick move action
+     *
+     * @param item                    the item being moved
+     * @param shouldCancel            whether or not the quick move should be cancelled
+     * @param shouldDelegateToDefault whether or not to delegate the quick move to the default chest quick move
+     * @since 1.0.0-SNAPSHOT
+     */
     record QuickMoveResult(@NotNull ItemStack item, boolean shouldCancel, boolean shouldDelegateToDefault) {
+        /**
+         * Creates a QuickMoveResult that cancels the quick move
+         *
+         * @return the quick move result
+         * @since 1.0.0-SNAPSHOT
+         */
         public static QuickMoveResult cancel() {
             return new QuickMoveResult(new ItemStack(Material.AIR), true, false);
         }
 
+        /**
+         * Creates a QuickMoveResult that delegates ot the default chest quick move
+         *
+         * @return the quick move result
+         * @since 1.0.0-SNAPSHOT
+         */
         public static QuickMoveResult delegate() {
             return new QuickMoveResult(new ItemStack(Material.AIR), false, true);
         }
 
+        /**
+         * Creates a completed QuickMoveResult with the item as the final item
+         *
+         * @param item the item
+         * @return the quick move result
+         * @since 1.0.0-SNAPSHOT
+         */
         public static QuickMoveResult complete(@NotNull final ItemStack item) {
             return new QuickMoveResult(new ItemStack(item), false, false);
         }

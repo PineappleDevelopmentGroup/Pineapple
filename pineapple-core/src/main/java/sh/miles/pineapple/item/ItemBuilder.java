@@ -39,7 +39,7 @@ import java.util.function.Consumer;
 /**
  * A Useful ItemBuilder that provides a variety of methods used to build ItemStack's easily.
  *
- * @since 1.0.0-SNAPSHOT-SNAPSHOT
+ * @since 1.0.0-SNAPSHOT
  */
 public class ItemBuilder {
 

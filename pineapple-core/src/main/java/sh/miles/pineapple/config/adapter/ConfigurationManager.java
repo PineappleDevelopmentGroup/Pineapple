@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * The ConfigurationManager handles all config creation, loading and TypeAdapters
  *
- * @since 1.0.0-SNAPSHOT-SNAPSHOT
+ * @since 1.0.0-SNAPSHOT
  */
 public class ConfigurationManager {
 
@@ -26,7 +26,7 @@ public class ConfigurationManager {
      * @param target instance of config class
      * @param <T>    config class
      * @return ConfigReloadable instance
-     * @since 1.0.0-SNAPSHOT-SNAPSHOT
+     * @since 1.0.0-SNAPSHOT
      */
     public <T> ReloadableObject<T> createReloadable(File file, T target) {
         return new ReloadableObject<>(file, target);
@@ -37,7 +37,7 @@ public class ConfigurationManager {
      * @param target config class
      * @param <T>    config class
      * @return ConfigReloadable instance
-     * @since 1.0.0-SNAPSHOT-SNAPSHOT
+     * @since 1.0.0-SNAPSHOT
      */
     public <T> ReloadableClass<T> createStaticReloadable(File file, Class<T> target) {
         return new ReloadableClass<>(file, target);
@@ -50,7 +50,7 @@ public class ConfigurationManager {
      * @param <S>   serialized type
      * @param <R>   runtime class
      * @return TypeAdapterString instance
-     * @since 1.0.0-SNAPSHOT-SNAPSHOT
+     * @since 1.0.0-SNAPSHOT
      */
     public <S, R> TypeAdapterString<S, R> getStringAdapter(Class<R> clazz) {
         return getStringAdapter(new ConfigType<>(clazz));
@@ -63,7 +63,7 @@ public class ConfigurationManager {
      * @param <S>  serialized type
      * @param <R>  runtime class
      * @return TypeAdapterString instance
-     * @since 1.0.0-SNAPSHOT-SNAPSHOT
+     * @since 1.0.0-SNAPSHOT
      */
     @SuppressWarnings("unchecked")
     public <S, R> TypeAdapterString<S, R> getStringAdapter(ConfigType<R> type) {
@@ -83,7 +83,7 @@ public class ConfigurationManager {
      * @param <S>   serialized type
      * @param <R>   runtime class
      * @return TypeAdapter instance
-     * @since 1.0.0-SNAPSHOT-SNAPSHOT
+     * @since 1.0.0-SNAPSHOT
      */
     public <S, R> TypeAdapter<S, R> getAdapter(Class<R> clazz) {
         return getAdapter(new ConfigType<>(clazz));
@@ -96,7 +96,7 @@ public class ConfigurationManager {
      * @param <S>  serialized type
      * @param <R>  runtime class
      * @return TypeAdapter instance
-     * @since 1.0.0-SNAPSHOT-SNAPSHOT
+     * @since 1.0.0-SNAPSHOT
      */
     @SuppressWarnings("unchecked")
     public <S, R> TypeAdapter<S, R> getAdapter(ConfigType<R> type) {

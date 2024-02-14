@@ -7,6 +7,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Provides a variety of methods that can be listened to when dealing with Custom Menu Slots
+ *
+ * @since 1.0.0-SNAPSHOT
  */
 @ApiStatus.OverrideOnly
 public interface CustomSlotListener {
@@ -19,6 +21,7 @@ public interface CustomSlotListener {
      *
      * @param menuContext the menu context
      * @param slotContext the slot context
+     * @since 1.0.0-SNAPSHOT
      */
     default void onSlotChange(@NotNull final CustomMenuContext menuContext, @NotNull final CustomMenuSlot slotContext) {
     }
@@ -30,6 +33,7 @@ public interface CustomSlotListener {
      * @param menuContext the menu context
      * @param slotContext the slot context
      * @param item        the given item that is going to be checked
+     * @since 1.0.0-SNAPSHOT
      */
     default void onCheckAchievements(@NotNull final CustomMenuContext menuContext, @NotNull final CustomMenuSlot slotContext, @NotNull final ItemStack item) {
     }
@@ -42,6 +46,7 @@ public interface CustomSlotListener {
      * @param player      the player who is taking the item
      * @param item        the item being taken
      * @return whether or not to allow the event to go through
+     * @since 1.0.0-SNAPSHOT
      */
     default boolean onTakeItem(@NotNull final CustomMenuContext menuContext, @NotNull final CustomMenuSlot slotContext, @NotNull final HumanEntity player, @NotNull final ItemStack item) {
         return true;
@@ -58,6 +63,7 @@ public interface CustomSlotListener {
      * @param slotContext the slot context
      * @param item        the item being set
      * @return true if the item should be placed, and the menu updated
+     * @since 1.0.0-SNAPSHOT
      */
     default boolean onSetItemByPlayer(@NotNull final CustomMenuContext menuContext, @NotNull final CustomMenuSlot slotContext, @NotNull final ItemStack item) {
         return true;
@@ -70,6 +76,7 @@ public interface CustomSlotListener {
      * @param slotContext the slot context
      * @param item        the item being set
      * @return true if the item should be placed, and the menu updated
+     * @since 1.0.0-SNAPSHOT
      */
     default boolean onSetItem(@NotNull final CustomMenuContext menuContext, @NotNull final CustomMenuSlot slotContext, @NotNull final ItemStack item) {
         return true;
@@ -82,6 +89,7 @@ public interface CustomSlotListener {
      * @param slotContext the slot context
      * @param item        the item that is attempting to be placed
      * @return true if the item can be placed, otherwise false
+     * @since 1.0.0-SNAPSHOT
      */
     default boolean dictateMayPlaceItem(@NotNull final CustomMenuContext menuContext, @NotNull final CustomMenuSlot slotContext, @NotNull final ItemStack item) {
         return true;
@@ -94,6 +102,7 @@ public interface CustomSlotListener {
      * @param slotContext the slot context
      * @param player      the player
      * @return true if the item can be picked up, otherwise false
+     * @since 1.0.0-SNAPSHOT
      */
     default boolean dictateMayPickupItem(@NotNull final CustomMenuContext menuContext, @NotNull final CustomMenuSlot slotContext, @NotNull final HumanEntity player) {
         return true;
@@ -106,6 +115,7 @@ public interface CustomSlotListener {
      * @param slotContext the slot context
      * @param player      the player
      * @return true if the item can be modified, otherwise false
+     * @since 1.0.0-SNAPSHOT
      */
     default boolean dictateAllowSlotModification(@NotNull final CustomMenuContext menuContext, @NotNull final CustomMenuSlot slotContext, @NotNull final HumanEntity player) {
         return dictateMayPickupItem(menuContext, slotContext, player) && dictateMayPlaceItem(menuContext, slotContext, slotContext.getBukkitItem());

@@ -7,6 +7,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a custom slot within a menu.
+ *
+ * @since 1.0.0-SNAPSHOT
  */
 @ApiStatus.NonExtendable
 public interface CustomMenuSlot {
@@ -16,6 +18,7 @@ public interface CustomMenuSlot {
      *
      * @param originalStack the original stack
      * @param newStack      the new stack
+     * @since 1.0.0-SNAPSHOT
      */
     void onQuickCraftItem(@NotNull final ItemStack originalStack, @NotNull final ItemStack newStack);
 
@@ -23,6 +26,7 @@ public interface CustomMenuSlot {
      * A Function used to check for achievements
      *
      * @param item the item
+     * @since 1.0.0-SNAPSHOT
      */
     void checkForAchievements(@NotNull final ItemStack item);
 
@@ -31,6 +35,7 @@ public interface CustomMenuSlot {
      *
      * @param player the player
      * @param item   the item
+     * @since 1.0.0-SNAPSHOT
      */
     void onTakeItem(@NotNull final HumanEntity player, @NotNull final ItemStack item);
 
@@ -39,6 +44,7 @@ public interface CustomMenuSlot {
      *
      * @param item the item to place
      * @return true if the item can be placed, otherwise false
+     * @since 1.0.0-SNAPSHOT
      */
     boolean mayPlaceItem(@NotNull final ItemStack item);
 
@@ -46,6 +52,7 @@ public interface CustomMenuSlot {
      * Determines whether or not this slot has an item
      *
      * @return true if the slot has an item, otherwise false
+     * @since 1.0.0-SNAPSHOT
      */
     boolean hasBukkitItem();
 
@@ -53,6 +60,7 @@ public interface CustomMenuSlot {
      * Sets the item in the slot via a player. This method is only triggered when a player places the item
      *
      * @param item the item to place
+     * @since 1.0.0-SNAPSHOT
      */
     void setItemByPlayer(@NotNull final ItemStack item);
 
@@ -60,11 +68,14 @@ public interface CustomMenuSlot {
      * Sets an item in the slot.
      *
      * @param item the item to place
+     * @since 1.0.0-SNAPSHOT
      */
     void setItem(@NotNull final ItemStack item);
 
     /**
      * Marks the slot as changed
+     *
+     * @since 1.0.0-SNAPSHOT
      */
     void setSlotChanged();
 
@@ -73,6 +84,7 @@ public interface CustomMenuSlot {
      *
      * @param player the player
      * @return true if the player may pickup an item, otherwise false
+     * @since 1.0.0-SNAPSHOT
      */
     boolean mayPickupItem(@NotNull final HumanEntity player);
 
@@ -81,6 +93,7 @@ public interface CustomMenuSlot {
      *
      * @param player the player
      * @return true if modification is allowed, otherwise false
+     * @since 1.0.0-SNAPSHOT
      */
     boolean allowSlotModification(@NotNull final HumanEntity player);
 
@@ -88,6 +101,7 @@ public interface CustomMenuSlot {
      * Gets the CraftBukkit item from this slot
      *
      * @return the CraftBukkit item
+     * @since 1.0.0-SNAPSHOT
      */
     @NotNull
     ItemStack getBukkitItem();

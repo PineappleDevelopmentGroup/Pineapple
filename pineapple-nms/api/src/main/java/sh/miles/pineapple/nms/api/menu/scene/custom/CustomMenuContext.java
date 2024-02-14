@@ -7,6 +7,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Gives context to states and data from a custom menu
+ *
+ * @since 1.0.0-SNAPSHOT
  */
 @ApiStatus.NonExtendable
 public interface CustomMenuContext {
@@ -19,12 +21,15 @@ public interface CustomMenuContext {
      * @param endIndex   the end index (excluded)
      * @param reverse    whether or not to reverse the search direction
      * @return the move result
+     * @since 1.0.0-SNAPSHOT
      */
     @NotNull
     MergeResult mergeItemStackBetween(@NotNull final ItemStack item, final int startIndex, final int endIndex, final boolean reverse);
 
     /**
      * Callback for when a crafting matrix is changed
+     *
+     * @since 1.0.0-SNAPSHOT
      */
     void slotsChanged();
 
@@ -33,6 +38,7 @@ public interface CustomMenuContext {
      *
      * @param rawSlot the raw slot
      * @return the custom slot implementation
+     * @since 1.0.0-SNAPSHOT
      */
     @NotNull
     CustomMenuSlot getMenuSlot(final int rawSlot);
@@ -41,6 +47,7 @@ public interface CustomMenuContext {
      * Retrieves a bukkit container
      *
      * @return the bukkit container
+     * @since 1.0.0-SNAPSHOT
      */
     @NotNull
     Inventory getBukkitContainer();
@@ -49,6 +56,7 @@ public interface CustomMenuContext {
      * Gets the amount of rows the menu's container has
      *
      * @return the amount of rows
+     * @since 1.0.0-SNAPSHOT
      */
     int getRowAmount();
 
@@ -56,9 +64,17 @@ public interface CustomMenuContext {
      * Gets the amount of slots this container has
      *
      * @return the amount of slots
+     * @since 1.0.0-SNAPSHOT
      */
     int getSlotAmount();
 
+    /**
+     * The result of merging to item stacks together
+     *
+     * @param item   the item merged
+     * @param result whether or not the merge was successful
+     * @since 1.0.0-SNAPSHOT
+     */
     record MergeResult(@NotNull ItemStack item, boolean result) {
     }
 }
