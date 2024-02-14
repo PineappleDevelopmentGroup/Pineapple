@@ -1,5 +1,6 @@
 package sh.miles.pineapple.nms.impl.v1_20_R3;
 
+import com.google.common.base.Preconditions;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -7,10 +8,13 @@ import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_20_R3.event.CraftEventFactory;
 import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftContainer;
+import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftInventoryView;
 import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_20_R3.util.CraftMagicNumbers;
 import org.bukkit.entity.Player;
@@ -22,7 +26,11 @@ import org.jetbrains.annotations.Nullable;
 import sh.miles.pineapple.ReflectionUtils;
 import sh.miles.pineapple.nms.api.PineappleNMS;
 import sh.miles.pineapple.nms.api.PineappleUnsafe;
+import sh.miles.pineapple.nms.api.menu.scene.MenuScene;
+import sh.miles.pineapple.nms.api.menu.scene.custom.CustomMenuListener;
 import sh.miles.pineapple.nms.impl.v1_20_R3.internal.ComponentUtils;
+import sh.miles.pineapple.nms.impl.v1_20_R3.inventory.scene.PineappleMenuScene;
+import sh.miles.pineapple.nms.impl.v1_20_R3.inventory.scene.custom.PineappleMenu;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -37,16 +45,33 @@ public class PineappleNMSImpl implements PineappleNMS {
 
     private static final MethodHandle itemStackHandle;
     private static final MethodHandle livingEntityLastDamageSourceHandle;
+    private static final MenuType<?>[] CHEST_TYPES;
 
     static {
         itemStackHandle = ReflectionUtils.getFieldAsGetter(CraftItemStack.class, "handle");
         livingEntityLastDamageSourceHandle = ReflectionUtils.getFieldAsGetter(net.minecraft.world.entity.LivingEntity.class, "cd");
+        CHEST_TYPES = new MenuType[]{MenuType.GENERIC_9x1, MenuType.GENERIC_9x2, MenuType.GENERIC_9x3, MenuType.GENERIC_9x4, MenuType.GENERIC_9x5, MenuType.GENERIC_9x6};
     }
 
     private final PineappleUnsafeImpl unsafe;
 
     public PineappleNMSImpl() {
         this.unsafe = new PineappleUnsafeImpl();
+    }
+
+    @NotNull
+    @Override
+    public MenuScene createMenuCustom(@NotNull final Player player, @NotNull final CustomMenuListener menuListener, final int rows, @NotNull final BaseComponent title) {
+        Preconditions.checkArgument(player != null, "The given player must not be null");
+        Preconditions.checkArgument(menuListener != null, "The given menuListener must not be null");
+        Preconditions.checkArgument(title != null, "The given title must not be null");
+        Preconditions.checkArgument(rows > 0 && rows < 7, "The given rows must be between 1 and 6 inclusive");
+
+        final ServerPlayer splayer = ((CraftPlayer) player).getHandle();
+        final MenuType<?> menuType = CHEST_TYPES[rows - 1];
+        final PineappleMenu menu = new PineappleMenu(menuListener, menuType, splayer.nextContainerCounter(), splayer.getInventory(), rows);
+        menu.setTitle(ComponentUtils.toMinecraftChat(title));
+        return new PineappleMenuScene<>((CraftInventoryView) menu.getBukkitView());
     }
 
     @Nullable
