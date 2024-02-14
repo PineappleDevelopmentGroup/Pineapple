@@ -1,7 +1,6 @@
 package sh.miles.pineapple.updater;
 
 import org.junit.jupiter.api.Test;
-import sh.miles.pineapple.SimpleSemVersion;
 import sh.miles.pineapple.ReflectionUtils;
 
 import java.lang.invoke.MethodHandle;
@@ -105,6 +104,27 @@ public class SimpleSemVersionTest {
     public void test_Older_Than_ReleaseHotFix_Lower_ThanRelease() {
         SimpleSemVersion version = SimpleSemVersion.fromString("1.2.4-beta");
         SimpleSemVersion other = SimpleSemVersion.fromString("1.2.5-hotfix");
+        assertTrue(other.isNewerThan(version));
+    }
+
+    @Test
+    public void test_Pre_1_Point_0_Older_Than_Post_1_Point_0() {
+        SimpleSemVersion version = SimpleSemVersion.fromString("0.0.1-SNAPSHOT");
+        SimpleSemVersion other = SimpleSemVersion.fromString("1.0.0-SNAPSHOT");
+        assertTrue(other.isNewerThan(version));
+    }
+
+    @Test
+    public void test_EqualBesidesPatch() {
+        final var version = SimpleSemVersion.fromString("1.0.0");
+        final var other = SimpleSemVersion.fromString("1.0.1");
+        assertTrue(other.isNewerThan(version));
+    }
+
+    @Test
+    public void test_EqualBesidesMinor() {
+        final var version = SimpleSemVersion.fromString("1.0.1");
+        final var other = SimpleSemVersion.fromString("1.1.0");
         assertTrue(other.isNewerThan(version));
     }
 }

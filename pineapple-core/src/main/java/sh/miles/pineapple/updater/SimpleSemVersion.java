@@ -1,4 +1,4 @@
-package sh.miles.pineapple;
+package sh.miles.pineapple.updater;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
@@ -67,7 +67,7 @@ public class SimpleSemVersion {
         }
 
         if (!suffix.isEmpty()) {
-            semVer.modifier = MODIFIER_LABEL.inverse().get(suffix);
+            semVer.modifier = MODIFIER_LABEL.inverse().get(suffix.toLowerCase());
         }
 
         return semVer;
@@ -88,7 +88,7 @@ public class SimpleSemVersion {
             return true;
         }
 
-        return !equals(other) && (this.major >= other.major && this.minor >= other.minor && this.patch >= other.patch);
+        return !equals(other) && (this.major > other.major) || (this.major == other.major && this.minor > other.minor) || (this.major == other.major && this.minor == other.minor && this.patch > other.patch) || (this.major == other.major && this.minor == other.minor && this.patch == other.patch && this.modifier >= other.modifier);
     }
 
     @Override
