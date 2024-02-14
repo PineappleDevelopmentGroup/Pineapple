@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import sh.miles.pineapple.ReflectionUtils;
 
 import java.lang.invoke.MethodHandle;
+import java.sql.Ref;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,6 +14,7 @@ public class SimpleSemVersionTest {
     private static final MethodHandle MINOR = ReflectionUtils.getFieldAsGetter(SimpleSemVersion.class, "minor");
     private static final MethodHandle PATCH = ReflectionUtils.getFieldAsGetter(SimpleSemVersion.class, "patch");
     private static final MethodHandle MODIFIER = ReflectionUtils.getFieldAsGetter(SimpleSemVersion.class, "modifier");
+    private static final MethodHandle COMPARATOR = ReflectionUtils.getFieldAsGetter(SimpleSemVersion.class, "comparator");
 
     @Test
     public void test_No_Suffix() {
@@ -97,6 +99,9 @@ public class SimpleSemVersionTest {
     public void test_Newer_Than_ReleaseHotFix_Higher_ThanRelease() {
         SimpleSemVersion version = SimpleSemVersion.fromString("1.2.2-release");
         SimpleSemVersion other = SimpleSemVersion.fromString("1.2.4-hotfix");
+        System.out.println(ReflectionUtils.safeInvoke(COMPARATOR.bindTo(version)));
+        System.out.println(ReflectionUtils.safeInvoke(COMPARATOR.bindTo(other)));
+
         assertTrue(version.isNewerThan(other));
     }
 

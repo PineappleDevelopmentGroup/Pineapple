@@ -3,6 +3,7 @@ package sh.miles.pineapple.updater;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -28,13 +29,15 @@ public class SimpleSemVersion {
     private final int major;
     private final int minor;
     private final int patch;
-    private byte modifier;
+    private final byte modifier;
+    private final int comparator;
 
     private SimpleSemVersion(int major, int minor, int patch, byte modifier) {
         this.major = major;
         this.minor = minor;
         this.patch = patch;
         this.modifier = modifier;
+        this.comparator = Integer.parseInt(modifier + Integer.toString(major) + minor + patch);
     }
 
     private SimpleSemVersion(int major, int minor, int patch) {
@@ -58,16 +61,16 @@ public class SimpleSemVersion {
         }
 
         SimpleSemVersion semVer;
+        byte modifier = 4;
+        if (!suffix.isEmpty()) {
+            modifier = MODIFIER_LABEL.inverse().get(suffix.toLowerCase());
+        }
 
         try {
             semVer = new SimpleSemVersion(Integer.parseInt(numParts[0]), Integer.parseInt(numParts[1]),
-                    Integer.parseInt(numParts[2]));
+                    Integer.parseInt(numParts[2]), modifier);
         } catch (NumberFormatException ex) {
             throw new IllegalArgumentException("String must be in the format major.minor.patch-SUFFIX (optional suffix)");
-        }
-
-        if (!suffix.isEmpty()) {
-            semVer.modifier = MODIFIER_LABEL.inverse().get(suffix.toLowerCase());
         }
 
         return semVer;
@@ -81,14 +84,7 @@ public class SimpleSemVersion {
      * @since 1.0.0-SNAPSHOT
      */
     public boolean isNewerThan(SimpleSemVersion other) {
-        // 1.0.0-BETA is lower than 1.0.0-SNAPSHOT
-        if (this.modifier < other.modifier) {
-            return false;
-        } else if (this.modifier > other.modifier) {
-            return true;
-        }
-
-        return !equals(other) && (this.major > other.major) || (this.major == other.major && this.minor > other.minor) || (this.major == other.major && this.minor == other.minor && this.patch > other.patch) || (this.major == other.major && this.minor == other.minor && this.patch == other.patch && this.modifier >= other.modifier);
+        return this.comparator > other.comparator;
     }
 
     @Override
@@ -99,12 +95,13 @@ public class SimpleSemVersion {
         if (!(o instanceof final SimpleSemVersion that)) {
             return false;
         }
-        return major == that.major && minor == that.minor && patch == that.patch && modifier == that.modifier;
+
+        return this.comparator == that.comparator;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(major, minor, patch, modifier);
+        return Objects.hash(comparator);
     }
 
     @Override
