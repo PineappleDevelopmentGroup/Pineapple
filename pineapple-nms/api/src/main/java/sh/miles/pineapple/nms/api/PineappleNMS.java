@@ -12,6 +12,7 @@ import sh.miles.pineapple.nms.annotations.PullRequested;
 import sh.miles.pineapple.nms.api.menu.scene.MenuScene;
 import sh.miles.pineapple.nms.api.menu.scene.custom.CustomMenuListener;
 import sh.miles.pineapple.nms.api.menu.scene.custom.CustomSlotListener;
+import sh.miles.pineapple.nms.api.packet.PineapplePackets;
 
 import java.util.List;
 
@@ -106,6 +107,14 @@ public interface PineappleNMS {
      */
     @NotNull
     ItemStack itemFromBytes(@NotNull final byte[] bytes);
+
+    /**
+     * Gets the packet handler
+     *
+     * @return the packet handler
+     * @since 1.0.0-SNAPSHOT
+     */
+    PineapplePackets getPackets();
 
     /**
      * Gets the PineappleUnsafe class

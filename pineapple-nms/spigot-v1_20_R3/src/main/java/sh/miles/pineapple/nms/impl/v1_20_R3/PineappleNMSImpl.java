@@ -31,6 +31,7 @@ import sh.miles.pineapple.nms.api.menu.scene.custom.CustomMenuListener;
 import sh.miles.pineapple.nms.impl.v1_20_R3.internal.ComponentUtils;
 import sh.miles.pineapple.nms.impl.v1_20_R3.inventory.scene.PineappleMenuScene;
 import sh.miles.pineapple.nms.impl.v1_20_R3.inventory.scene.custom.PineappleMenu;
+import sh.miles.pineapple.nms.impl.v1_20_R3.packet.PineapplePacketsImpl;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -54,9 +55,11 @@ public class PineappleNMSImpl implements PineappleNMS {
     }
 
     private final PineappleUnsafeImpl unsafe;
+    private final PineapplePacketsImpl packets;
 
     public PineappleNMSImpl() {
         this.unsafe = new PineappleUnsafeImpl();
+        this.packets = new PineapplePacketsImpl();
     }
 
     @NotNull
@@ -179,6 +182,11 @@ public class PineappleNMSImpl implements PineappleNMS {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public PineapplePacketsImpl getPackets() {
+        return this.packets;
     }
 
     @NotNull
