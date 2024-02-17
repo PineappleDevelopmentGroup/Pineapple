@@ -70,11 +70,7 @@ tasks.withType<Javadoc> {
 }
 
 tasks.publish {
-    for (subproject in project.subprojects) {
-        if (subproject.pluginManager.hasPlugin("pineapplecheckstyle")) {
-            this.dependsOn(subproject.tasks.getByName("checkstyleMain"))
-        }
-    }
+    dependsOn(tasks.getByName("checkstyleProject"))
 }
 
 publishing {
@@ -91,6 +87,14 @@ publishing {
                 this.username = System.getenv("PINEAPPLE_REPOSILITE_USERNAME")
                 this.password = System.getenv("PINEAPPLE_REPOSILITE_PASSWORD")
             }
+        }
+    }
+}
+
+tasks.register("checkstyleProject") {
+    for (subproject in project.subprojects) {
+        if (subproject.pluginManager.hasPlugin("pineapplecheckstyle")) {
+            this.dependsOn(subproject.tasks.getByName("checkstyleMain"))
         }
     }
 }
