@@ -29,7 +29,7 @@ public abstract class PlayerGui<T extends MenuScene> {
 
     private final T scene;
     private final Player viewer;
-    private final Inventory topInventory;
+    protected final Inventory topInventory;
     protected final List<GuiSlot> slots;
 
     protected PlayerGui(@NotNull final Function<Player, T> scene, @NotNull final Player viewer) {

@@ -56,6 +56,7 @@ public final class PineappleLib {
      * @return the configuration manager
      * @since 1.0.0-SNAPSHOT
      */
+    @NotNull
     public static ConfigurationManager getConfigurationManager() {
         return instance.configurationManager;
     }
