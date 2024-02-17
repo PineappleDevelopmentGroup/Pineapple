@@ -6,6 +6,7 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.ReflectionUtils;
+import sh.miles.pineapple.command.internal.PineappleCommandManager;
 
 import java.lang.invoke.MethodHandle;
 
@@ -13,7 +14,7 @@ import java.lang.invoke.MethodHandle;
  * A Command Registry for registering all commands to. This clas plays an important middle man role in-between, the
  * Bukkit command registration system and Pineapple's command system.
  *
- * @since @since 1.0.0-SNAPSHOT
+ * @since 1.0.0-SNAPSHOT
  */
 public final class CommandRegistry {
 
@@ -56,4 +57,19 @@ public final class CommandRegistry {
         }
     }
 
+    /**
+     * Register Pineapple's internal commands with the plugin name as a suffix
+     */
+    public void registerInternalCommands() {
+        registerInternalCommands(plugin.getName());
+    }
+
+    /**
+     * Register Pineapple's internal commands with a custom suffix
+     *
+     * @param commandSuffix the suffix
+     */
+    public void registerInternalCommands(String commandSuffix) {
+        register(new PineappleCommandManager(this.plugin, commandSuffix.toLowerCase()));
+    }
 }

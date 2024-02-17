@@ -28,7 +28,7 @@ public interface JsonAdapter<T> extends JsonSerializer<T>, JsonDeserializer<T> {
      * or just a normal type adapter.
      *
      * @return true if the adapter should be used in a hierarchy, otherwise false
-     * @since @since 1.0.0-SNAPSHOT
+     * @since 1.0.0-SNAPSHOT
      */
     default boolean isHierarchy() {
         return false;

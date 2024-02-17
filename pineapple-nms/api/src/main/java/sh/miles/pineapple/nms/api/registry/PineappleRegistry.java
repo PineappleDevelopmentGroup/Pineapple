@@ -3,19 +3,24 @@ package sh.miles.pineapple.nms.api.registry;
 import org.bukkit.NamespacedKey;
 import sh.miles.pineapple.collection.registry.Registry;
 import sh.miles.pineapple.collection.registry.RegistryKey;
-import sh.miles.pineapple.nms.api.loader.NMSManager;
+import sh.miles.pineapple.nms.loader.NMSLoader;
 import sh.miles.pineapple.nms.api.menu.MenuType;
-import sh.miles.pineapple.nms.api.world.damagesource.DamageEffect;
-import sh.miles.pineapple.nms.api.world.damagesource.DamageType;
 
-public interface PineappleRegistry {
+/**
+ * A class full of different types of Registries that can used
+ *
+ * @since 1.0.0-SNAPSHOT
+ */
+public final class PineappleRegistry {
 
-    Registry<MenuType<?>, NamespacedKey> MENU = make(MenuType.class);
-    Registry<DamageEffect, NamespacedKey> DAMAGE_EFFECT = make(DamageEffect.class);
-    Registry<DamageType, NamespacedKey> DAMAGE_TYPE = make(DamageType.class);
+    public static final Registry<MenuType<?>, NamespacedKey> MENU = make(MenuType.class);
+
+    private PineappleRegistry() {
+        throw new UnsupportedOperationException("You can not instantiate a utility class");
+    }
 
     private static <T extends RegistryKey<NamespacedKey>> Registry<T, NamespacedKey> make(Class<? super T> interfaceClass) {
-        return NMSManager.getPineapple().getRegistry(interfaceClass);
+        return NMSLoader.INSTANCE.getPineapple().getUnsafe().getRegistry(interfaceClass);
     }
 
 }

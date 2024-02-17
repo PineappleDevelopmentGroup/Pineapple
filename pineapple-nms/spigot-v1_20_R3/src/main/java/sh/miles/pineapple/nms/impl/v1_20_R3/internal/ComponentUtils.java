@@ -37,7 +37,7 @@ public final class ComponentUtils {
      * @param components the component to translate
      * @return the minecraft component
      */
-    public static Component toMinecraftChat(@NotNull final BaseComponent... components) {
+    public static Component toMinecraftChat(@NotNull final BaseComponent components) {
         return CraftChatMessage.fromJSON(ComponentSerializer.toString(components));
     }
 
@@ -47,7 +47,7 @@ public final class ComponentUtils {
      * @param component the component to translate
      * @return the string
      */
-    public static String toJsonString(@NotNull final BaseComponent... component) {
+    public static String toJsonString(@NotNull final BaseComponent component) {
         return ComponentSerializer.toString(component);
     }
 

@@ -31,7 +31,7 @@ public class TypeAdapterTest extends BukkitTest {
     @Override
     public void setup() {
         super.setup();
-        PineappleLib.initialize(super.plugin);
+        PineappleLib.initialize(super.plugin, false);
         this.config = PineappleLib.getConfigurationManager()
                 .createStaticReloadable(new File(plugin.getDataFolder(), "config.yml"), ConfigMock.class);
         this.config.saveDefaults().load();

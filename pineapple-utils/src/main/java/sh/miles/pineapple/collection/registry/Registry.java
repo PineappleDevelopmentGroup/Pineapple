@@ -42,10 +42,28 @@ public interface Registry<T extends RegistryKey<K>, K> {
      */
     Set<K> keys();
 
+    /**
+     * Creates a new WriteableRegistry with the given data
+     *
+     * @param data the data
+     * @param <T>  the type
+     * @param <K>  the key type
+     * @return the newly created WriteableRegistry
+     * @since 1.0.0-SNAPSHOT
+     */
     static <T extends RegistryKey<K>, K> WriteableRegistry<T, K> newWriteable(Supplier<Map<K, T>> data) {
         return new WriteableRegistry<>(data);
     }
 
+    /**
+     * Creates a new FrozenRegistry with the given data
+     *
+     * @param data the data
+     * @param <T>  the type
+     * @param <K>  the key type
+     * @return the newly created FrozenRegistry
+     * @since 1.0.0-SNAPSHOT
+     */
     static <T extends RegistryKey<K>, K> FrozenRegistry<T, K> newFrozen(Supplier<Map<K, T>> data) {
         return new FrozenRegistry<>(data);
     }

@@ -1,9 +1,6 @@
 package sh.miles.pineapple.nms.api;
 
 import net.md_5.bungee.api.chat.BaseComponent;
-import org.bukkit.NamespacedKey;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
@@ -11,59 +8,36 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import sh.miles.pineapple.collection.registry.FrozenRegistry;
-import sh.miles.pineapple.collection.registry.RegistryKey;
-import sh.miles.pineapple.nms.api.menu.MenuType;
+import sh.miles.pineapple.nms.annotations.PullRequested;
 import sh.miles.pineapple.nms.api.menu.scene.MenuScene;
-import sh.miles.pineapple.nms.api.world.damagesource.DamageType;
+import sh.miles.pineapple.nms.api.menu.scene.custom.CustomMenuListener;
+import sh.miles.pineapple.nms.api.menu.scene.custom.CustomSlotListener;
+import sh.miles.pineapple.nms.api.packet.PineapplePackets;
 
 import java.util.List;
 
 /**
  * Pineapple NMS adapts a bunch of useful stuffs from NMS so that we can use it. Don't tell MD_5 he won't be happy.
  *
- * @since 1.0.0
+ * @since 1.0.0-SNAPSHOT
  */
 public interface PineappleNMS {
 
     /**
-     * Opens a newly created empty menu for the given player
+     * Creates a custom MenuScene with the given player and behavior
+     * <p>
+     * You can create custom behavior by implementing {@link CustomMenuListener} as well as implementing
+     * {@link CustomSlotListener}. In conjunction you can specify a wide arrays of functions an Inventory can take
      *
-     * @param human the human to open the menu for
-     * @param type  the type of menu to open
-     * @param title the title of the menu to open
-     * @param <T>   The ContainerScene type held by the menu
-     * @return the menu scene
-     * @since 1.0.0
-     */
-    @Nullable
-    <T extends MenuScene> T openContainer(@NotNull final HumanEntity human, MenuType<T> type, String title);
-
-
-    /**
-     * Opens a newly created empty menu for the given player
-     *
-     * @param human the human to open the menu for
-     * @param type  the type of menu to open
-     * @param title the title to give the menu
-     * @param <T>   The ContainerScene type held by the menu
-     * @return the menu scene
-     * @since 1.0.0
-     */
-    @Nullable
-    <T extends MenuScene> T openContainer(@NotNull final HumanEntity human, MenuType<T> type, BaseComponent... title);
-
-
-    /**
-     * Opens a container scene for the given player
-     *
-     * @param human the player to open the scene for
-     * @param scene the scene to open
-     * @return the player to open the container for
-     * @since 1.0.0
+     * @param player       the player
+     * @param menuListener the menu listener
+     * @param rows         the amount of rows, no more than 6 no less than 1
+     * @param title        the title of the menu
+     * @return the MenuScene that can be opened and modified
+     * @since 1.0.0-SNAPSHOT
      */
     @NotNull
-    MenuScene openContainer(@NotNull final HumanEntity human, @NotNull final MenuScene scene);
+    MenuScene createMenuCustom(@NotNull final Player player, @NotNull final CustomMenuListener menuListener, final int rows, @NotNull final BaseComponent title);
 
     /**
      * Opens an inventory with a base component title. Note this implementation uses CraftContainer so Inventories
@@ -73,9 +47,11 @@ public interface PineappleNMS {
      * @param inventory the inventory to open
      * @param title     the title to use
      * @return the legacy bukkit inventory view associated with this task
+     * @since 1.0.0-SNAPSHOT
      */
     @Nullable
-    InventoryView openInventory(@NotNull final Player player, @NotNull final Inventory inventory, @NotNull BaseComponent... title);
+    @PullRequested
+    InventoryView openInventory(@NotNull final Player player, @NotNull final Inventory inventory, @NotNull BaseComponent title);
 
     /**
      * Renames the given item stack with the base component
@@ -83,7 +59,10 @@ public interface PineappleNMS {
      * @param item        the item to rename
      * @param displayName the display name
      * @return the item with its display name changed
+     * @since 1.0.0-SNAPSHOT
      */
+    @NotNull
+    @PullRequested
     ItemStack setItemDisplayName(@NotNull final ItemStack item, BaseComponent displayName);
 
     /**
@@ -92,7 +71,10 @@ public interface PineappleNMS {
      * @param item the item to set the lore of
      * @param lore the lore
      * @return the item with its lore changed
+     * @since 1.0.0-SNAPSHOT
      */
+    @NotNull
+    @PullRequested
     ItemStack setItemLore(@NotNull final ItemStack item, List<BaseComponent> lore);
 
     /**
@@ -100,27 +82,18 @@ public interface PineappleNMS {
      *
      * @param item the item to get the lore of
      * @return the lore
+     * @since 1.0.0-SNAPSHOT
      */
-    List<BaseComponent> getItemLore(@NotNull final ItemStack item);
-
-    /**
-     * Gets the last DamageType that an entity experienced
-     *
-     * @param entity the entity
-     * @return the last damage type or null
-     */
-    @Nullable
-    DamageType getEntityLastDamageType(@NotNull final LivingEntity entity);
-
-    @ApiStatus.Internal
     @NotNull
-    <T extends RegistryKey<NamespacedKey>> FrozenRegistry<T, NamespacedKey> getRegistry(Class<? super T> clazz);
+    @PullRequested
+    List<BaseComponent> getItemLore(@NotNull final ItemStack item);
 
     /**
      * Converts the given ItemStack into bytes
      *
      * @param itemStack the item stack to convert to bytes
      * @return the bytes
+     * @since 1.0.0-SNAPSHOT
      */
     @NotNull
     byte[] itemToBytes(@NotNull final ItemStack itemStack);
@@ -130,8 +103,27 @@ public interface PineappleNMS {
      *
      * @param bytes the bytes to convert into an ItemStack
      * @return the ItemStack
+     * @since 1.0.0-SNAPSHOT
      */
     @NotNull
     ItemStack itemFromBytes(@NotNull final byte[] bytes);
+
+    /**
+     * Gets the packet handler
+     *
+     * @return the packet handler
+     * @since 1.0.0-SNAPSHOT
+     */
+    PineapplePackets getPackets();
+
+    /**
+     * Gets the PineappleUnsafe class
+     *
+     * @return the PineappleUnsafe class
+     * @since 1.0.0-SNAPSHOT
+     */
+    @ApiStatus.Internal
+    @NotNull
+    PineappleUnsafe getUnsafe();
 
 }

@@ -22,8 +22,10 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.profile.PlayerProfile;
 import org.bukkit.profile.PlayerTextures;
 import org.jetbrains.annotations.NotNull;
+import sh.miles.pineapple.nms.annotations.NMS;
 import sh.miles.pineapple.nms.api.PineappleNMS;
-import sh.miles.pineapple.nms.api.loader.NMSManager;
+import sh.miles.pineapple.nms.loader.NMSLoader;
+import sh.miles.pineapple.PineappleLib;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -157,6 +159,7 @@ public class ItemBuilder {
      * @return the ItemBuilder
      * @since 1.0.0-SNAPSHOT
      */
+    @NMS
     public ItemBuilder name(@NotNull final BaseComponent name) {
         this.name = name;
         return this;
@@ -195,6 +198,7 @@ public class ItemBuilder {
      * @return the ItemBuilder
      * @since 1.0.0-SNAPSHOT
      */
+    @NMS
     public ItemBuilder lore(@NotNull final List<BaseComponent> lore) {
         List<BaseComponent> itemLore = getLore();
         itemLore.addAll(lore);
@@ -444,8 +448,9 @@ public class ItemBuilder {
         return meta.hasLore() ? meta.getLore() : new ArrayList<>();
     }
 
+    @NMS
     private List<BaseComponent> getLore() {
-        return new ArrayList<>(NMSManager.getPineapple().getItemLore(this.stack));
+        return new ArrayList<>(PineappleLib.getNmsProvider().getItemLore(this.stack));
     }
 
     /**
@@ -455,14 +460,16 @@ public class ItemBuilder {
      * @since 1.0.0-SNAPSHOT
      */
     public ItemStack build() {
-        PineappleNMS nms = NMSManager.getPineapple();
         stack.setItemMeta(meta);
-        if (this.name != null) {
-            stack = nms.setItemDisplayName(this.stack, this.name);
-        }
+        if (NMSLoader.INSTANCE.isActive()) {
+            PineappleNMS nms = PineappleLib.getNmsProvider();
+            if (this.name != null) {
+                stack = nms.setItemDisplayName(this.stack, this.name);
+            }
 
-        if (this.lore != null) {
-            stack = nms.setItemLore(this.stack, this.lore);
+            if (this.lore != null) {
+                stack = nms.setItemLore(this.stack, this.lore);
+            }
         }
 
         return stack;

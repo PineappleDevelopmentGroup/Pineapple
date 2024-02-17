@@ -17,7 +17,7 @@ public final class PineappleSceneFactory {
         factory.put(MenuType.ANVIL, PineappleAnvilScene::new);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("all")
     public static <T extends MenuScene> T make(MenuType<T> type, CraftInventoryView view) {
         return (T) factory.getOrDefault(((PineappleMenuType<T>) type).getHandle(), PineappleMenuScene::new).apply(view);
     }

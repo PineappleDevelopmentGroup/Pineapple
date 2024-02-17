@@ -4,7 +4,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.damagesource.DamageEffects;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.craftbukkit.v1_20_R3.CraftServer;
@@ -12,11 +11,7 @@ import org.bukkit.craftbukkit.v1_20_R3.util.CraftNamespacedKey;
 import sh.miles.pineapple.collection.registry.FrozenRegistry;
 import sh.miles.pineapple.collection.registry.RegistryKey;
 import sh.miles.pineapple.nms.api.menu.MenuType;
-import sh.miles.pineapple.nms.api.world.damagesource.DamageEffect;
-import sh.miles.pineapple.nms.api.world.damagesource.DamageType;
 import sh.miles.pineapple.nms.impl.v1_20_R3.inventory.PineappleMenuType;
-import sh.miles.pineapple.nms.impl.v1_20_R3.world.damagesource.PineappleDamageEffect;
-import sh.miles.pineapple.nms.impl.v1_20_R3.world.damagesource.PineappleDamageType;
 
 import java.util.Arrays;
 import java.util.function.BiFunction;
@@ -49,12 +44,6 @@ public final class PineappleNmsRegistry<P extends RegistryKey<NamespacedKey>, M>
         final RegistryAccess access = ((CraftServer) Bukkit.getServer()).getHandle().getServer().registryAccess();
         if (interfaceClass == MenuType.class) {
             return new PineappleNmsRegistry<>(access.registryOrThrow(Registries.MENU), PineappleMenuType::new);
-        }
-        if (interfaceClass == DamageEffect.class) {
-            return new PineappleNmsRegistry<>(DamageEffects.values(), PineappleDamageEffect::new);
-        }
-        if (interfaceClass == DamageType.class) {
-            return new PineappleNmsRegistry<>(access.registryOrThrow(Registries.DAMAGE_TYPE), PineappleDamageType::new);
         }
 
         throw new IllegalStateException("No such registry %s found".formatted(interfaceClass.getName()));

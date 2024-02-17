@@ -17,8 +17,11 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import sh.miles.pineapple.chat.PineappleChat;
+import sh.miles.pineapple.function.Either;
+import sh.miles.pineapple.function.Option;
 import sh.miles.pineapple.json.JsonAdapter;
-import sh.miles.pineapple.nms.api.loader.NMSManager;
+import sh.miles.pineapple.nms.loader.NMSLoader;
+import sh.miles.pineapple.PineappleLib;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -48,15 +51,31 @@ class ItemStackAdapter implements JsonAdapter<ItemStack> {
         JsonObject parent = json.getAsJsonObject();
         Material itemType = parseItemType(parent);
         ItemStack item = new ItemStack(itemType);
-        final BaseComponent name = parseName(parent);
-        if (name != null) {
-            item = NMSManager.getPineapple().setItemDisplayName(item, name);
+        final Option<Either<BaseComponent, String>> possibleName = parseName(parent);
+
+        if (possibleName instanceof Option.Some<Either<BaseComponent, String>> some) {
+            final var either = some.some();
+            if (either.isLeft()) {
+                item = PineappleLib.getNmsProvider().setItemDisplayName(item, either.leftOrThrow());
+            } else {
+                ItemMeta meta = item.getItemMeta();
+                meta.setDisplayName(either.rightOrThrow());
+                item.setItemMeta(meta);
+            }
         }
 
-        final List<BaseComponent> lore = parseLore(parent);
-        if (!lore.isEmpty()) {
-            item = NMSManager.getPineapple().setItemLore(item, lore);
+        final Option<Either<List<BaseComponent>, List<String>>> possibleLore = parseLore(parent);
+        if (possibleLore instanceof Option.Some<Either<List<BaseComponent>, List<String>>> some) {
+            final var either = some.some();
+            if (either.isLeft()) {
+                item = PineappleLib.getNmsProvider().setItemLore(item, either.leftOrThrow());
+            } else {
+                ItemMeta meta = item.getItemMeta();
+                meta.setLore(either.rightOrThrow());
+                item.setItemMeta(meta);
+            }
         }
+
         parseEnchantment(parent).forEach(item::addEnchantment);
         final ItemMeta meta = item.getItemMeta();
         parseItemFlag(parent).forEach(meta::addItemFlags);
@@ -94,26 +113,45 @@ class ItemStackAdapter implements JsonAdapter<ItemStack> {
     }
 
     @Nullable
-    private static BaseComponent parseName(JsonObject parent) {
+    private static Option<Either<BaseComponent, String>> parseName(JsonObject parent) {
         final JsonElement temp = parent.get(NAME);
         if (temp == null) {
             return null;
         }
         final String name = temp.getAsString();
-        return name == null ? null : PineappleChat.parse(name);
+
+        if (name == null) {
+            return Option.none();
+        }
+
+        if (NMSLoader.INSTANCE.isActive()) {
+            return Option.some(Either.left(PineappleChat.parse(name)));
+        }
+
+        return Option.some(Either.right(PineappleChat.parseLegacy(name)));
     }
 
     @NotNull
-    private static List<BaseComponent> parseLore(JsonObject parent) {
+    private static Option<Either<List<BaseComponent>, List<String>>> parseLore(JsonObject parent) {
         final JsonArray loreArray = parent.getAsJsonArray(LORE);
         if (loreArray == null) {
-            return new ArrayList<>();
+            return Option.none();
         }
-        final List<BaseComponent> lore = new ArrayList<>(loreArray.size());
+
+        if (NMSLoader.INSTANCE.isActive()) {
+            final List<BaseComponent> lore = new ArrayList<>(loreArray.size());
+            for (final JsonElement jsonElement : loreArray) {
+                lore.add(PineappleChat.parse(jsonElement.getAsString()));
+            }
+            return Option.some(Either.left(lore));
+        }
+
+        final List<String> lore = new ArrayList<>(loreArray.size());
         for (final JsonElement jsonElement : loreArray) {
-            lore.add(PineappleChat.parse(jsonElement.getAsString()));
+            lore.add(PineappleChat.parseLegacy(jsonElement.getAsString()));
         }
-        return lore;
+
+        return Option.some(Either.right(lore));
     }
 
     @NotNull

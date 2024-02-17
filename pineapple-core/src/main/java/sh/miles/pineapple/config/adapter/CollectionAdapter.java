@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 class CollectionAdapter<S, R> implements TypeAdapter<List<S>, Collection<R>> {
-    private static Map<Class<?>, Supplier<? extends Collection<?>>> defaults;
+    private static final Map<Class<?>, Supplier<? extends Collection<?>>> defaults;
 
     static {
         defaults = new HashMap<>();

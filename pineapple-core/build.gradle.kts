@@ -19,8 +19,13 @@ dependencies {
 
     implementation("sh.miles.pineapplechat:pineapplechat-core:1.0.0-SNAPSHOT")
     implementation("sh.miles.pineapplechat:pineapplechat-bungee:1.0.0-SNAPSHOT")
+    implementation("sh.miles.pineapplechat:pineapplechat-minecraft-legacy:1.0.0-SNAPSHOT")
     implementation("com.jeff_media:MorePersistentDataTypes:2.4.0")
 
     compileOnly(project(":pineapple-nms:api"))
     compileOnlyAndTest(project(":pineapple-utils"))
+}
+
+tasks.processResources {
+    expand("version" to rootProject.version)
 }

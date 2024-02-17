@@ -1,27 +1,21 @@
 package sh.miles.pineapple.nms.impl.v1_20_R3;
 
+import com.google.common.base.Preconditions;
 import net.md_5.bungee.api.chat.BaseComponent;
-import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
-import org.bukkit.craftbukkit.v1_20_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftLivingEntity;
+import net.minecraft.world.inventory.MenuType;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_20_R3.event.CraftEventFactory;
 import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftContainer;
+import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftInventoryView;
 import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_20_R3.util.CraftMagicNumbers;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
@@ -29,15 +23,14 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import sh.miles.pineapple.ReflectionUtils;
-import sh.miles.pineapple.collection.registry.FrozenRegistry;
-import sh.miles.pineapple.collection.registry.RegistryKey;
 import sh.miles.pineapple.nms.api.PineappleNMS;
-import sh.miles.pineapple.nms.api.menu.MenuType;
+import sh.miles.pineapple.nms.api.PineappleUnsafe;
 import sh.miles.pineapple.nms.api.menu.scene.MenuScene;
-import sh.miles.pineapple.nms.api.world.damagesource.DamageType;
+import sh.miles.pineapple.nms.api.menu.scene.custom.CustomMenuListener;
 import sh.miles.pineapple.nms.impl.v1_20_R3.internal.ComponentUtils;
-import sh.miles.pineapple.nms.impl.v1_20_R3.registry.PineappleNmsRegistry;
-import sh.miles.pineapple.nms.impl.v1_20_R3.world.damagesource.PineappleDamageType;
+import sh.miles.pineapple.nms.impl.v1_20_R3.inventory.scene.PineappleMenuScene;
+import sh.miles.pineapple.nms.impl.v1_20_R3.inventory.scene.custom.PineappleMenu;
+import sh.miles.pineapple.nms.impl.v1_20_R3.packet.PineapplePacketsImpl;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -52,38 +45,40 @@ public class PineappleNMSImpl implements PineappleNMS {
 
     private static final MethodHandle itemStackHandle;
     private static final MethodHandle livingEntityLastDamageSourceHandle;
+    private static final MenuType<?>[] CHEST_TYPES;
 
     static {
         itemStackHandle = ReflectionUtils.getFieldAsGetter(CraftItemStack.class, "handle");
         livingEntityLastDamageSourceHandle = ReflectionUtils.getFieldAsGetter(net.minecraft.world.entity.LivingEntity.class, "cd");
+        CHEST_TYPES = new MenuType[]{MenuType.GENERIC_9x1, MenuType.GENERIC_9x2, MenuType.GENERIC_9x3, MenuType.GENERIC_9x4, MenuType.GENERIC_9x5, MenuType.GENERIC_9x6};
     }
 
-    @Nullable
-    @Override
-    public <T extends MenuScene> T openContainer(@NotNull final HumanEntity human, final MenuType<T> type, final String title) {
-        final T scene = type.create(human, title);
-        this.openContainer(human, scene);
-        return scene;
-    }
+    private final PineappleUnsafeImpl unsafe;
+    private final PineapplePacketsImpl packets;
 
-    @Nullable
-    @Override
-    public <T extends MenuScene> T openContainer(@NotNull final HumanEntity human, final MenuType<T> type, final BaseComponent... title) {
-        final T scene = type.create(human, title);
-        this.openContainer(human, scene);
-        return scene;
+    public PineappleNMSImpl() {
+        this.unsafe = new PineappleUnsafeImpl();
+        this.packets = new PineapplePacketsImpl();
     }
 
     @NotNull
     @Override
-    public MenuScene openContainer(@NotNull final HumanEntity human, @NotNull final MenuScene scene) {
-        human.openInventory(scene.getBukkitView());
-        return scene;
+    public MenuScene createMenuCustom(@NotNull final Player player, @NotNull final CustomMenuListener menuListener, final int rows, @NotNull final BaseComponent title) {
+        Preconditions.checkArgument(player != null, "The given player must not be null");
+        Preconditions.checkArgument(menuListener != null, "The given menuListener must not be null");
+        Preconditions.checkArgument(title != null, "The given title must not be null");
+        Preconditions.checkArgument(rows > 0 && rows < 7, "The given rows must be between 1 and 6 inclusive");
+
+        final ServerPlayer splayer = ((CraftPlayer) player).getHandle();
+        final MenuType<?> menuType = CHEST_TYPES[rows - 1];
+        final PineappleMenu menu = new PineappleMenu(menuListener, menuType, splayer.nextContainerCounter(), splayer.getInventory(), rows);
+        menu.setTitle(ComponentUtils.toMinecraftChat(title));
+        return new PineappleMenuScene<>((CraftInventoryView) menu.getBukkitView());
     }
 
     @Nullable
     @Override
-    public InventoryView openInventory(@NotNull final Player player, @NotNull final Inventory inventory, @NotNull final BaseComponent... title) {
+    public InventoryView openInventory(@NotNull final Player player, @NotNull final Inventory inventory, @NotNull final BaseComponent title) {
         ServerPlayer nms = ((CraftPlayer) player).getHandle();
         // legacy method to be replaced
         net.minecraft.world.inventory.MenuType<?> mojType = CraftContainer.getNotchInventoryType(inventory);
@@ -103,32 +98,7 @@ public class PineappleNMSImpl implements PineappleNMS {
         return nms.containerMenu.getBukkitView();
     }
 
-    @Nullable
-    @Override
-    public DamageType getEntityLastDamageType(@NotNull final LivingEntity entity) {
-        final net.minecraft.world.entity.LivingEntity livingEntity = ((CraftLivingEntity) entity).getHandle();
-        try {
-            final DamageSource source = (DamageSource) livingEntityLastDamageSourceHandle.bindTo(livingEntity).invoke();
-            if (source == null) {
-                return null;
-            }
-            return PineappleDamageType.minecraftToPineapple(source.type());
-        } catch (Throwable e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
     @NotNull
-    @Override
-    public <T extends RegistryKey<NamespacedKey>> FrozenRegistry<T, NamespacedKey> getRegistry(final Class<? super T> clazz) {
-        return (FrozenRegistry<T, NamespacedKey>) PineappleNmsRegistry.makeRegistry(clazz);
-    }
-
-    private <T> Registry<T> getRegistry(ResourceKey<? extends Registry<T>> registryKey) {
-        return ((CraftServer) Bukkit.getServer()).getHandle().getServer().registryAccess().registryOrThrow(registryKey);
-    }
-
     @Override
     public ItemStack setItemDisplayName(@NotNull final ItemStack item, final BaseComponent displayName) {
         final CraftItemStack craftItem = ensureCraftItemStack(item);
@@ -137,6 +107,7 @@ public class PineappleNMSImpl implements PineappleNMS {
         return CraftItemStack.asBukkitCopy(nmsItem);
     }
 
+    @NotNull
     @Override
     public ItemStack setItemLore(@NotNull ItemStack item, @NotNull List<BaseComponent> lore) {
         final CraftItemStack craftItem = ensureCraftItemStack(item);
@@ -158,7 +129,7 @@ public class PineappleNMSImpl implements PineappleNMS {
     }
 
     @Override
-    public List<BaseComponent> getItemLore(@NotNull final ItemStack item) {
+    public @NotNull List<BaseComponent> getItemLore(@NotNull final ItemStack item) {
         final CraftItemStack craftItem = ensureCraftItemStack(item);
         final net.minecraft.world.item.ItemStack nmsItem = getItemStackHandle(craftItem);
 
@@ -212,10 +183,20 @@ public class PineappleNMSImpl implements PineappleNMS {
         }
     }
 
+    @Override
+    public PineapplePacketsImpl getPackets() {
+        return this.packets;
+    }
+
+    @NotNull
+    @Override
+    public PineappleUnsafe getUnsafe() {
+        return this.unsafe;
+    }
+
     private CraftItemStack ensureCraftItemStack(ItemStack item) {
         return item instanceof CraftItemStack craftItem ? craftItem : CraftItemStack.asCraftCopy(item);
     }
-
 
     private static net.minecraft.world.item.ItemStack getItemStackHandle(CraftItemStack itemStack) {
         try {

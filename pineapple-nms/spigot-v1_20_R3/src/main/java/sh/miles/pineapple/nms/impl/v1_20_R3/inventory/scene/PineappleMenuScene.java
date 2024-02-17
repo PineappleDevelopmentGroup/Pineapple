@@ -25,7 +25,7 @@ public class PineappleMenuScene<T extends AbstractContainerMenu> implements Menu
     }
 
     @Override
-    public void setTitle(final BaseComponent... title) {
+    public void setTitle(final BaseComponent title) {
         container.setTitle(ComponentUtils.toMinecraftChat(title));
     }
 
@@ -33,5 +33,10 @@ public class PineappleMenuScene<T extends AbstractContainerMenu> implements Menu
     @Override
     public InventoryView getBukkitView() {
         return this.view;
+    }
+
+    @Override
+    public void open() {
+        this.view.getPlayer().openInventory(this.view);
     }
 }

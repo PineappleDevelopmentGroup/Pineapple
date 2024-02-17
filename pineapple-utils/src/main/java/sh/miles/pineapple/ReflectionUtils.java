@@ -40,6 +40,7 @@ public final class ReflectionUtils {
      * @param params the parameters to pass in to the constructor
      * @param <T>    the class T
      * @return a new instance of the class with the parameters or null if errors occur
+     * @since 1.0.0-SNAPSHOT
      */
     public static <T> T newInstance(@NotNull final Class<T> clazz, @NotNull final Object[] params) {
         Objects.requireNonNull(clazz);
@@ -64,6 +65,7 @@ public final class ReflectionUtils {
      * @param params    the parameters
      * @param <T>       the Type
      * @return the intended instance
+     * @since 1.0.0-SNAPSHOT
      */
     @SuppressWarnings("unchecked")
     public static <T> T newInstance(@NotNull final String classPath, @NotNull final Object[] params) {
@@ -86,6 +88,7 @@ public final class ReflectionUtils {
      * @param fieldType the type of the field
      * @param <T>       The Field Type
      * @return the value of the field or null if errors occur or the field is null
+     * @since 1.0.0-SNAPSHOT
      */
     public static <T> T getField(@NotNull final Object instance, @NotNull final String fieldName, @NotNull final Class<T> fieldType) {
         return getField(instance.getClass(), instance, fieldName, fieldType);
@@ -99,6 +102,7 @@ public final class ReflectionUtils {
      * @param fieldType   the type of the field
      * @param <T>         the field type
      * @return the value of the field or null if errors occur or the field is null
+     * @since 1.0.0-SNAPSHOT
      */
     public static <T> T getField(@NotNull final Class<?> parentClass, @NotNull final String fieldName, @NotNull final Class<T> fieldType) {
         return getField(parentClass, null, fieldName, fieldType);
@@ -113,6 +117,7 @@ public final class ReflectionUtils {
      * @param fieldType   the type of the field
      * @param <T>         the Field Type
      * @return the value of the field or null if errors occur or the field is null
+     * @since 1.0.0-SNAPSHOT
      */
     private static <T> T getField(@NotNull final Class<?> parentClass, @Nullable final Object instance, @NotNull final String fieldName, @NotNull final Class<T> fieldType) {
         Objects.requireNonNull(parentClass);
@@ -135,6 +140,7 @@ public final class ReflectionUtils {
      *
      * @param parameters the objects to convert to parameters
      * @return an array of parameters
+     * @since 1.0.0-SNAPSHOT
      */
     @Contract("_ -> new")
     public static Class<?>[] classesFromParameters(@NotNull final Object[] parameters) {
@@ -154,6 +160,7 @@ public final class ReflectionUtils {
      * @param clazz      the class to get the constructor from
      * @param parameters the parameters
      * @return the method handle
+     * @since 1.0.0-SNAPSHOT
      */
     public static MethodHandle getConstructor(Class<?> clazz, Class<?>[] parameters) {
         try {
@@ -171,6 +178,7 @@ public final class ReflectionUtils {
      * @param methodName the method name
      * @param parameters the parameters of the method
      * @return the method handle
+     * @since 1.0.0-SNAPSHOT
      */
     public static MethodHandle getMethod(Class<?> clazz, String methodName, Class<?>[] parameters) {
         try {
@@ -188,6 +196,7 @@ public final class ReflectionUtils {
      * @param clazz     the class to get the field from
      * @param fieldName the field name
      * @return the method handle associated with the class and field
+     * @since 1.0.0-SNAPSHOT
      */
     public static MethodHandle getFieldAsGetter(Class<?> clazz, String fieldName) {
         try {
@@ -204,6 +213,7 @@ public final class ReflectionUtils {
      * @param clazz     the class to get the field from
      * @param fieldName the field name
      * @return the method handle associated with the class and field
+     * @since 1.0.0-SNAPSHOT
      */
     public static MethodHandle getFieldAsSetter(Class<?> clazz, String fieldName) {
         try {
@@ -220,6 +230,7 @@ public final class ReflectionUtils {
      * @param handle     the handle
      * @param parameters the parameters
      * @return the object created from the invocation
+     * @since 1.0.0-SNAPSHOT
      */
     public static Object safeInvoke(MethodHandle handle, Object... parameters) {
         try {
@@ -237,6 +248,7 @@ public final class ReflectionUtils {
      * @param <T>              the type T
      * @param <R>              the type R
      * @return the return type of the provided function
+     * @since 1.0.0-SNAPSHOT
      */
     private static <T extends AccessibleObject, R> R accessAndReturn(T accessibleObject, ThrowingSupplier<R> function) throws Exception {
         accessibleObject.setAccessible(true);

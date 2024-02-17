@@ -1,11 +1,17 @@
 package sh.miles.pineapple;
 
-import com.google.common.base.Preconditions;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.config.adapter.ConfigurationManager;
-import sh.miles.pineapple.menu.manage.MenuManager;
+import sh.miles.pineapple.gui.manage.GuiManager;
+import sh.miles.pineapple.nms.annotations.NMS;
+import sh.miles.pineapple.nms.api.PineappleNMS;
+import sh.miles.pineapple.nms.loader.NMSLoader;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 /**
@@ -13,66 +19,121 @@ import java.util.logging.Logger;
  * <p>
  * Provides ease of access to many features of PineappleLib and puts them all into one place.
  *
- * @since 1.0.0
+ * @since 1.0.0-SNAPSHOT
  */
-public class PineappleLib {
+public final class PineappleLib {
+
     private static PineappleLib instance;
 
     private final Plugin plugin;
-    private final ConfigurationManager configManager;
-    private final MenuManager menuManager;
+    private PineappleNMS nmsProvider;
+    private final ConfigurationManager configurationManager;
+    private final GuiManager guiManager;
+    private String version;
 
-    private PineappleLib(Plugin plugin) {
+    /**
+     * Creates a new instance of PineappleLib
+     *
+     * @param plugin the plugin
+     * @param useNms whether or not to use NMS
+     */
+    private PineappleLib(final Plugin plugin, final boolean useNms) {
         this.plugin = plugin;
-        this.configManager = new ConfigurationManager();
-        this.menuManager = new MenuManager(plugin);
+        if (useNms) {
+            NMSLoader.INSTANCE.activate();
+            this.nmsProvider = NMSLoader.INSTANCE.getPineapple();
+        }
+        this.configurationManager = new ConfigurationManager();
+        this.guiManager = new GuiManager(plugin);
+
+        loadVersion();
     }
 
+    /**
+     * @return the configuration manager
+     * @since 1.0.0-SNAPSHOT
+     */
+    public static ConfigurationManager getConfigurationManager() {
+        return instance.configurationManager;
+    }
+
+    /**
+     * @return the gui manager
+     * @since 1.0.0-SNAPSHOT
+     */
+    @NotNull
+    public static GuiManager getGuiManager() {
+        return instance.guiManager;
+    }
+
+    /**
+     * Gets the PineappleNMS provider
+     * <p>
+     * Given That NMS was disabled this will throw an error
+     *
+     * @return PineappleNMS
+     * @since 1.0.0-SNAPSHOT
+     */
+    @NMS
+    public static PineappleNMS getNmsProvider() {
+        NMSLoader.INSTANCE.verifyNMS();
+        return instance.nmsProvider;
+    }
+
+    /**
+     * Retrieves the initialized plugin's logger
+     *
+     * @return the logger
+     * @since 1.0.0-SNAPSHOT
+     */
     @NotNull
     public static Logger getLogger() {
-        return getInstance().plugin.getLogger();
-    }
-
-    @NotNull
-    public static ConfigurationManager getConfigurationManager() {
-        return getInstance().configManager;
-    }
-
-    @NotNull
-    public static MenuManager getMenuManager() {
-        return getInstance().menuManager;
+        return instance.plugin.getLogger();
     }
 
     /**
-     * Initializes PineappleLib using the provided plugin
-     *
-     * @param plugin the plugin to initialize PineappleLib
+     * @return the version
+     * @since 1.0.0-SNAPSHOT
      */
-    public static void initialize(Plugin plugin) {
-        Preconditions.checkArgument(instance == null, "PineappleLib is already initialized");
-        instance = new PineappleLib(plugin);
+    public static String getVersion() {
+        return instance.version;
     }
 
     /**
-     * Cleans up PineappleLib by setting the underlying instance to null
+     * Initializes PineappleLib
+     *
+     * @param plugin the plugin
+     * @since 1.0.0-SNAPSHOT
+     */
+    @NMS
+    public static void initialize(@NotNull final Plugin plugin) {
+        instance = new PineappleLib(plugin, true);
+    }
+
+    /**
+     * Initializes PineappleLib
+     *
+     * @param plugin the plugin
+     * @param useNms decides whether or not to use NMS
+     * @since 1.0.0-SNAPSHOT
+     */
+    public static void initialize(@NotNull final Plugin plugin, final boolean useNms) {
+        instance = new PineappleLib(plugin, useNms);
+    }
+
+    /**
+     * Cleans up and shutdown Pineapple and all of its functions
      */
     public static void cleanup() {
-        Preconditions.checkArgument(instance != null, "PineappleLib is not initialized so it can not be cleaned up");
         instance = null;
     }
 
-    /**
-     * Gets the current PineappleLib instance or throws if one does not exist
-     *
-     * @return the PineappleLib instance
-     * @throws IllegalStateException throws if {@link PineappleLib#initialize(Plugin)} has not yet been called
-     */
-    @NotNull
-    public static PineappleLib getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException("Not initialized");
+    private void loadVersion() {
+        try (final BufferedReader reader = new BufferedReader(
+                new InputStreamReader(getClass().getResourceAsStream("/pineapple.version"), StandardCharsets.UTF_8)
+        )) {
+            this.version = reader.readLine();
+        } catch (IOException ignored) {
         }
-
-        return instance;
     }
 }
