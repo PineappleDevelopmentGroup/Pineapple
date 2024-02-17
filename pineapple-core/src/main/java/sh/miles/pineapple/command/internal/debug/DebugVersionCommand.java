@@ -1,6 +1,5 @@
 package sh.miles.pineapple.command.internal.debug;
 
-import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
@@ -10,9 +9,7 @@ import sh.miles.pineapple.chat.PineappleChat;
 import sh.miles.pineapple.command.Command;
 import sh.miles.pineapple.command.CommandLabel;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 class DebugVersionCommand extends Command {

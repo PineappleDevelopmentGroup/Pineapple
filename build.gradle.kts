@@ -73,6 +73,10 @@ tasks.publish {
     dependsOn(tasks.getByName("checkstyleProject"))
 }
 
+tasks.publishToMavenLocal {
+    dependsOn(tasks.getByName("checkstyleProject"))
+}
+
 publishing {
     publications {
         create<MavenPublication>("Maven") {
