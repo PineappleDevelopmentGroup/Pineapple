@@ -29,7 +29,7 @@ public abstract class PlayerGui<T extends MenuScene> {
 
     private final T scene;
     private final Player viewer;
-    protected final Inventory topInventory;
+    private final Inventory topInventory;
     protected final List<GuiSlot> slots;
 
     protected PlayerGui(@NotNull final Function<Player, T> scene, @NotNull final Player viewer) {
@@ -39,6 +39,7 @@ public abstract class PlayerGui<T extends MenuScene> {
         Preconditions.checkState(this.scene != null, "The given scene function must return a non null value");
         this.viewer = viewer;
         this.topInventory = this.scene.getBukkitView().getTopInventory();
+        Preconditions.checkState(this.topInventory != null, "The top inventory must not be null! This is a spigot bug!");
         this.slots = new ArrayList<>(this.topInventory.getSize());
 
         for (int i = 0; i < this.topInventory.getSize(); i++) {
@@ -189,7 +190,7 @@ public abstract class PlayerGui<T extends MenuScene> {
      * @param event the event
      */
     public void handleClose(@NotNull final InventoryCloseEvent event) {
-        this.close();
+        PineappleLib.getGuiManager().unregister(this.topInventory);
     }
 
     /**

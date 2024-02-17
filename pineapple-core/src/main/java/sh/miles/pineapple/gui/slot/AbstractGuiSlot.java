@@ -16,7 +16,7 @@ public abstract class AbstractGuiSlot implements GuiSlot {
 
     protected AbstractGuiSlot(@NotNull final Inventory inventory, final int index) {
         Preconditions.checkArgument(inventory != null, "The given inventory must not be null");
-        Preconditions.checkArgument(index > 0 && index < inventory.getSize(), "The given index must be in the bounds %d, %d".formatted(0, inventory.getSize()));
+        Preconditions.checkArgument(index >= 0 && index < inventory.getSize(), "The given index must be in the bounds %d, %d you provided %d".formatted(0, inventory.getSize(), index));
         this.inventory = inventory;
         this.index = index;
     }

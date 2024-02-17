@@ -71,7 +71,7 @@ public interface GuiSlot {
          * @since 1.0.0-SNAPSHOT
          */
         public GuiSlotBuilder inventory(@NotNull final Inventory inventory) {
-            Preconditions.checkArgument(this.inventory != null, "The given inventory must not be null");
+            Preconditions.checkArgument(inventory != null, "The given inventory must not be null");
             this.inventory = inventory;
             return this;
         }
@@ -84,7 +84,7 @@ public interface GuiSlot {
          * @since 1.0.0-SNAPSHOT
          */
         public GuiSlotBuilder index(final int index) {
-            Preconditions.checkArgument(index > 0 && index < inventory.getSize(), "The given index must be in the bounds %d, %d".formatted(0, inventory.getSize()));
+            Preconditions.checkArgument(index >= 0 && index < inventory.getSize(), "The given index must be in the bounds %d, %d".formatted(0, inventory.getSize()));
             this.index = index;
             return this;
         }

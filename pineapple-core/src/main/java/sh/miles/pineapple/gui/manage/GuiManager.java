@@ -1,5 +1,6 @@
 package sh.miles.pineapple.gui.manage;
 
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
@@ -27,6 +28,7 @@ public class GuiManager {
      */
     public GuiManager(@NotNull final Plugin plugin) {
         this.guis = new HashMap<>();
+        Bukkit.getPluginManager().registerEvents(new GuiListener(this), plugin);
     }
 
     /**
