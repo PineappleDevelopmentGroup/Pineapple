@@ -13,6 +13,11 @@ import java.util.function.Function;
  */
 public sealed class Option<E> permits Option.None, Option.Some {
 
+    /**
+     * Commits an operation given that an option is present
+     *
+     * @param consumer the operation on present
+     */
     public void ifPresent(@NotNull final Consumer<E> consumer) {
         if (this instanceof Option.Some<E> some) {
             consumer.accept(some.some);

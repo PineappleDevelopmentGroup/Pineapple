@@ -1,7 +1,6 @@
 package sh.miles.pineapple.nms.api.packet;
 
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**

@@ -135,6 +135,11 @@ public abstract class PlayerGui<T extends MenuScene> {
         }
     }
 
+    /**
+     * Obtains the size of this inventory
+     *
+     * @return the inventory size
+     */
     protected int size() {
         return this.topInventory.getSize();
     }
@@ -158,6 +163,11 @@ public abstract class PlayerGui<T extends MenuScene> {
         return this.topInventory;
     }
 
+    /**
+     * Handles the click event for this inventory
+     *
+     * @param event the event
+     */
     public void handleClick(@NotNull final InventoryClickEvent event) {
         if (event.getClickedInventory() != null && event.getClickedInventory().equals(topInventory)) {
             final var slot = event.getSlot();
@@ -165,9 +175,19 @@ public abstract class PlayerGui<T extends MenuScene> {
         }
     }
 
+    /**
+     * Handles the open event for this inventory
+     *
+     * @param event the event
+     */
     public void handleOpen(@NotNull final InventoryOpenEvent event) {
     }
 
+    /**
+     * Handles the close event for this inventory
+     *
+     * @param event the event
+     */
     public void handleClose(@NotNull final InventoryCloseEvent event) {
         this.close();
     }

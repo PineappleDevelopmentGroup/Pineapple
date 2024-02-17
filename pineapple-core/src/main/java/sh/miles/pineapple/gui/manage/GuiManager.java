@@ -1,6 +1,5 @@
 package sh.miles.pineapple.gui.manage;
 
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
@@ -10,7 +9,6 @@ import sh.miles.pineapple.gui.PlayerGui;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * Manages Menus and their functionality
@@ -25,6 +23,7 @@ public class GuiManager {
      * Creates a GuiManager
      *
      * @param plugin the plugin to use
+     * @since 1.0.0-SNAPSHOT
      */
     public GuiManager(@NotNull final Plugin plugin) {
         this.guis = new HashMap<>();
@@ -45,6 +44,7 @@ public class GuiManager {
      *
      * @param inventory the given inventory that the GUI belongs to
      * @return the player gui
+     * @since 1.0.0-SNAPSHOT
      */
     @NotNull
     public Option<PlayerGui<?>> getGui(@NotNull final Inventory inventory) {

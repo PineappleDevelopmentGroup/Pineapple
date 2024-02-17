@@ -1,5 +1,4 @@
 plugins {
-    id("checkstyle")
     id("java-library")
     id("maven-publish")
     id("io.freefair.aggregate-javadoc-jar") version "8.4"
@@ -68,6 +67,14 @@ tasks.withType<Javadoc> {
         "NMS:a:Requires NMS",
         "PullRequested:a:A Pull Request is open"
     )
+}
+
+tasks.publish {
+    for (subproject in project.subprojects) {
+        if (subproject.pluginManager.hasPlugin("pineapplecheckstyle")) {
+            this.dependsOn(subproject.tasks.getByName("checkstyleMain"))
+        }
+    }
 }
 
 publishing {

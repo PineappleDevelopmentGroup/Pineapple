@@ -3,7 +3,6 @@ package sh.miles.pineapple.updater;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 /**
