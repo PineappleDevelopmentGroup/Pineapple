@@ -6,6 +6,7 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.ReflectionUtils;
+import sh.miles.pineapple.command.internal.PineappleCommandManager;
 
 import java.lang.invoke.MethodHandle;
 
@@ -56,4 +57,19 @@ public final class CommandRegistry {
         }
     }
 
+    /**
+     * Register Pineapple's internal commands with the plugin name as a suffix
+     */
+    public void registerInternalCommands() {
+        registerInternalCommands(plugin.getName());
+    }
+
+    /**
+     * Register Pineapple's internal commands with a custom suffix
+     *
+     * @param commandSuffix the suffix
+     */
+    public void registerInternalCommands(String commandSuffix) {
+        register(new PineappleCommandManager(this.plugin, commandSuffix.toLowerCase()));
+    }
 }

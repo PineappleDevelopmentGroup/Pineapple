@@ -25,3 +25,7 @@ dependencies {
     compileOnly(project(":pineapple-nms:api"))
     compileOnlyAndTest(project(":pineapple-utils"))
 }
+
+tasks.processResources {
+    expand("version" to rootProject.version)
+}
