@@ -8,6 +8,10 @@ import sh.miles.pineapple.nms.annotations.NMS;
 import sh.miles.pineapple.nms.api.PineappleNMS;
 import sh.miles.pineapple.nms.loader.NMSLoader;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 /**
@@ -25,6 +29,7 @@ public final class PineappleLib {
     private PineappleNMS nmsProvider;
     private final ConfigurationManager configurationManager;
     private final GuiManager guiManager;
+    private String version;
 
     /**
      * Creates a new instance of PineappleLib
@@ -40,6 +45,8 @@ public final class PineappleLib {
         }
         this.configurationManager = new ConfigurationManager();
         this.guiManager = new GuiManager(plugin);
+
+        loadVersion();
     }
 
     /**
@@ -85,6 +92,14 @@ public final class PineappleLib {
     }
 
     /**
+     * @return the version
+     * @since 1.0.0-SNAPSHOT
+     */
+    public static String getVersion() {
+        return instance.version;
+    }
+
+    /**
      * Initializes PineappleLib
      *
      * @param plugin the plugin
@@ -111,5 +126,14 @@ public final class PineappleLib {
      */
     public static void cleanup() {
         instance = null;
+    }
+
+    private void loadVersion() {
+        try (final BufferedReader reader = new BufferedReader(
+                new InputStreamReader(getClass().getResourceAsStream("/pineapple.version"), StandardCharsets.UTF_8)
+        )) {
+            this.version = reader.readLine();
+        } catch (IOException ignored) {
+        }
     }
 }
