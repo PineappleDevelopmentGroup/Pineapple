@@ -192,4 +192,8 @@ class ItemStackAdapter implements JsonAdapter<ItemStack> {
         return tip;
     }
 
+    @Override
+    public boolean isHierarchy() {
+        return true;
+    }
 }
