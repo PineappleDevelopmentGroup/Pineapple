@@ -5,7 +5,6 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.damage.DamageType;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.UUID;
