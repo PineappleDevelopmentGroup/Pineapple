@@ -3,6 +3,7 @@ package sh.miles.pineapple.collection.registry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -29,6 +30,22 @@ public abstract class AbstractRegistry<T extends RegistryKey<K>, K> implements R
     @Override
     public T getOrNull(@NotNull final K key) {
         return registry.get(key);
+    }
+
+    @NotNull
+    @Override
+    public T getOrDefault(@NotNull final K key, @NotNull final T defaultValue) {
+        return registry.getOrDefault(key, Objects.requireNonNull(defaultValue));
+    }
+
+    @NotNull
+    @Override
+    public T getOrDefault(@NotNull final K key, @NotNull final Supplier<T> defaultValue) {
+        var temp = registry.get(key);
+        if (temp == null) {
+            return defaultValue.get();
+        }
+        return temp;
     }
 
     @Override

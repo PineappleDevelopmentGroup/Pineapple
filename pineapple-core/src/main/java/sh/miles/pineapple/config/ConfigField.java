@@ -1,54 +1,33 @@
 package sh.miles.pineapple.config;
 
+import sh.miles.pineapple.config.annotation.Comment;
+import sh.miles.pineapple.config.annotation.ConfigPath;
+
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
-
-import sh.miles.pineapple.config.annotation.Comment;
-import sh.miles.pineapple.config.annotation.ConfigEntry;
 
 public class ConfigField {
 
     private final Field field;
-    private final boolean isStatic;
-    private String path;
     private List<String> comments;
+    private final Class<?> runtimeClass;
+    private String path;
 
     /**
-     * Creates a new ConfigField
+     * Create a config field wrapper from {@link Field}
      *
-     * @param field the reflected field to use
+     * @param field the field
      */
     public ConfigField(Field field) {
         this.field = field;
-        this.isStatic = Modifier.isStatic(field.getModifiers());
+        this.runtimeClass = this.field.getType();
 
-        initalize();
+        setup();
     }
 
-    public Field getField() {
-        return this.field;
-    }
-
-    public String getPath() {
-        return this.path;
-    }
-
-    public Class<?> getType() {
-        return this.field.getType();
-    }
-
-    public boolean isStatic() {
-        return isStatic;
-    }
-
-    public List<String> getComments() {
-        return this.comments;
-    }
-
-    private void initalize() {
-        this.path = this.field.getAnnotation(ConfigEntry.class).value();
+    private void setup() {
+        this.path = this.field.getAnnotation(ConfigPath.class).value();
 
         for (Comment comment : this.field.getAnnotationsByType(Comment.class)) {
             if (this.comments == null) {
@@ -58,4 +37,19 @@ public class ConfigField {
         }
     }
 
+    public Field getField() {
+        return field;
+    }
+
+    public List<String> getComments() {
+        return comments;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public Class<?> getRuntimeClass() {
+        return runtimeClass;
+    }
 }

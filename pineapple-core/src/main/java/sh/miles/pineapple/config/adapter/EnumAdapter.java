@@ -1,9 +1,9 @@
 package sh.miles.pineapple.config.adapter;
 
-import sh.miles.pineapple.config.adapter.base.GenericStringAdapter;
+import sh.miles.pineapple.config.adapter.base.TypeAdapterString;
 
 @SuppressWarnings("rawtypes")
-class EnumAdapter<R extends Enum> implements GenericStringAdapter<R> {
+class EnumAdapter<R extends Enum> implements TypeAdapterString<R> {
     private final Class<R> clazz;
 
     @SuppressWarnings("unchecked")

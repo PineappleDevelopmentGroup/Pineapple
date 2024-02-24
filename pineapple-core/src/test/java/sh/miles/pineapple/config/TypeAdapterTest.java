@@ -25,16 +25,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TypeAdapterTest extends BukkitTest {
 
-    private ConfigReloadable<ConfigMock> config;
-
     @BeforeEach
     @Override
     public void setup() {
         super.setup();
         PineappleLib.initialize(super.plugin, false);
-        this.config = PineappleLib.getConfigurationManager()
-                .createStaticReloadable(new File(plugin.getDataFolder(), "config.yml"), ConfigMock.class);
-        this.config.saveDefaults().load();
+        PineappleLib.getConfigurationManager().createDefault(new File(plugin.getDataFolder(), "config.yml"), ConfigMock.class);
     }
 
     @AfterEach
@@ -113,18 +109,21 @@ public class TypeAdapterTest extends BukkitTest {
     }
 
     @Test
-    public void test_Primitive_Boolean_TypeAdapter() {
+    public void test_Boolean_TypeAdapter() {
         assertTrue(ConfigMock.PRIMITIVE_BOOLEAN);
+        assertTrue(ConfigMock.OBJECT_BOOLEAN);
     }
 
     @Test
-    public void test_Primitive_Int_TypeAdapter() {
+    public void test_Int_TypeAdapter() {
         assertEquals(1, ConfigMock.PRIMITIVE_INT);
+        assertEquals(1, ConfigMock.OBJECT_INTEGER);
     }
 
     @Test
-    public void test_Primitive_Long_TypeAdapter() {
-        assertEquals(1L, ConfigMock.PRIMITIVE_LONG);
+    public void test_Long_TypeAdapter() {
+        assertEquals(4294967299L, ConfigMock.PRIMITIVE_LONG);
+        assertEquals(4294967299L, ConfigMock.OBJECT_LONG);
     }
 
     @Test

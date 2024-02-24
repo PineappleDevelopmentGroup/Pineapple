@@ -378,7 +378,7 @@ public class ItemBuilder {
     }
 
     /**
-     * Sets hte potionColor on the given item
+     * Sets the potionColor on the given item
      *
      * @param color the color
      * @return the ItemBuilder

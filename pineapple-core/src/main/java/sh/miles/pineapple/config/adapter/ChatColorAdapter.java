@@ -1,11 +1,12 @@
 package sh.miles.pineapple.config.adapter;
 
+
 import net.md_5.bungee.api.ChatColor;
-import sh.miles.pineapple.config.adapter.base.GenericStringAdapter;
+import sh.miles.pineapple.config.adapter.base.TypeAdapterString;
 
 import java.awt.Color;
 
-class ChatColorAdapter implements GenericStringAdapter<ChatColor> {
+class ChatColorAdapter implements TypeAdapterString<ChatColor> {
 
     @Override
     public Class<ChatColor> getRuntimeType() {

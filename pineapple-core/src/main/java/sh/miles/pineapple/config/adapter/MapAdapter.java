@@ -7,23 +7,16 @@ import sh.miles.pineapple.config.adapter.base.TypeAdapterString;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 class MapAdapter<K, V> implements TypeAdapter<Map<String, Object>, Map<K, V>> {
-    private final TypeAdapter<Object, V> valueAdapter;
-    private final TypeAdapterString<Object, K> keyAdapter;
 
-    /**
-     * Creates a new MapAdapter
-     *
-     * @param type the type of map to adapt
-     */
+    private final TypeAdapterString<K> keyAdapter;
+    private final TypeAdapter<Object, V> valueAdapter;
+
     @SuppressWarnings("unchecked")
     public MapAdapter(ConfigType<?> type) {
-        this.keyAdapter = (TypeAdapterString<Object, K>) PineappleLib
-                .getConfigurationManager().getStringAdapter(type.getComponentTypes().get(0));
-        this.valueAdapter = (TypeAdapter<Object, V>) PineappleLib.getConfigurationManager()
-                .getAdapter(type.getComponentTypes().get(1));
+        this.keyAdapter = (TypeAdapterString<K>) (Object) PineappleLib.getConfigurationManager().getTypeAdapter(type.getComponentTypes().get(0));
+        this.valueAdapter = (TypeAdapter<Object, V>)  PineappleLib.getConfigurationManager().getTypeAdapter(type.getComponentTypes().get(1));
     }
 
     @SuppressWarnings("unchecked")
@@ -35,21 +28,7 @@ class MapAdapter<K, V> implements TypeAdapter<Map<String, Object>, Map<K, V>> {
     @SuppressWarnings("unchecked")
     @Override
     public Class<Map<K, V>> getRuntimeType() {
-        return (Class<Map<K, V>>) (Object) Map.class;
-    }
-
-    @Override
-    public Map<K, V> read(Map<String, Object> value) {
-        Map<K, V> map = new LinkedHashMap<>();
-
-        for (Entry<String, Object> entry : value.entrySet()) {
-            K mapKey = this.keyAdapter.fromString(entry.getKey());
-            V mapValue = this.valueAdapter.read(entry.getValue());
-
-            map.put(mapKey, mapValue);
-        }
-
-        return map;
+        return (Class<Map<K,V>>) (Object) Map.class;
     }
 
     @Override
@@ -58,16 +37,32 @@ class MapAdapter<K, V> implements TypeAdapter<Map<String, Object>, Map<K, V>> {
             existing = new LinkedHashMap<>();
         }
 
-        for (Entry<K, V> entry : value.entrySet()) {
-            String key = this.keyAdapter.toString(entry.getKey());
+        for (Map.Entry<K, V> entry : value.entrySet()) {
+            String serializedKey = this.keyAdapter.toString(entry.getKey());
 
-            if (!existing.containsKey(key) || replace) {
-                Object saveValue = this.valueAdapter.write(entry.getValue(), existing.get(key), replace);
-                if (saveValue != null) {
-                    existing.put(key, saveValue);
+            if (!existing.containsKey(serializedKey) || replace) {
+                Object saveValue = this.valueAdapter.write(entry.getValue(), existing.get(serializedKey), replace);
+                if (saveValue == null) {
+                    continue;
                 }
+                existing.put(serializedKey, saveValue);
             }
         }
+
         return existing;
+    }
+
+    @Override
+    public Map<K, V> read(Map<String, Object> saved) {
+        Map<K, V> read = new LinkedHashMap<>();
+
+        for (Map.Entry<String, Object> entry : saved.entrySet()) {
+            K key = this.keyAdapter.fromString(entry.getKey());
+            V value = this.valueAdapter.read(entry.getValue());
+
+            read.put(key, value);
+        }
+
+        return read;
     }
 }

@@ -35,6 +35,26 @@ public interface Registry<T extends RegistryKey<K>, K> {
     T getOrNull(@NotNull final K key);
 
     /**
+     * Fetches the value at the given key or a provided default key
+     *
+     * @param key          the key
+     * @param defaultValue the default value given the key has no value
+     * @return a non null value from either the key or default
+     */
+    @NotNull
+    T getOrDefault(@NotNull final K key, @NotNull final T defaultValue);
+
+    /**
+     * Fetches the value at the given key or a provided default key
+     *
+     * @param key          the key
+     * @param defaultValue the default value function triggered if the key has no value
+     * @return a non null value from either the key or default
+     */
+    @NotNull
+    T getOrDefault(@NotNull final K key, @NotNull final Supplier<T> defaultValue);
+
+    /**
      * Retrieves a set of all keys from the registry
      *
      * @return a set of string keys

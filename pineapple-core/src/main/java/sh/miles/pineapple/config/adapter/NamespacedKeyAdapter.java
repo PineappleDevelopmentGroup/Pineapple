@@ -1,9 +1,9 @@
 package sh.miles.pineapple.config.adapter;
 
 import org.bukkit.NamespacedKey;
-import sh.miles.pineapple.config.adapter.base.GenericStringAdapter;
+import sh.miles.pineapple.config.adapter.base.TypeAdapterString;
 
-class NamespacedKeyAdapter implements GenericStringAdapter<NamespacedKey> {
+class NamespacedKeyAdapter implements TypeAdapterString<NamespacedKey> {
 
     @Override
     public Class<NamespacedKey> getRuntimeType() {

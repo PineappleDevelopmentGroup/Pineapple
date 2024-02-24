@@ -31,7 +31,7 @@ class CollectionAdapter<S, R> implements TypeAdapter<List<S>, Collection<R>> {
 
     @SuppressWarnings("unchecked")
     public CollectionAdapter(ConfigType<?> type) {
-        this.adapter = (TypeAdapter<S, R>) PineappleLib.getConfigurationManager().getAdapter(type.getComponentTypes().get(0));
+        this.adapter = (TypeAdapter<S, R>) PineappleLib.getConfigurationManager().getTypeAdapter(type.getComponentTypes().get(0));
         this.type = (ConfigType<Collection<R>>) type;
     }
 
