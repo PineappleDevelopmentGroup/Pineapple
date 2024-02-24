@@ -2,12 +2,11 @@ package sh.miles.pineapple.config;
 
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
+import org.junit.jupiter.api.Test;
 import sh.miles.pineapple.chat.PineappleChat;
 import sh.miles.pineapple.chat.PineappleComponent;
 import sh.miles.pineapple.collection.WeightedRandom;
-import sh.miles.pineapple.config.annotation.ConfigEntry;
-import sh.miles.pineapple.item.ItemBuilder;
+import sh.miles.pineapple.config.annotation.ConfigPath;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -21,52 +20,62 @@ import java.util.Set;
 @SuppressWarnings("deprecation")
 public class ConfigMock {
 
-    @ConfigEntry("test.collection.list")
+    @ConfigPath("test.collection.list")
     public static List<String> COLLECTION_LIST = new ArrayList<>(List.of("a", "b", "c"));
 
-    @ConfigEntry("test.collection.set")
+    @ConfigPath("test.collection.set")
     public static Set<String> COLLECTION_SET = new LinkedHashSet<>(List.of("a", "b", "c"));
 
-    @ConfigEntry("test.collection.queue")
+    @ConfigPath("test.collection.queue")
     public static Queue<String> COLLECTION_QUEUE = new ArrayDeque<>(List.of("a", "b", "c"));
 
-    @ConfigEntry("test.collection.map")
+    @ConfigPath("test.collection.map")
     public static Map<String, String> COLLECTION_MAP = new HashMap<>(Map.of("a", "1", "b", "2", "c", "3"));
 
-    @ConfigEntry("test.color.red")
+    @ConfigPath("test.color.red")
     public static ChatColor COLOR_RED = ChatColor.RED;
 
-    @ConfigEntry("test.color.green")
+    @ConfigPath("test.color.green")
     public static ChatColor COLOR_GREEN = ChatColor.GREEN;
 
-    @ConfigEntry("test.color.blue")
+    @ConfigPath("test.color.blue")
     public static ChatColor COLOR_BLUE = ChatColor.BLUE;
 
-    @ConfigEntry("test.enum.1")
+    @ConfigPath("test.enum.1")
     public static EnumMock ENUM_1 = EnumMock.VALUE1;
 
-    @ConfigEntry("test.enum.2")
+    @ConfigPath("test.enum.2")
     public static EnumMock ENUM_2 = EnumMock.VALUE2;
 
-    @ConfigEntry("test.enum.3")
+    @ConfigPath("test.enum.3")
     public static EnumMock ENUM_3 = EnumMock.VALUE3;
 
-    @ConfigEntry("test.material")
+    @ConfigPath("test.material")
     public static Material MATERIAL = Material.BARRIER;
 
-    @ConfigEntry("test.component")
+    @ConfigPath("test.component")
     public static PineappleComponent CHAT = PineappleChat.component("<green></bold>Test");
 
-    @ConfigEntry("test.primitive.boolean")
+    @ConfigPath("test.primitive.boolean")
     public static boolean PRIMITIVE_BOOLEAN = true;
 
-    @ConfigEntry("test.primitive.int")
+
+    @ConfigPath("test.primitive.int")
     public static int PRIMITIVE_INT = 1;
 
-    @ConfigEntry("test.primitive.long")
-    public static long PRIMITIVE_LONG = 1;
+    @ConfigPath("test.primitive.long")
+    public static long PRIMITIVE_LONG = 4294967299L;
 
-    @ConfigEntry("test.weightedrandom")
+    @ConfigPath("test.object.boolean")
+    public static Boolean OBJECT_BOOLEAN = Boolean.TRUE;
+
+    @ConfigPath("test.object.int")
+    public static Integer OBJECT_INTEGER = 1;
+
+    @ConfigPath("test.object.long")
+    public static Long OBJECT_LONG = Long.parseLong("4294967299");
+
+    @ConfigPath("test.weightedrandom")
     public static WeightedRandom<String> WEIGHTED_RANDOM = getWeightedRandom();
 
     public static WeightedRandom<String> getWeightedRandom() {

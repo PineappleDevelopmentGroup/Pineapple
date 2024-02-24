@@ -12,11 +12,11 @@ import java.util.Map.Entry;
 
 class WeightedRandomAdapter<R> implements TypeAdapter<Map<String, Object>, WeightedRandom<R>> {
 
-    private final TypeAdapterString<Object, R> adapter;
+    private final TypeAdapterString<R> adapter;
 
     @SuppressWarnings("unchecked")
     public WeightedRandomAdapter(ConfigType<?> type) {
-        this.adapter = (TypeAdapterString<Object, R>) PineappleLib.getConfigurationManager().getStringAdapter(type.getComponentTypes().get(0));
+        this.adapter = (TypeAdapterString<R>) (Object) PineappleLib.getConfigurationManager().getTypeAdapter(type.getComponentTypes().get(0));
     }
 
     @SuppressWarnings("unchecked")

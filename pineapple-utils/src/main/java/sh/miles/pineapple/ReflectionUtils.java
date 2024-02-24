@@ -241,7 +241,7 @@ public final class ReflectionUtils {
     }
 
     /**
-     * Sets the given accessible object accessible and then returns the result of hte provided function
+     * Sets the given accessible object accessible and then returns the result of the provided function
      *
      * @param accessibleObject the accessible object
      * @param function         the function

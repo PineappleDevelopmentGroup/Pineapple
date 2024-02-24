@@ -7,11 +7,11 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Comment {
+public @interface ConfigPath {
     /**
-     * Comment value
+     * In config path of field
      *
-     * @return the comment
+     * @return the path
      */
     String value() default "";
 }

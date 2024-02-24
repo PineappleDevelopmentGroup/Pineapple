@@ -32,7 +32,7 @@ public interface GuiSlot {
     void setItem(@NotNull final ItemStack item);
 
     /**
-     * Gets hte item content of this gui slot
+     * Gets the item content of this gui slot
      *
      * @return the item
      * @since 1.0.0-SNAPSHOT
