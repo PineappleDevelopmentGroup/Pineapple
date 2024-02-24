@@ -1,11 +1,6 @@
 package sh.miles.pineapple.config.adapter;
 
-import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
-import sh.miles.pineapple.chat.PineappleComponent;
 import sh.miles.pineapple.collection.WeightedRandom;
 import sh.miles.pineapple.collection.registry.WriteableRegistry;
 import sh.miles.pineapple.config.ConfigType;
@@ -13,13 +8,10 @@ import sh.miles.pineapple.config.adapter.base.ConfigSerializable;
 import sh.miles.pineapple.config.adapter.base.TypeAdapter;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 @ApiStatus.Internal
 public class TypeAdapterHandler extends WriteableRegistry<TypeAdapter<?, ?>, ConfigType<?>> {
-
-    private final Map<ConfigType<?>, TypeAdapter<?, ?>> typeAdapters = new HashMap<>();
 
     /**
      * Create a new TypeAdapterHandler

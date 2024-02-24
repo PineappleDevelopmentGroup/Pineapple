@@ -2,11 +2,9 @@ package sh.miles.pineapple.config;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Stack;
 import java.util.stream.Collectors;
 
 /**
