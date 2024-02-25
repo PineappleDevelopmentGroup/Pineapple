@@ -41,6 +41,14 @@ public class ConfigField {
         return field;
     }
 
+    public void setVisible() {
+        this.field.setAccessible(true);
+    }
+
+    public void setHidden() {
+        this.field.setAccessible(false);
+    }
+
     public List<String> getComments() {
         return comments;
     }

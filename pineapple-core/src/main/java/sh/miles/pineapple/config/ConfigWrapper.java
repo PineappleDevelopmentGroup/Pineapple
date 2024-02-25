@@ -53,6 +53,7 @@ public class ConfigWrapper {
 
         ConfigManager configManager = PineappleLib.getConfigurationManager();
         for (ConfigField field : this.fields) {
+            field.setVisible();
             String path = field.getPath();
 
             boolean mapOnly = field.getRuntimeClass() == Map.class && path.isEmpty() && this.fields.size() == 1;
@@ -64,6 +65,7 @@ public class ConfigWrapper {
             TypeAdapter<Object, Object> adapter = (TypeAdapter<Object, Object>) configManager.getTypeAdapter(ConfigType.get(field.getField()));
             if (adapter == null) {
                 PineappleLib.getLogger().log(Level.WARNING, "Unable to find type adapter for field: {0} with path: {1} in {2}", objArr(field.getField().getName(), field.getPath(), this.file.getName()));
+                field.setHidden();
                 continue;
             }
 
@@ -87,6 +89,7 @@ public class ConfigWrapper {
             Object value = adapter.write(toSave, existing, replace);
             if (value == null) {
                 PineappleLib.getLogger().log(Level.WARNING, "Found null value from TypeAdapter: {0} while trying to save config {1}", objArr(adapter.getClass().getTypeName(), this.file.getName()));
+                field.setHidden();
                 continue;
             }
 
@@ -95,11 +98,13 @@ public class ConfigWrapper {
                 for (Map.Entry<String, Object> entry : saving.entrySet()) {
                     config.set(entry.getKey(), entry.getValue());
                 }
+                field.setHidden();
                 continue;
             }
 
 
             config.set(path, value);
+            field.setHidden();
         }
 
         try {
@@ -127,6 +132,7 @@ public class ConfigWrapper {
         YamlConfiguration config = YamlConfiguration.loadConfiguration(this.file);
 
         for (ConfigField field : this.fields) {
+            field.setVisible();
             String path = field.getPath();
 
             boolean mapOnly = field.getRuntimeClass() == Map.class && path.isEmpty() && this.fields.size() == 1;
@@ -134,6 +140,7 @@ public class ConfigWrapper {
 
             if (typeAdapter == null) {
                 PineappleLib.getLogger().log(Level.WARNING, "Unable to find type adapter for field: {0} with path: {1} in {2}", objArr(field.getField().getName(), field.getPath(), this.file.getName()));
+                field.setHidden();
                 continue;
             }
 
@@ -144,12 +151,14 @@ public class ConfigWrapper {
                 }
                 Map<?, ?> deserialized = new HashMap<>((Map<?, ?>) typeAdapter.read(fromConfig));
                 setField(field.getField(), deserialized);
+                field.setHidden();
                 return this;
             }
 
             Object configValue = config.get(path);
             if(configValue == null) {
                 PineappleLib.getLogger().log(Level.WARNING, "Config value retrieved is null for {0}", path);
+                field.setHidden();
                 continue;
             }
 
@@ -162,10 +171,12 @@ public class ConfigWrapper {
 
             if (unserialized == null) {
                 PineappleLib.getLogger().log(Level.WARNING, "Deserialized value for path: {0}, is null from TypeAdapter {1}", objArr(path, typeAdapter.getClass().getTypeName()));
+                field.setHidden();
                 return this;
             }
 
             setField(field.getField(), unserialized);
+            field.setHidden();
         }
         return this;
     }

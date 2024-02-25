@@ -132,4 +132,10 @@ public class TypeAdapterTest extends BukkitTest {
         WeightedRandom<String> config = ConfigMock.WEIGHTED_RANDOM;
         assertEquals(3, config.size());
     }
+
+    @Test
+    public void test_Private_Fields() {
+        assertEquals("full private string", ConfigMock.getFullPrivateString());
+        assertEquals("package private string", ConfigMock.PACKAGE_PRIVATE_STRING);
+    }
 }

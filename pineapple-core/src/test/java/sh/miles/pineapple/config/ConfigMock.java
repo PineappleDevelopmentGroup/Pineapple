@@ -78,6 +78,16 @@ public class ConfigMock {
     @ConfigPath("test.weightedrandom")
     public static WeightedRandom<String> WEIGHTED_RANDOM = getWeightedRandom();
 
+    @ConfigPath("test.private.package")
+    static String PACKAGE_PRIVATE_STRING = "package private string";
+
+    @ConfigPath("test.private.full")
+    private static String FULL_PRIVATE_STRING = "full private string";
+
+    public static String getFullPrivateString() {
+        return FULL_PRIVATE_STRING;
+    }
+
     public static WeightedRandom<String> getWeightedRandom() {
         WeightedRandom<String> weightedRandom = new WeightedRandom<>();
         weightedRandom.add(5, "a");
