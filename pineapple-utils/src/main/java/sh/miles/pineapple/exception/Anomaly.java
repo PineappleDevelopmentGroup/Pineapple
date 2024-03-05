@@ -41,7 +41,7 @@ public class Anomaly<R> {
     public Anomaly(@NotNull final Logger logger, @NotNull final Exception exception, @NotNull final String message) {
         this.logger = Objects.requireNonNull(logger);
         this.exception = Option.some(exception);
-        this.message = Option.some(message);
+        this.message = Option.some(StringUtils.boxError(message));
     }
 
     /**
