@@ -1,7 +1,10 @@
 package sh.miles.pineapple;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A Collection of Utilities useful for string manipulation
@@ -9,6 +12,10 @@ import java.util.List;
  * @since 1.0.0-SNAPSHOT
  */
 public final class StringUtils {
+
+    private static final int LINE_CHAR_LIMIT = 50;
+    private static final char HORIZONTAL_BAR = '⎯';
+    private static final char VERTICAL_BAR = '│';
 
     private StringUtils() {
         throw new UnsupportedOperationException("no");
@@ -72,5 +79,39 @@ public final class StringUtils {
         }
 
         return split;
+    }
+
+    /**
+     * Boxes up an error in a pretty looking message
+     *
+     * @param errorMessage the errorMessage to box up
+     * @return the formatted string
+     */
+    public static String boxError(@NotNull final String errorMessage) {
+        Objects.requireNonNull(errorMessage);
+        StringBuilder builder = new StringBuilder().append("\n");
+        builder.append(VERTICAL_BAR).append(String.valueOf(HORIZONTAL_BAR).repeat(LINE_CHAR_LIMIT + 1)).append(VERTICAL_BAR).append('\n');
+        builder.append(" ").append(" An Error Has Occurred").append("\n"); // 18 characters
+        builder.append(VERTICAL_BAR).append(String.valueOf(HORIZONTAL_BAR).repeat(LINE_CHAR_LIMIT + 1)).append(VERTICAL_BAR).append('\n').append(' ');
+
+        final char[] messageChars = errorMessage.toCharArray();
+        boolean wrappedOnEnd = false;
+        for (int i = 0; i < messageChars.length; i++) {
+            final char cur = messageChars[i];
+            if ((i != 0 && i % LINE_CHAR_LIMIT == 0) || wrappedOnEnd) {
+                if (cur != ' ') {
+                    wrappedOnEnd = true;
+                } else {
+                    builder.append('\n');
+                    wrappedOnEnd = false;
+                }
+            }
+
+            builder.append(cur);
+        }
+
+        builder.append("\n").append(VERTICAL_BAR).append(String.valueOf(HORIZONTAL_BAR).repeat(LINE_CHAR_LIMIT + 1)).append(VERTICAL_BAR);
+
+        return builder.toString();
     }
 }

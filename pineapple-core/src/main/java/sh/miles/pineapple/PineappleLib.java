@@ -1,11 +1,10 @@
 package sh.miles.pineapple;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.command.CommandRegistry;
 import sh.miles.pineapple.config.ConfigManager;
-import sh.miles.pineapple.exception.PrettyExceptionFactory;
+import sh.miles.pineapple.exception.AnomalyFactory;
 import sh.miles.pineapple.gui.manage.GuiManager;
 import sh.miles.pineapple.nms.annotations.NMS;
 import sh.miles.pineapple.nms.api.PineappleNMS;
@@ -33,7 +32,7 @@ public final class PineappleLib {
     private final CommandRegistry commandRegistry;
     private final ConfigManager configurationManager;
     private final GuiManager guiManager;
-    private final PrettyExceptionFactory exceptionFactory;
+    private final AnomalyFactory anomalyFactory;
     private String version;
 
     /**
@@ -51,7 +50,7 @@ public final class PineappleLib {
         this.commandRegistry = new CommandRegistry(plugin);
         this.configurationManager = new ConfigManager();
         this.guiManager = new GuiManager(plugin);
-        this.exceptionFactory = new PrettyExceptionFactory(plugin.getLogger(), () -> Bukkit.getServer().getPluginManager().disablePlugin(plugin));
+        this.anomalyFactory = new AnomalyFactory(plugin.getLogger());
         loadVersion();
     }
 
@@ -97,13 +96,13 @@ public final class PineappleLib {
     }
 
     /**
-     * Retrieves the pretty exception factory used for prettifying and creating readable exceptions
+     * Retrieves the pretty anomaly factory used for handling and prettifying exceptions
      *
-     * @return the pretty exception factory
+     * @return the anomaly factory
      * @since 1.0.0-SNAPSHOT
      */
-    public static PrettyExceptionFactory getExceptionFactory() {
-        return instance.exceptionFactory;
+    public static AnomalyFactory getAnomalyFactory() {
+        return instance.anomalyFactory;
     }
 
     /**

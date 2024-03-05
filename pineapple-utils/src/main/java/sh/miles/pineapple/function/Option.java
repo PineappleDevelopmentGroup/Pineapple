@@ -83,7 +83,7 @@ public sealed class Option<E> permits Option.None, Option.Some {
 
         private final E some;
 
-        Some(E some) {
+        public Some(E some) {
             this.some = Objects.requireNonNull(some);
         }
 
@@ -99,6 +99,13 @@ public sealed class Option<E> permits Option.None, Option.Some {
      * @param <E> arbitrary type
      */
     public static final class None<E> extends Option<E> {
+        public None() {
+        }
+
+        @Override
+        public boolean equals(final Object obj) {
+            return obj instanceof Option.None<?>;
+        }
     }
 
 }
