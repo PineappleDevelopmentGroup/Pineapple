@@ -30,17 +30,6 @@ public class AnomalyFactory {
     }
 
     /**
-     * Creates an anomaly with the given exception and message
-     *
-     * @param exception the exception
-     * @param message   the message
-     * @return the new anomaly
-     */
-    public Anomaly<Void> create(@NotNull final Exception exception, @NotNull final String message) {
-        return new Anomaly<>(this.logger, exception, message);
-    }
-
-    /**
      * Creates an anomaly with the return value
      *
      * @param returnValue the return value
@@ -48,7 +37,7 @@ public class AnomalyFactory {
      * @return the new anomaly
      */
     public <R> Anomaly<R> create(@NotNull final R returnValue) {
-        return new Anomaly<>(this.logger)
+        return new Anomaly<R>(this.logger)
                 .run(() -> returnValue);
     }
 

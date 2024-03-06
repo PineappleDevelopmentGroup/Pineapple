@@ -23,7 +23,7 @@ public interface BukkitRegistryJsonAdapter<T extends Keyed> extends JsonAdapter<
     default T deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context) throws JsonParseException {
         final T keyedEntry = registry().get(context.deserialize(jsonElement, NamespacedKey.class));
         if (keyedEntry == null) {
-            throw new JsonParseException("Could not find keyed entry for json element %s".formatted(jsonElement));
+            throw new JsonParseException("Could not find keyed entry in registry %s for json element %s".formatted(getAdapterType(), jsonElement));
         }
         return keyedEntry;
     }

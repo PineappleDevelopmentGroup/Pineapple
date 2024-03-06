@@ -44,7 +44,7 @@ subprojects {
     tasks.test {
         useJUnitPlatform()
         testLogging {
-            events("passed", "skipped", "failed")
+            events("PASSED", "SKIPPED", "FAILED", "STANDARD_OUT", "STANDARD_ERROR")
         }
     }
 

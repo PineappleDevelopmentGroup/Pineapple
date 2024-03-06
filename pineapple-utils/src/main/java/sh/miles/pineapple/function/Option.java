@@ -54,6 +54,21 @@ public sealed class Option<E> permits Option.None, Option.Some {
     }
 
     /**
+     * Gets some value or the other value
+     *
+     * @param value the non null value to use instead
+     * @return the value
+     */
+    @NotNull
+    public E orElse(@NotNull final E value) {
+        if (!(this instanceof Some<E> some)) {
+            return Objects.requireNonNull(value);
+        }
+
+        return some.some;
+    }
+
+    /**
      * Creates Some Option
      *
      * @param value the value

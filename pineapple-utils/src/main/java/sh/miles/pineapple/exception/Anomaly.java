@@ -3,203 +3,234 @@ package sh.miles.pineapple.exception;
 import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.StringUtils;
 import sh.miles.pineapple.function.Option;
+import sh.miles.pineapple.function.Option.None;
 import sh.miles.pineapple.function.Option.Some;
 import sh.miles.pineapple.function.ThrowingSupplier;
 
-import java.util.Objects;
 import java.util.logging.Logger;
 
 /**
  * Tracks "Anomalies" That occur in code and prettify any errors that they cause
  */
 public class Anomaly<R> {
-
-    private final Logger logger;
     private Option<R> returnValue = Option.none();
+    // display actions
     private Option<String> message = Option.none();
     private Option<Exception> exception = Option.none();
-    private Option<Runnable> onError = Option.none();
-    private boolean logged = false;
-    private boolean throwExceptionIfExists = true;
+    private Option<Runnable> onFail = Option.none();
+    // settings
+    private boolean logException = true;
+    private boolean throwLog = true;
+    private boolean throwRuntimeException = true;
+    private boolean useExceptionMessage = false;
+
+    private final Logger logger;
 
     /**
-     * Creates an empty anomaly with a logger
+     * Creates a new anomaly
      *
      * @param logger the logger
      */
     public Anomaly(@NotNull final Logger logger) {
-        this.logger = Objects.requireNonNull(logger);
+        this.logger = logger;
     }
 
     /**
-     * Creates an anomaly with an exception and message
-     *
-     * @param logger    the logger
-     * @param exception the exception
-     * @param message   the message
-     */
-    public Anomaly(@NotNull final Logger logger, @NotNull final Exception exception, @NotNull final String message) {
-        this.logger = Objects.requireNonNull(logger);
-        this.exception = Option.some(exception);
-        this.message = Option.some(StringUtils.boxError(message));
-    }
-
-    /**
-     * Makes the returned anomaly not log the given message
-     *
-     * @return the new anomaly
-     */
-    public Anomaly<R> noLog() {
-        var copy = copy(this);
-        copy.logged = true;
-        return copy;
-    }
-
-    /**
-     * Causes the returned anomaly to not throw an exception if {@link #hard()} is used even if one exists
-     *
-     * @return the new anomaly
-     */
-    public Anomaly<R> noThrowException() {
-        var copy = copy(this);
-        copy.throwExceptionIfExists = false;
-        return copy;
-    }
-
-    /**
-     * Sets the message for a copy of this anomaly
+     * Sets the message of the returned message
      *
      * @param message the message
-     * @return the new anomaly
+     * @return a newly created anomaly
      */
     public Anomaly<R> message(@NotNull final String message) {
-        var copy = copy(this);
-        copy.message = Option.some(StringUtils.boxError(message));
-        return copy;
+        var anomaly = copy(this);
+        anomaly.message = Option.some(StringUtils.boxError(message));
+        return anomaly;
     }
 
     /**
-     * Executes a runnable when the returned Anomaly errors
+     * Sets the failure function on the returned anomaly
      *
-     * @param runnable the runnable
-     * @return the new anomaly
+     * @param onFail the onFail function
+     * @return a newly created anomaly
      */
-    public Anomaly<R> onError(@NotNull final Runnable runnable) {
-        var copy = copy(this);
-        copy.onError = Option.some(runnable);
-        return copy;
+    public Anomaly<R> onFail(@NotNull final Runnable onFail) {
+        var anomaly = copy(this);
+        anomaly.onFail = Option.some(onFail);
+        return anomaly;
     }
 
     /**
-     * Runs a piece of code in a throwing supplier which allows the anomaly to swallow its error and propagate it
-     * forward
-     *
-     * @param supplier the supplier to run
-     * @param <T>      the new return value
-     * @return the new anomaly
-     */
-    public <T> Anomaly<T> run(@NotNull final ThrowingSupplier<T> supplier) {
-        try {
-            var value = supplier.get();
-            return copyNewValue(this, Option.some(value));
-        } catch (Exception e) {
-            var copy = copyNewValue(this, new Option.None<T>());
-            copy.exception = Option.some(e);
-            return copy;
-        }
-    }
-
-    /**
-     * Logs the result of the anomaly with the given message if an error occurred
-     *
-     * @param runningClass the running class of this anomaly
-     * @param methodName   the method name this anomaly is running in
-     * @return this anomaly
-     */
-    @NotNull
-    public Anomaly<R> log(@NotNull final Class<?> runningClass, @NotNull final String methodName) {
-        if (this.exception instanceof Some<Exception> some && !this.logged) {
-            if (this.message instanceof Some<String> someMessage) {
-                this.logger.severe(someMessage.some());
-            }
-            this.logger.throwing(runningClass.getName(), methodName, some.some());
-            this.logged = true;
-        }
-        return this;
-    }
-
-    /**
-     * Completes the anomaly softly and does not throw or log any exceptions even if they occurred
-     *
-     * @return the return value
-     */
-    public Option<R> soft() {
-        if (this.exception instanceof Some<Exception> && this.onError instanceof Some<Runnable> some) {
-            some.some().run();
-        }
-        return this.returnValue;
-    }
-
-    /**
-     * Completes the anomaly with a RuntimeException takes into account if the error has been logged already or not when
-     * throwing
+     * Sets the throwLog setting to false on the returned anomaly
      * <p>
-     * This method only throws a runtime exception if {@link #noThrowException()} is not used
+     * The throwLog setting determines whether the error should be printed as in the log file
      *
-     * @return the return value
+     * @return a newly created anomaly
      */
-    public Option<R> hard() throws RuntimeException {
-        if (this.exception instanceof Some<Exception> some && this.throwExceptionIfExists) {
-            if (this.onError instanceof Some<Runnable> someRunnable) {
-                someRunnable.some().run();
-            }
-            if (logged) {
-                throw new RuntimeException(some.some());
-            } else {
-                if (this.message instanceof Some<String> someMessage) {
-                    throw new RuntimeException(someMessage.some(), some.some());
-                } else {
-                    throw new RuntimeException(some.some());
-                }
-            }
-        }
-        return this.returnValue;
+    public Anomaly<R> noThrowLog() {
+        var anomaly = copy(this);
+        anomaly.throwLog = false;
+        return anomaly;
     }
 
     /**
-     * Copies the current anomaly settings but returns an anomaly with a different return value
+     * Sets the useExceptionMessage setting to true on the returned anomaly
+     * <p>
+     * the useExceptionMessage automatically uses the exception message if an error is thrown from the supplier in
+     * {@link #run(ThrowingSupplier)}
      *
-     * @param anomaly     the original anomaly
-     * @param returnValue the new return value
-     * @param <R>         the return value
-     * @param <T>         the old type of return value
-     * @return the new anomaly
-     */
-    private static <R, T> Anomaly<R> copyNewValue(@NotNull final Anomaly<T> anomaly, @NotNull final Option<R> returnValue) {
-        final Anomaly<R> copy = new Anomaly<>(anomaly.logger);
-        copy.logged = anomaly.logged;
-        copy.exception = anomaly.exception;
-        copy.message = anomaly.message;
-        copy.onError = anomaly.onError;
-        copy.returnValue = returnValue;
-        return copy;
-    }
-
-    /**
-     * Copies the given anomaly into another object
-     *
-     * @param anomaly the anomaly
-     * @param <R>     the return value type
      * @return the newly created anomaly
      */
-    private static <R> Anomaly<R> copy(Anomaly<R> anomaly) {
-        final Anomaly<R> copy = new Anomaly<>(anomaly.logger);
-        copy.returnValue = anomaly.returnValue;
-        copy.logged = anomaly.logged;
-        copy.exception = anomaly.exception;
-        copy.onError = anomaly.onError;
-        copy.message = anomaly.message;
+    public Anomaly<R> useExceptionMessage() {
+        var anomaly = copy(this);
+        anomaly.useExceptionMessage = true;
+        return anomaly;
+    }
+
+    /**
+     * Sets the logException field to false on the returned anomaly
+     * <p>
+     * when log exception is false the exception is not logged in any capacity. Unlike {@link #noThrowLog} this is a
+     * package deal and includes the "Pretty" exception
+     *
+     * @return the newly created anomaly
+     */
+    public Anomaly<R> noLogException() {
+        var anomaly = copy(this);
+        anomaly.logException = false;
+        return anomaly;
+    }
+
+    /**
+     * Sets the throwRuntimeException field to false on the returned anomaly
+     * <p>
+     * when running {@link #hard(Class, String)} throwRuntimeException does not throw a RuntimeException even if an
+     * exception has occurred.
+     *
+     * @return the newly created anomaly
+     */
+    public Anomaly<R> noThrowRuntimeException() {
+        var anomaly = copy(this);
+        anomaly.throwRuntimeException = false;
+        return anomaly;
+    }
+
+    /**
+     * Runs a method and returns a new anomaly updating the values according to its return
+     *
+     * @param supplier the function to run
+     * @param <T>      the type returned by the supplier
+     * @return a newly created anomaly
+     */
+    public <T> Anomaly<T> run(@NotNull final ThrowingSupplier<T> supplier) {
+        Anomaly<T> copy;
+        try {
+            var value = supplier.get();
+            copy = copyWithValue(this, value);
+            copy.returnValue = Option.some(value);
+        } catch (Exception exception) {
+            copy = copyWithoutValue(this);
+            copy.exception = Option.some(exception);
+            if (useExceptionMessage) {
+                copy.message = Option.some(StringUtils.boxError(exception.getMessage()));
+            }
+        }
+
         return copy;
     }
 
+    /**
+     * Completes the Anomaly transaction using the settings the anomaly was given
+     * <p>
+     * Unlike {@link #hard(Class, String)} this method will never throw a runtime error but instead logs the error and
+     * peacefully continues execution. This plugin will also never trigger a runnable provided by
+     * {@link #onFail(Runnable)}
+     *
+     * @param clazz  the class the anomaly was completed in
+     * @param method the method the anomaly was completed in
+     * @return the possible return value
+     */
+    public Option<R> soft(@NotNull final Class<?> clazz, @NotNull final String method) {
+        if (exception instanceof None<Exception>) {
+            return this.returnValue;
+        }
+
+        var exception = this.exception.orThrow();
+        if (this.logException) {
+            if (this.message instanceof Some<String> some) {
+                this.logger.severe(some.some());
+            }
+
+            if (this.throwLog) {
+                this.logger.throwing(clazz.getName(), method, exception);
+            }
+        }
+
+        return this.returnValue;
+    }
+
+    /**
+     * Completes the Anomaly transaction using the settings the anomaly was given
+     * <p>
+     * Unlike {@link #soft(Class, String)} this method can throw a RuntimeException. This method also triggers the
+     * {@link #onFail(Runnable)}. If a method is supplied for {@link #onFail(Runnable)} no RuntimeException would be
+     * executed.
+     *
+     * @param clazz  the class the anomaly was completed in
+     * @param method the method the anomaly was completed in
+     * @return the possible return value
+     * @throws RuntimeException the possible exception that occurred
+     */
+    public Option<R> hard(@NotNull final Class<?> clazz, @NotNull final String method) throws RuntimeException {
+        if (this.exception instanceof None<Exception>) {
+            return this.returnValue;
+        }
+
+        var exception = this.exception.orThrow();
+        if (this.logException) {
+            if (this.message instanceof Some<String> some) {
+                this.logger.severe(some.some());
+            }
+
+            if (this.throwLog) {
+                this.logger.throwing(clazz.getName(), method, exception);
+            }
+        }
+
+        if (this.onFail instanceof Some<Runnable> some) {
+            some.some().run();
+            return this.returnValue;
+        }
+
+        if (throwRuntimeException) {
+            throw new RuntimeException(exception);
+        }
+
+        return this.returnValue;
+    }
+
+    private static <R> Anomaly<R> copy(Anomaly<R> old) {
+        Anomaly<R> copy = copyWithoutValue(old);
+        copy.returnValue = old.returnValue;
+        return copy;
+    }
+
+    private static <R, T> Anomaly<R> copyWithValue(Anomaly<T> old, R value) {
+        Anomaly<R> copy = copyWithoutValue(old);
+        copy.returnValue = Option.some(value);
+        return copy;
+    }
+
+    private static <R> Anomaly<R> copyWithoutValue(Anomaly<?> old) {
+        var copy = new Anomaly<R>(old.logger);
+        // display action
+        copy.message = old.message;
+        copy.exception = old.exception;
+        copy.onFail = old.onFail;
+        // settings
+        copy.throwLog = old.throwLog;
+        copy.logException = old.logException;
+        copy.useExceptionMessage = old.useExceptionMessage;
+        copy.throwRuntimeException = old.throwRuntimeException;
+        return copy;
+    }
 }
