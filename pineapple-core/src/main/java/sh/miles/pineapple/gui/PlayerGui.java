@@ -56,6 +56,7 @@ public abstract class PlayerGui<T extends MenuScene> {
         if (this.scene.getBukkitView() == viewer.getOpenInventory()) {
             throw new IllegalStateException("Can not re-open same menu twice");
         }
+
         decorate();
         PineappleLib.getGuiManager().register(this);
         this.viewer.openInventory(this.scene.getBukkitView());
@@ -71,6 +72,7 @@ public abstract class PlayerGui<T extends MenuScene> {
         if (this.scene.getBukkitView() == viewer.getOpenInventory()) {
             viewer.closeInventory();
             PineappleLib.getGuiManager().unregister(this.topInventory);
+            return;
         }
         throw new IllegalStateException("Attempted to close non-open player gui");
     }
