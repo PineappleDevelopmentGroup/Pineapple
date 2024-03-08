@@ -1,8 +1,10 @@
 package sh.miles.pineapple.nms.api.menu;
 
+import com.google.common.base.Preconditions;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.HumanEntity;
+import org.checkerframework.common.value.qual.IntRange;
 import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.collection.registry.RegistryKey;
 import sh.miles.pineapple.nms.api.menu.scene.AnvilScene;
@@ -55,5 +57,36 @@ public interface MenuType<T extends MenuScene> extends RegistryKey<NamespacedKey
     @SuppressWarnings("unchecked")
     private static <T extends MenuScene> MenuType<T> get(String id) {
         return (MenuType<T>) PineappleRegistry.MENU.getOrNull(NamespacedKey.minecraft(id));
+    }
+
+    /**
+     * Gets a Generic 9 by X container given the amount of rows provided
+     *
+     * @param rows a number of rows between 0 and 6
+     * @return the MenuType based on the amount of rows
+     */
+    static MenuType<?> fromRows(@IntRange(from = 0, to = 6) final int rows) {
+        Preconditions.checkArgument(rows >= 0 && rows <= 6, "The given row amount is not valid");
+        switch (rows) {
+            case 1 -> {
+                return MenuType.GENERIC_9x1;
+            }
+            case 2 -> {
+                return MenuType.GENERIC_9x2;
+            }
+            case 3 -> {
+                return MenuType.GENERIC_9x3;
+            }
+            case 4 -> {
+                return MenuType.GENERIC_9x4;
+            }
+            case 5 -> {
+                return MenuType.GENERIC_9x5;
+            }
+            case 6 -> {
+                return MenuType.GENERIC_9x6;
+            }
+            default -> throw new IllegalArgumentException("The given int is not in range!");
+        }
     }
 }
