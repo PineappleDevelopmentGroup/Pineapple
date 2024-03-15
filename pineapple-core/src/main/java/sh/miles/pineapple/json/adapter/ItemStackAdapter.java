@@ -76,7 +76,7 @@ class ItemStackAdapter implements JsonAdapter<ItemStack> {
             }
         }
 
-        parseEnchantment(parent).forEach(item::addEnchantment);
+        parseEnchantment(parent).forEach(item::addUnsafeEnchantment);
         final ItemMeta meta = item.getItemMeta();
         parseItemFlag(parent).forEach(meta::addItemFlags);
 
