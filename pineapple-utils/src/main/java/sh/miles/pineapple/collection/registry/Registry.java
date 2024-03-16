@@ -2,9 +2,9 @@ package sh.miles.pineapple.collection.registry;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import sh.miles.pineapple.function.Option;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -22,7 +22,7 @@ public interface Registry<T extends RegistryKey<K>, K> {
      * @return an optional wrapping the nullable result
      * @since 1.0.0-SNAPSHOT
      */
-    Optional<T> get(@NotNull final K key);
+    Option<T> get(@NotNull final K key);
 
     /**
      * Fetches an entry from the registry

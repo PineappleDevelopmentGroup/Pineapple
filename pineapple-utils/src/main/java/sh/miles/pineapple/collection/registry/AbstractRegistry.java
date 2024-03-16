@@ -1,10 +1,10 @@
 package sh.miles.pineapple.collection.registry;
 
 import org.jetbrains.annotations.NotNull;
+import sh.miles.pineapple.function.Option;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -23,8 +23,13 @@ public abstract class AbstractRegistry<T extends RegistryKey<K>, K> implements R
     }
 
     @Override
-    public Optional<T> get(@NotNull final K key) {
-        return Optional.ofNullable(registry.get(key));
+    public Option<T> get(@NotNull final K key) {
+        final T value = registry.get(key);
+        if (value == null) {
+            return Option.none();
+        } else {
+            return Option.some(value);
+        }
     }
 
     @Override
