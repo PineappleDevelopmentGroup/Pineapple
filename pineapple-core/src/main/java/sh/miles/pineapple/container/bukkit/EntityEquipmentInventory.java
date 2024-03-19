@@ -1,4 +1,4 @@
-package sh.miles.pineapple.util.inventory;
+package sh.miles.pineapple.container.bukkit;
 
 import com.google.common.base.Preconditions;
 import org.bukkit.Location;
