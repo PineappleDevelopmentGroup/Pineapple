@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.collection.NonNullArray;
+import sh.miles.pineapple.function.Option;
 
 import java.util.List;
 
@@ -55,6 +56,15 @@ public class SimpleContainer implements Container {
     @Override
     public boolean addItem(@NotNull final ItemStack item) {
         return this.contents.add(item);
+    }
+
+    @Override
+    public Option<ItemStack> removeItem(final int index) throws IndexOutOfBoundsException {
+        var item = contents.remove(index);
+        if (item.getType() == Material.AIR) {
+            return Option.none();
+        }
+        return Option.some(item);
     }
 
     @Override

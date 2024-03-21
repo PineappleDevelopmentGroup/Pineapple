@@ -85,11 +85,27 @@ public class NonNullArray<E> implements Collection<E> {
     }
 
     /**
+     * Removes the element from the given index
+     *
+     * @param index the index to remove the element from
+     * @return the removed item
+     * @throws IndexOutOfBoundsException if the index is out of bounds
+     */
+    @NotNull
+    public E remove(final int index) throws IndexOutOfBoundsException {
+        verifyIndex(index);
+        var temp = this.objects[index];
+        this.objects[index] = this.nullValue.get();
+        return (E) temp;
+    }
+
+    /**
      * Removes the given object
      *
      * @param value the value to remove
      * @return true if the value was removed, otherwise false
      */
+    @Override
     public boolean remove(@NotNull final Object value) {
         Objects.requireNonNull(value);
         for (int i = 0; i < this.objects.length; i++) {
@@ -103,19 +119,9 @@ public class NonNullArray<E> implements Collection<E> {
     }
 
     /**
-     * Removes the element from the given index
-     *
-     * @param index the index to remove the element from
-     * @throws IndexOutOfBoundsException if the index is out of bounds
-     */
-    public void remove(final int index) throws IndexOutOfBoundsException {
-        verifyIndex(index);
-        this.objects[index] = this.nullValue.get();
-    }
-
-    /**
      * Clears the Array of all values
      */
+    @Override
     public void clear() {
         for (int i = 0; i < objects.length; i++) {
             this.objects[i] = this.nullValue.get();
