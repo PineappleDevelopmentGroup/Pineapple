@@ -12,6 +12,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import sh.miles.pineapple.collection.NonNullArray;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +31,7 @@ public class EntityEquipmentInventory implements Inventory {
     public static final int LEGS = 4;
     public static final int FEET = 5;
 
-    private final NonNullList<ItemStack> contents;
+    private final NonNullArray<ItemStack> contents;
     private final EntityEquipment equipment;
 
     /**
@@ -40,7 +41,7 @@ public class EntityEquipmentInventory implements Inventory {
      */
     public EntityEquipmentInventory(@NotNull final EntityEquipment equipment) {
         Preconditions.checkArgument(equipment != null, "The provided equipment must not be null");
-        this.contents = new NonNullList<>(() -> new ItemStack(Material.AIR));
+        this.contents = new NonNullArray<>(6, () -> new ItemStack(Material.AIR));
         this.equipment = equipment;
     }
 
@@ -275,13 +276,13 @@ public class EntityEquipmentInventory implements Inventory {
     @NotNull
     @Override
     public ListIterator<ItemStack> iterator() {
-        return this.contents.listIterator();
+        return this.contents.stream().toList().listIterator();
     }
 
     @NotNull
     @Override
     public ListIterator<ItemStack> iterator(final int i) {
-        return this.contents.listIterator(i);
+        return this.contents.stream().toList().listIterator(i);
     }
 
     @Nullable

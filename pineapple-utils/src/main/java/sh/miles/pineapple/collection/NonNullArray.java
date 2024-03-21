@@ -223,7 +223,7 @@ public class NonNullArray<E> implements Collection<E> {
     @Override
     public boolean removeAll(@NotNull final Collection<?> c) {
         for (final Object o : c) {
-            remove(c);
+            remove(o);
         }
         return true;
     }
