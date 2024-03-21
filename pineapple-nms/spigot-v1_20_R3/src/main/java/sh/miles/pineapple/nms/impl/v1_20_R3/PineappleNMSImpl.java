@@ -163,7 +163,11 @@ public class PineappleNMSImpl implements PineappleNMS {
     @Override
     public byte[] itemsToBytes(@NotNull final Collection<ItemStack> itemStack) {
         NonNullList<net.minecraft.world.item.ItemStack> list = NonNullList.withSize(itemStack.size(), net.minecraft.world.item.ItemStack.EMPTY);
-        list.addAll(itemStack.stream().map(CraftItemStack::asNMSCopy).toList());
+        int index = 0;
+        for (final ItemStack stack : itemStack) {
+            list.set(index, CraftItemStack.asNMSCopy(stack));
+            index++;
+        }
         var tag = ContainerHelper.saveAllItems(new CompoundTag(), list);
 
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
