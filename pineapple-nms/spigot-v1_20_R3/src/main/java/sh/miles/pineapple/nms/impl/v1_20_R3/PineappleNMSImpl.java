@@ -2,12 +2,14 @@ package sh.miles.pineapple.nms.impl.v1_20_R3;
 
 import com.google.common.base.Preconditions;
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
@@ -39,7 +41,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.lang.invoke.MethodHandle;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PineappleNMSImpl implements PineappleNMS {
 
@@ -154,6 +158,37 @@ public class PineappleNMSImpl implements PineappleNMS {
         }
 
         return lore;
+    }
+
+    @Override
+    public byte[] itemsToBytes(@NotNull final Collection<ItemStack> itemStack) {
+        NonNullList<net.minecraft.world.item.ItemStack> list = NonNullList.withSize(itemStack.size(), net.minecraft.world.item.ItemStack.EMPTY);
+        list.addAll(itemStack.stream().map(CraftItemStack::asNMSCopy).toList());
+        var tag = ContainerHelper.saveAllItems(new CompoundTag(), list);
+
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            try (DataOutputStream dos = new DataOutputStream(baos)) {
+                NbtIo.write(tag, dos);
+            }
+            return baos.toByteArray();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Collection<ItemStack> itemsFromBytes(@NotNull final byte[] bytes, final int size) {
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes)) {
+            try (DataInputStream dis = new DataInputStream(bais)) {
+                var items = NbtIo.read(dis);
+
+                NonNullList<net.minecraft.world.item.ItemStack> list = NonNullList.withSize(size, net.minecraft.world.item.ItemStack.EMPTY);
+                ContainerHelper.loadAllItems(items, list);
+                return list.stream().map(CraftItemStack::asCraftMirror).collect(Collectors.toList());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @NotNull
