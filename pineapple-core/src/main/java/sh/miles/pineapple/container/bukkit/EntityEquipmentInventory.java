@@ -12,7 +12,6 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import sh.miles.pineapple.collection.NonNullList;
 
 import java.util.HashMap;
 import java.util.List;

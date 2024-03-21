@@ -14,6 +14,7 @@ import sh.miles.pineapple.nms.api.menu.scene.custom.CustomMenuListener;
 import sh.miles.pineapple.nms.api.menu.scene.custom.CustomSlotListener;
 import sh.miles.pineapple.nms.api.packet.PineapplePackets;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -94,7 +95,9 @@ public interface PineappleNMS {
      * @param itemStack the item stack to convert to bytes
      * @return the bytes
      * @since 1.0.0-SNAPSHOT
+     * @deprecated use {@link #itemsToBytes(Collection)} instead
      */
+    @Deprecated(forRemoval = true)
     @NotNull
     byte[] itemToBytes(@NotNull final ItemStack itemStack);
 
@@ -104,9 +107,30 @@ public interface PineappleNMS {
      * @param bytes the bytes to convert into an ItemStack
      * @return the ItemStack
      * @since 1.0.0-SNAPSHOT
+     * @deprecated use {@link #itemsFromBytes(byte[], int)} instead
      */
+    @Deprecated(forRemoval = true)
     @NotNull
     ItemStack itemFromBytes(@NotNull final byte[] bytes);
+
+    /**
+     * Converts the given ItemStack's into bytes
+     *
+     * @param itemStack the item stack to convert to bytes
+     * @return the bytes
+     * @since 1.0.0-SNAPSHOT
+     */
+    byte[] itemsToBytes(@NotNull final Collection<ItemStack> itemStack);
+
+    /**
+     * Converts teh given bytes into a collection of ItemStack's
+     *
+     * @param bytes the bytes to convert
+     * @param size  the size of the output Collection
+     * @return the ItemStack's
+     * @since 1.0.0-SNAPSHOT
+     */
+    Collection<ItemStack> itemsFromBytes(@NotNull final byte[] bytes, final int size);
 
     /**
      * Gets the packet handler
