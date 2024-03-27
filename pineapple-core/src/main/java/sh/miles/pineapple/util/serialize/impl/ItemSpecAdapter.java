@@ -20,6 +20,7 @@ import sh.miles.pineapple.util.serialize.exception.FieldNotFoundException;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -81,7 +82,109 @@ class ItemSpecAdapter implements GenericSerializer<ItemSpec> {
     @NotNull
     @Override
     public Map<String, Object> serialize(final ItemSpec target) {
-        return null;
+        final Map<String, Object> map = new HashMap<>();
+        map.put(ITEM_TYPE_KEY, target.getItemType().name());
+        map.put(AMOUNT_KEY, target.getAmount());
+
+        // Display Data
+        if (target.getName() != null) {
+            map.put(NAME_KEY, target.getName());
+        }
+
+        if (!target.getLore().isEmpty()) {
+            map.put(LORE_KEY, target.getLore());
+        }
+
+        if (!target.getHideToolTips().isEmpty()) {
+            map.put(HIDE_TOOLTIPS_KEY, target.getHideToolTips().stream().map(ItemFlag::name).toList());
+        }
+        // Display Data end
+
+        // Attributes
+        if (!target.getAttributeModifiers().isEmpty()) {
+            map.put(ATTRIBUTES_KEY, target.getAttributeModifiers().entries().stream().collect(
+                    Collectors.toMap(
+                            (entry) -> entry.getKey().name(),
+                            (entry) -> GenericSerializable.INSTANCE.serialize(entry.getValue())
+                    )
+            ));
+        }
+        // Attributes end
+
+        // Enchantments
+        if (!target.getEnchantments().isEmpty()) {
+            map.put(ENCHANTMENTS_KEY, GenericSerializable.INSTANCE.serialize(target.getEnchantments(), new TypeToken<Map<Enchantment, Integer>>(){}.getRawType()));
+        }
+        // Enchantments end
+
+        // Durability
+        if (target.getDurability() != ItemSpec.INT_DATA_UNSET) {
+            map.put(DURABILITY_KEY, target.getDurability());
+        }
+
+        if (target.isUnbreakable()) {
+            map.put(UNBREAKABLE_KEY, target.isUnbreakable());
+        }
+        // Durability end
+
+        // Potion Effects
+        if (!target.getEffects().isEmpty()) {
+            map.put(POTION_EFFECTS_KEY, target.getEffects().stream().map(GenericSerializable.INSTANCE::serialize).toList());
+        }
+
+        if (target.getPotionColor() != null) {
+            map.put(POTION_COLOR_KEY, target.getPotionColor());
+        }
+        // Potion Effects end
+
+        // Armor
+        if (target.getArmorTrim() != null) {
+            map.put(ARMOR_TRIM_KEY, GenericSerializable.INSTANCE.serialize(target.getArmorTrim()));
+        }
+
+        if (target.getArmorColor() != null) {
+            map.put(ARMOR_COLOR_KEY, GenericSerializable.INSTANCE.serialize(target.getArmorColor()));
+        }
+        // Armor end
+
+        // Knowledge Books
+        if (!target.getStoredEnchantments().isEmpty()) {
+            map.put(STORED_ENCHANTMENTS_KEY, GenericSerializable.INSTANCE.serialize(target.getStoredEnchantments(), new TypeToken<Map<Enchantment, Integer>>(){}.getRawType()));
+        }
+        // Knowledge Books end
+
+        // Buckets of Aquatic Mob
+        if (target.getFishPattern() != null) {
+            map.put(FISH_PATTERN_KEY, target.getFishPattern().name());
+        }
+
+        if (target.getFishBodyColor() != null) {
+            map.put(FISH_BODY_COLOR_KEY, target.getFishBodyColor().getColor().asRGB());
+        }
+
+        if (target.getFishPatternColor() != null) {
+            map.put(FISH_PATTERN_COLOR_KEY, target.getFishPatternColor().getColor().asRGB());
+        }
+        // Buckets of Aquatic Mob end
+
+        // Compasses
+        if (target.isLodestoneTracked()) {
+            map.put(LODESTONE_TRACKED_KEY, target.isLodestoneTracked());
+        }
+
+        if (target.getLodestoneLocation() != null) {
+            map.put(LODESTONE_LOCATION_KEY, target.getLodestoneLocation());
+        }
+        // Compasses end
+
+        // Crossbows
+        if (!target.getChargedProjectiles().isEmpty()) {
+            List<ItemSpec> chargedProjectiles = target.getChargedProjectiles().stream().map(ItemSpec::fromItemStack).toList();
+            map.put(CHARGED_PROJECTILES_KEY, target.getChargedProjectiles().stream().map(ItemSpec::fromItemStack).map(GenericSerializable.INSTANCE::serialize));
+        }
+        // Crossbows end
+
+        return map;
     }
 
     @NotNull

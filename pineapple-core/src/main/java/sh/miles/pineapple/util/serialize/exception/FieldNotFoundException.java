@@ -2,7 +2,6 @@ package sh.miles.pineapple.util.serialize.exception;
 
 import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.util.serialize.GenericSerializer;
-import sh.miles.pineapple.util.serialize.impl.GenericSerializable;
 
 /**
  * Exception thrown if a field is not found within a serializer

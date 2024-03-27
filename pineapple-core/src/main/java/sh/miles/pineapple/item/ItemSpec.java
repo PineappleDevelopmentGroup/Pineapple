@@ -1,6 +1,7 @@
 package sh.miles.pineapple.item;
 
 import com.google.common.base.Function;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -978,5 +979,112 @@ public class ItemSpec {
         builder.append("}");
 
         return builder.toString();
+    }
+
+    public static ItemSpec fromItemStack(@NotNull final ItemStack item) {
+        Preconditions.checkArgument(item != null, "the given item must not be null");
+        final ItemSpec spec = new ItemSpec(item.getType());
+        spec.setAmount(item.getAmount());
+
+        final ItemMeta meta = item.getItemMeta();
+
+        // Display Data
+        if (meta.getDisplayName() != null) {
+            spec.setName(meta.getDisplayName());
+        }
+
+        if (meta.hasLore()) {
+            spec.setLore(meta.getLore());
+        }
+
+        if (!meta.getItemFlags().isEmpty()) {
+            spec.setHideToolTips(meta.getItemFlags().stream().toList());
+        }
+        // Display Data end
+
+        // Attributes
+        if (!meta.hasAttributeModifiers()) {
+            spec.setAttributeModifiers(meta.getAttributeModifiers());
+        }
+        // Attributes
+
+        // Enchantments
+        if (!meta.hasEnchants()) {
+            spec.setEnchantments(meta.getEnchants());
+        }
+        // Enchantments end
+
+        // Durability
+        if (meta instanceof Damageable damageable) {
+            if (damageable.hasDamage()) {
+                spec.setDurability(damageable.getDamage());
+            }
+
+            if (damageable.isUnbreakable()) {
+                damageable.setUnbreakable(damageable.isUnbreakable());
+            }
+        }
+        // Durability end
+
+        // Potion Effects
+        if (meta instanceof PotionMeta potionMeta) {
+            if (potionMeta.hasCustomEffects()) {
+                spec.setPotionEffects(potionMeta.getCustomEffects());
+            }
+
+            if (potionMeta.hasColor()) {
+                spec.setPotionColor(potionMeta.getColor());
+            }
+        }
+        // Potion Effects end
+
+        // Armor
+        if (meta instanceof ArmorMeta armorMeta) {
+            if (armorMeta.hasTrim()) {
+                spec.setArmorTrim(armorMeta.getTrim());
+            }
+        }
+
+        if (meta instanceof LeatherArmorMeta armorMeta) {
+            if (armorMeta.getColor() != null) {
+                spec.setArmorColor(armorMeta.getColor());
+            }
+        }
+        // Armor end
+
+        // Knowledge Books
+        if (meta instanceof EnchantmentStorageMeta emeta) {
+            if (emeta.hasStoredEnchants()) {
+                spec.setStoredEnchantments(emeta.getStoredEnchants());
+            }
+        }
+        // Knowledge Books end
+
+        // Buckets of Aquatic Mob
+        if (meta instanceof TropicalFishBucketMeta bucketMeta) {
+            spec.setFishPattern(bucketMeta.getPattern());
+            spec.setFishPatternColor(bucketMeta.getPatternColor());
+            spec.setFishBodyColor(bucketMeta.getBodyColor());
+        }
+        // Buckets of Aquatic Mob end
+
+        // Compasses
+        if (meta instanceof CompassMeta compassMeta) {
+            spec.setLodestoneTracked(compassMeta.isLodestoneTracked());
+            if (compassMeta.getLodestone() != null) {
+                spec.setLodestoneLocation(compassMeta.getLodestone());
+            }
+        }
+        // Compasses end
+
+        // Crossbows
+        if (meta instanceof CrossbowMeta crossbowMeta) {
+            if (crossbowMeta.hasChargedProjectiles()) {
+                spec.setChargedProjectiles(crossbowMeta.getChargedProjectiles());
+            }
+        }
+        // Crossbows end
+
+        return spec;
     }
 }

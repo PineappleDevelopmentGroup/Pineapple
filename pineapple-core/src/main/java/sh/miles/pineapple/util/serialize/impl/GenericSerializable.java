@@ -61,13 +61,17 @@ public final class GenericSerializable {
      * @param <T>    the type
      * @return the map string object map
      */
-    public <T> Map<String, Object> serializer(@NotNull final T object) {
+    public <T> Map<String, Object> serialize(@NotNull final T object) {
+        return serialize(object, object.getClass());
+    }
+
+    public <T> Map<String, Object> serialize(@NotNull final Object object, Class<T> clazz) {
         checkArgument(object != null, "The given type must not be null");
-        final var serializer = (GenericSerializer<T>) serializers.get(object.getClass());
-        if (serializer != null) {
-            throw new GenericSerializerNotFoundException(object.getClass());
+        final var serializer = (GenericSerializer<T>) serializers.get(clazz);
+        if (serializer == null) {
+            throw new GenericSerializerNotFoundException(clazz);
         }
-        return serializer.serialize(object);
+        return serializer.serialize((T) object);
     }
 
     /**
