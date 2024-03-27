@@ -154,10 +154,11 @@ public class ItemSpec {
      * @param itemType the itemType to use
      * @since 1.0.0-SNAPSHOT
      */
-    public void setItemType(final Material itemType) {
+    public ItemSpec setItemType(final Material itemType) {
         checkArgument(itemType != null, "The given item type must not be null");
         checkArgument(itemType.isItem(), "The provided itemType of %s is not an item".formatted(itemType));
         this.itemType = itemType;
+        return this;
     }
 
     /**
@@ -175,9 +176,10 @@ public class ItemSpec {
      * @param amount the amount
      * @since 1.0.0-SNAPSHOT
      */
-    public void setAmount(final int amount) {
+    public ItemSpec setAmount(final int amount) {
         checkArgument(amount > 0 && amount < 65, "The given amount must be between 0 and 65 exclusively %d is not in this range".formatted(amount));
         this.amount = amount;
+        return this;
     }
 
     /**
@@ -196,9 +198,10 @@ public class ItemSpec {
      * @param loreLine the lore line
      * @since 1.0.0-SNAPSHOT
      */
-    public void addLoreLine(@NotNull final String loreLine) {
+    public ItemSpec addLoreLine(@NotNull final String loreLine) {
         checkArgument(loreLine != null, "the given loreLine must not be null");
         this.lore.add(loreLine);
+        return this;
     }
 
     /**
@@ -207,10 +210,11 @@ public class ItemSpec {
      * @param lore the lore to set
      * @since 1.0.0-SNAPSHOT
      */
-    public void setLore(@NotNull final List<String> lore) {
+    public ItemSpec setLore(@NotNull final List<String> lore) {
         checkArgument(lore != null, "The given lore must not be null");
         this.lore.clear();
         this.lore.addAll(lore);
+        return this;
     }
 
     /**
@@ -219,9 +223,10 @@ public class ItemSpec {
      * @param name the name to set
      * @since 1.0.0-SNAPSHOT
      */
-    public void setName(@NotNull final String name) {
+    public ItemSpec setName(@NotNull final String name) {
         checkArgument(name != null, "The given name must not be null");
         this.name = name;
+        return this;
     }
 
     /**
@@ -241,9 +246,10 @@ public class ItemSpec {
      * @param nameMutator the name mutator
      * @since 1.0.0-SNAPSHOT
      */
-    public void setNameMutator(@NotNull final Function<String, BaseComponent> nameMutator) {
+    public ItemSpec setNameMutator(@NotNull final Function<String, BaseComponent> nameMutator) {
         checkArgument(nameMutator != null, "The name mutator must not be null");
         this.nameMutator = nameMutator;
+        return this;
     }
 
     /**
@@ -263,9 +269,10 @@ public class ItemSpec {
      * @param loreMutator the lore mutator
      * @since 1.0.0-SNAPSHOT
      */
-    public void setLoreMutator(@NotNull final Function<String, BaseComponent> loreMutator) {
+    public ItemSpec setLoreMutator(@NotNull final Function<String, BaseComponent> loreMutator) {
         checkArgument(loreMutator != null, "The lore mutator must not be null");
         this.loreMutator = loreMutator;
+        return this;
     }
 
     /**
@@ -285,9 +292,10 @@ public class ItemSpec {
      * @param tooltip the tooltip to add
      * @since 1.0.0-SNAPSHOT
      */
-    public void addHideToolTip(@NotNull final ItemFlag tooltip) {
+    public ItemSpec addHideToolTip(@NotNull final ItemFlag tooltip) {
         checkArgument(tooltip != null, "The tooltip must not be null");
         this.hideToolTips.add(tooltip);
+        return this;
     }
 
     /**
@@ -296,10 +304,12 @@ public class ItemSpec {
      * @param tooltips the tooltips
      * @since 1.0.0-SNAPSHOT
      */
-    public void setHideToolTips(@NotNull final List<ItemFlag> tooltips) {
+    public ItemSpec setHideToolTips(@NotNull final List<ItemFlag> tooltips) {
         checkArgument(tooltips != null, "The given tooltips must not be null");
         this.hideToolTips.clear();
         this.hideToolTips.addAll(tooltips);
+        return this;
+
     }
 
     /**
@@ -319,8 +329,10 @@ public class ItemSpec {
      * @param customModelData the custom model data
      * @since 1.0.0-SNAPSHOT
      */
-    public void setCustomModelData(final int customModelData) {
+    public ItemSpec setCustomModelData(final int customModelData) {
         this.customModelData = customModelData;
+        return this;
+
     }
 
     /**
@@ -338,9 +350,11 @@ public class ItemSpec {
      * @param attributeModifier the attribute modifier to add
      * @since 1.0.0-SNAPSHOT
      */
-    public void addAttributeModifier(@NotNull final Attribute attribute, @NotNull final AttributeModifier attributeModifier) {
+    public ItemSpec addAttributeModifier(@NotNull final Attribute attribute, @NotNull final AttributeModifier attributeModifier) {
         checkArgument(attributeModifier != null, "the given attribute modifier must not be null");
         this.attributeModifiers.put(attribute, attributeModifier);
+        return this;
+
     }
 
     /**
@@ -349,10 +363,12 @@ public class ItemSpec {
      * @param attributeModifiers the attribute modifiers to set
      * @since 1.0.0-SNAPSHOT
      */
-    public void setAttributeModifiers(@NotNull final Multimap<Attribute, AttributeModifier> attributeModifiers) {
+    public ItemSpec setAttributeModifiers(@NotNull final Multimap<Attribute, AttributeModifier> attributeModifiers) {
         checkArgument(attributeModifiers != null, "the given attribute modifiers must not be null");
         this.attributeModifiers.clear();
         this.attributeModifiers.putAll(attributeModifiers);
+        return this;
+
     }
 
     /**
@@ -373,10 +389,12 @@ public class ItemSpec {
      * @param level       the level
      * @since 1.0.0-SNAPSHOT
      */
-    public void addEnchantment(@NotNull final Enchantment enchantment, final int level) {
+    public ItemSpec addEnchantment(@NotNull final Enchantment enchantment, final int level) {
         checkArgument(enchantment != null, "The enchantment must not be null");
         checkArgument(level > 0 && level < 256, "the level must be greater than 0");
         this.enchantments.put(enchantment, level);
+        return this;
+
     }
 
     /**
@@ -385,10 +403,12 @@ public class ItemSpec {
      * @param enchantments the enchantments
      * @since 1.0.0-SNAPSHOT
      */
-    public void setEnchantments(@NotNull final Map<Enchantment, Integer> enchantments) {
+    public ItemSpec setEnchantments(@NotNull final Map<Enchantment, Integer> enchantments) {
         checkArgument(enchantments != null, "The enchantments must not be null");
         this.enchantments.clear();
         this.enchantments.putAll(enchantments);
+        return this;
+
     }
 
     /**
@@ -408,8 +428,10 @@ public class ItemSpec {
      * @param durability the durability
      * @since 1.0.0-SNAPSHOT
      */
-    public void setDurability(final int durability) {
+    public ItemSpec setDurability(final int durability) {
         this.durability = durability;
+        return this;
+
     }
 
     /**
@@ -426,8 +448,10 @@ public class ItemSpec {
      * @param unbreakable whether to be unbreakable
      * @since 1.0.0-SNAPSHOT
      */
-    public void setUnbreakable(final boolean unbreakable) {
+    public ItemSpec setUnbreakable(final boolean unbreakable) {
         this.unbreakable = unbreakable;
+        return this;
+
     }
 
     /**
@@ -446,9 +470,11 @@ public class ItemSpec {
      * @param effect the effect to add
      * @since 1.0.0-SNAPSHOT
      */
-    public void addPotionEffect(@NotNull final PotionEffect effect) {
+    public ItemSpec addPotionEffect(@NotNull final PotionEffect effect) {
         checkArgument(effect != null, "The given effect must not be null");
         this.effects.add(effect);
+        return this;
+
     }
 
     /**
@@ -457,8 +483,10 @@ public class ItemSpec {
      * @param effects the effects to set
      * @since 1.0.0-SNAPSHOT
      */
-    public void setPotionEffects(@NotNull final List<PotionEffect> effects) {
+    public ItemSpec setPotionEffects(@NotNull final List<PotionEffect> effects) {
         checkArgument(effects != null, "The given effects must not be null");
+        return this;
+
     }
 
     /**
@@ -478,9 +506,11 @@ public class ItemSpec {
      * @param potionColor potion color
      * @since 1.0.0-SNAPSHOT
      */
-    public void setPotionColor(@NotNull final Color potionColor) {
+    public ItemSpec setPotionColor(@NotNull final Color potionColor) {
         checkArgument(potionColor != null, "potion color must not be null");
         this.potionColor = potionColor;
+        return this;
+
     }
 
     /**
@@ -500,9 +530,11 @@ public class ItemSpec {
      * @param armorTrim the armor trim to set
      * @since 1.0.0-SNAPSHOT
      */
-    public void setArmorTrim(@NotNull final ArmorTrim armorTrim) {
+    public ItemSpec setArmorTrim(@NotNull final ArmorTrim armorTrim) {
         checkArgument(armorTrim != null, "the armor trim must not be null");
         this.armorTrim = armorTrim;
+        return this;
+
     }
 
     /**
@@ -521,9 +553,11 @@ public class ItemSpec {
      *
      * @param armorColor armor color
      */
-    public void setArmorColor(@NotNull final Color armorColor) {
+    public ItemSpec setArmorColor(@NotNull final Color armorColor) {
         checkArgument(armorColor != null, "armor color must not be null");
         this.armorColor = armorColor;
+        return this;
+
     }
 
     /**
@@ -544,10 +578,12 @@ public class ItemSpec {
      * @param level       the level
      * @since 1.0.0-SNAPSHOT
      */
-    public void addStoredEnchantment(@NotNull final Enchantment enchantment, final int level) {
+    public ItemSpec addStoredEnchantment(@NotNull final Enchantment enchantment, final int level) {
         checkArgument(enchantment != null, "The enchantment must not be null");
         checkArgument(level > 0 && level < 256, "the level must be greater than 0");
         this.storedEnchantments.put(enchantment, level);
+        return this;
+
     }
 
     /**
@@ -556,10 +592,12 @@ public class ItemSpec {
      * @param enchantments the enchantments
      * @since 1.0.0-SNAPSHOT
      */
-    public void setStoredEnchantments(@NotNull final Map<Enchantment, Integer> enchantments) {
+    public ItemSpec setStoredEnchantments(@NotNull final Map<Enchantment, Integer> enchantments) {
         checkArgument(enchantments != null, "The enchantments must not be null");
         this.storedEnchantments.clear();
         this.storedEnchantments.putAll(enchantments);
+        return this;
+
     }
 
     /**
@@ -578,9 +616,11 @@ public class ItemSpec {
      * @param fishPattern fish pattern
      * @since 1.0.0-SNAPSHOT
      */
-    public void setFishPattern(@NotNull final TropicalFish.Pattern fishPattern) {
+    public ItemSpec setFishPattern(@NotNull final TropicalFish.Pattern fishPattern) {
         checkArgument(fishPattern != null, "the fish pattern must not be null");
         this.fishPattern = fishPattern;
+        return this;
+
     }
 
     /**
@@ -598,9 +638,11 @@ public class ItemSpec {
      * @param fishPatternColor fish pattern color
      * @since 1.0.0-SNAPSHOT
      */
-    public void setFishPatternColor(@NotNull final DyeColor fishPatternColor) {
+    public ItemSpec setFishPatternColor(@NotNull final DyeColor fishPatternColor) {
         checkArgument(fishPatternColor != null, "the fish pattern color must not be null");
         this.fishPatternColor = fishPatternColor;
+        return this;
+
     }
 
     /**
@@ -617,9 +659,11 @@ public class ItemSpec {
      *
      * @param fishBodyColor fish body color
      */
-    public void setFishBodyColor(@NotNull final DyeColor fishBodyColor) {
+    public ItemSpec setFishBodyColor(@NotNull final DyeColor fishBodyColor) {
         checkArgument(fishBodyColor != null, "fish body color must not be null");
         this.fishBodyColor = fishBodyColor;
+        return this;
+
     }
 
     /**
@@ -637,8 +681,10 @@ public class ItemSpec {
      * @param lodestoneTracked status
      * @since 1.0.0-SNAPSHOT
      */
-    public void setLodestoneTracked(final boolean lodestoneTracked) {
+    public ItemSpec setLodestoneTracked(final boolean lodestoneTracked) {
         isLodestoneTracked = lodestoneTracked;
+        return this;
+
     }
 
     /**
@@ -655,9 +701,11 @@ public class ItemSpec {
      * @param lodestoneLocation lcoation
      * @since 1.0.0-SNAPSHOT
      */
-    public void setLodestoneLocation(@NotNull final Location lodestoneLocation) {
+    public ItemSpec setLodestoneLocation(@NotNull final Location lodestoneLocation) {
         checkArgument(lodestoneLocation != null, "the location must not be null");
         this.lodestoneLocation = lodestoneLocation;
+        return this;
+
     }
 
     /**
@@ -677,9 +725,11 @@ public class ItemSpec {
      * @param chargedProjectile the projectile to add
      * @since 1.0.0-SNAPSHOT
      */
-    public void addChargedProjectile(@NotNull final ItemStack chargedProjectile) {
+    public ItemSpec addChargedProjectile(@NotNull final ItemStack chargedProjectile) {
         checkArgument(chargedProjectile != null, "the projectile must not be null");
         this.chargedProjectiles.add(chargedProjectile);
+        return this;
+
     }
 
     /**
@@ -688,10 +738,12 @@ public class ItemSpec {
      * @param chargedProjectiles the charged projectiles
      * @since 1.0.0-SNAPSHOT
      */
-    public void setChargedProjectiles(@NotNull final List<ItemStack> chargedProjectiles) {
+    public ItemSpec setChargedProjectiles(@NotNull final List<ItemStack> chargedProjectiles) {
         checkArgument(chargedProjectiles != null, "the projectiles list must not be null");
         this.chargedProjectiles.clear();
         this.chargedProjectiles.addAll(chargedProjectiles);
+        return this;
+
     }
 
     /**
@@ -854,5 +906,77 @@ public class ItemSpec {
 
         item.setItemMeta(meta);
         return item;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("ItemSpec{\n\t")
+                .append("itemType=").append(itemType).append(",\n\t")
+                .append("amount=").append(amount).append(",\n\t");
+
+        if (name != null) {
+            builder.append("name=").append(name).append(",\n\t");
+        }
+        if (!lore.isEmpty()) {
+            builder.append("lore=").append(lore).append(",\n\t");
+        }
+        if (!hideToolTips.isEmpty()) {
+            builder.append("hideToolTips=").append(hideToolTips).append(",\n\t");
+        }
+        if (customModelData != INT_DATA_UNSET) {
+            builder.append("customModelData=").append(customModelData).append(",\n\t");
+        }
+        if (!attributeModifiers.isEmpty()) {
+            builder.append("attributeModifiers=").append(attributeModifiers).append(",\n\t");
+        }
+        if (!enchantments.isEmpty()) {
+            builder.append("enchantments=").append(enchantments).append(",\n\t");
+        }
+        if (durability != INT_DATA_UNSET) {
+            builder.append("durability=").append(durability).append(",\n\t");
+        }
+        if (unbreakable) {
+            builder.append("unbreakable=true,\n\t");
+        }
+        if (!effects.isEmpty()) {
+            builder.append("effects=").append(effects).append(",\n\t");
+        }
+        if (potionColor != null) {
+            builder.append("potionColor=(").append(potionColor.getRed()).append(",").append(potionColor.getGreen()).append(",").append(potionColor.getRed()).append("),\n\t");
+        }
+        if (armorTrim != null) {
+            builder.append("armorTrim=").append(armorTrim).append(",\n\t");
+        }
+        if (armorColor != null) {
+            builder.append("armorColor=(").append(armorColor.getRed()).append(",").append(armorColor.getGreen()).append(",").append(armorColor.getRed()).append("),\n\t");
+        }
+        if (!storedEnchantments.isEmpty()) {
+            builder.append("storedEnchantments=").append(storedEnchantments).append(",\n\t");
+        }
+        if (fishPattern != null) {
+            builder.append("fishPattern=").append(fishPattern).append(",\n\t");
+        }
+        if (fishPatternColor != null) {
+            final Color color = fishPatternColor.getColor();
+            builder.append("fishPatternColor=(").append(color.getRed()).append(",").append(color.getGreen()).append(",").append(color.getRed()).append("),\n\t");
+        }
+        if (fishBodyColor != null) {
+            final Color color = fishBodyColor.getColor();
+            builder.append("fishBodyColor=(").append(color.getRed()).append(",").append(color.getGreen()).append(",").append(color.getRed()).append("),\n\t");
+        }
+        if (isLodestoneTracked) {
+            builder.append("isLodestoneTracked=true,\n\t");
+        }
+        if (lodestoneLocation != null) {
+            builder.append("lodestoneLocation=").append(lodestoneLocation).append(",\n\t");
+        }
+        if (!this.chargedProjectiles.isEmpty()) {
+            builder.append("chargedProjectiles=").append(chargedProjectiles).append("\n\t");
+        }
+        builder.deleteCharAt(builder.length() - 1);
+        builder.append("}");
+
+        return builder.toString();
     }
 }

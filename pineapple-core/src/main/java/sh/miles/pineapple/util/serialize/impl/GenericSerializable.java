@@ -27,6 +27,12 @@ public final class GenericSerializable {
     private GenericSerializable() {
         this.serializers = new HashMap<>();
         this.platforms = new ArrayList<>();
+
+        register(new AttributeModifierAdapter());
+        register(new EnchantmentAdapter());
+        register(new ItemSpecAdapter());
+        register(new LocationAdapter());
+        register(new PotionEffectAdapter());
     }
 
     /**
@@ -42,7 +48,7 @@ public final class GenericSerializable {
         checkArgument(map != null, "the given map must not be null");
         checkArgument(type != null, "the given type must not be null");
         final var serializer = (GenericSerializer<T>) serializers.get(type);
-        if (serializer != null) {
+        if (serializer == null) {
             throw new GenericSerializerNotFoundException(type);
         }
         return serializer.deserialize(map);
@@ -57,7 +63,7 @@ public final class GenericSerializable {
      */
     public <T> Map<String, Object> serializer(@NotNull final T object) {
         checkArgument(object != null, "The given type must not be null");
-        final var serializer = (GenericSerializer<T>) serializers.get(object);
+        final var serializer = (GenericSerializer<T>) serializers.get(object.getClass());
         if (serializer != null) {
             throw new GenericSerializerNotFoundException(object.getClass());
         }
