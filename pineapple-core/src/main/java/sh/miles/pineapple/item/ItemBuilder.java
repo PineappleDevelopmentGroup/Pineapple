@@ -109,6 +109,7 @@ public class ItemBuilder {
         ItemBuilder builder = new ItemBuilder();
         builder.stack = stack;
         builder.meta = stack.getItemMeta();
+        builder.lore = PineappleLib.getNmsProvider().getItemLore(stack);
         return builder;
     }
 

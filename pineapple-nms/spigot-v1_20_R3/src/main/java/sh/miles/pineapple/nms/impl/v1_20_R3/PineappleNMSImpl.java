@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.ContainerHelper;
@@ -136,27 +137,26 @@ public class PineappleNMSImpl implements PineappleNMS {
     public @NotNull List<BaseComponent> getItemLore(@NotNull final ItemStack item) {
         final CraftItemStack craftItem = ensureCraftItemStack(item);
         final net.minecraft.world.item.ItemStack nmsItem = getItemStackHandle(craftItem);
+        Preconditions.checkState(nmsItem != null, "Failed to acquire the handle for the Nms Item");
 
-        final CompoundTag tag = nmsItem.getTag();
-        if (tag == null) {
-            return List.of();
+        final CompoundTag itemCompound = nmsItem.getTag();
+        if (!itemCompound.contains(net.minecraft.world.item.ItemStack.TAG_DISPLAY, CraftMagicNumbers.NBT.TAG_COMPOUND)) {
+            return new ArrayList<>();
         }
 
-        final CompoundTag displayTag = tag.getCompound(net.minecraft.world.item.ItemStack.TAG_DISPLAY);
-        if (displayTag == null) {
-            return List.of();
+        final CompoundTag displayTag = itemCompound.getCompound(net.minecraft.world.item.ItemStack.TAG_DISPLAY);
+
+        if (!displayTag.contains(net.minecraft.world.item.ItemStack.TAG_LORE, CraftMagicNumbers.NBT.TAG_LIST)) {
+            return new ArrayList<>();
         }
 
-        final ListTag loreTag = displayTag.getList(net.minecraft.world.item.ItemStack.TAG_LORE, CraftMagicNumbers.NBT.TAG_LIST);
-        if (loreTag == null) {
-            return List.of();
-        }
-
+        final ListTag listTag = displayTag.getList(net.minecraft.world.item.ItemStack.TAG_LORE, CraftMagicNumbers.NBT.TAG_STRING);
         final List<BaseComponent> lore = new ArrayList<>();
-        for (int i = 0; i < loreTag.size(); i++) {
-            lore.add(ComponentUtils.toBungeeChat(loreTag.getString(i)));
+        for (final Tag tag : listTag) {
+            String contents = tag.getAsString();
+            lore.add(ComponentUtils.toBungeeChat(contents));
         }
-
+        
         return lore;
     }
 
