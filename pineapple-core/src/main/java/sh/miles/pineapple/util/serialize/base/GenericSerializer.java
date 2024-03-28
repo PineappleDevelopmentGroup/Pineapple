@@ -1,6 +1,7 @@
 package sh.miles.pineapple.util.serialize.base;
 
 import com.google.gson.reflect.TypeToken;
+import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.util.serialize.exception.GenericSerializationException;
 
 /**
@@ -16,20 +17,24 @@ public interface GenericSerializer<S, C> {
      * Serializes a complex type into the stored type
      *
      * @param complex the complex type
+     * @param context the serialization context
      * @return the serialized type
      * @since 1.0.0-SNAPSHOT
      */
-    S serialize(C complex);
+    @NotNull
+    S serialize(@NotNull final C complex, @NotNull final GenericSerializationContext context);
 
     /**
      * Deserializes a stored type into a complex type
      *
      * @param stored the stored type
+     * @param context the serialization context
      * @return the complex code type
      * @throws GenericSerializationException if any exception occurs while deserialization occurs
      * @since 1.0.0-SNAPSHOT
      */
-    C deserialize(S stored) throws GenericSerializationException;
+    @NotNull
+    C deserialize(@NotNull final S stored, @NotNull final GenericSerializationContext context) throws GenericSerializationException;
 
     /**
      * Gets the stored type
@@ -37,6 +42,7 @@ public interface GenericSerializer<S, C> {
      * @return the stored type
      * @since 1.0.0-SNAPSHOT
      */
+    @NotNull
     TypeToken<S> getStoredType();
 
     /**
@@ -45,5 +51,6 @@ public interface GenericSerializer<S, C> {
      * @return the complex type
      * @since 1.0.0-SNAPSHOT
      */
+    @NotNull
     TypeToken<C> getComplexType();
 }
