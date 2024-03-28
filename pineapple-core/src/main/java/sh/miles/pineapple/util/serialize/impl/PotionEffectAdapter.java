@@ -1,17 +1,19 @@
 package sh.miles.pineapple.util.serialize.impl;
 
+import com.google.gson.reflect.TypeToken;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
-import sh.miles.pineapple.util.serialize.GenericSerializer;
+import sh.miles.pineapple.util.serialize.base.ComplexGenericSerializer;
+import sh.miles.pineapple.util.serialize.base.GenericSerializer;
 import sh.miles.pineapple.util.serialize.exception.FieldNotFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
 
-class PotionEffectAdapter implements GenericSerializer<PotionEffect> {
+class PotionEffectAdapter implements ComplexGenericSerializer<PotionEffect> {
 
     public static final String TYPE_KEY = "type";
     public static final String DURATION_KEY = "duration";
@@ -63,7 +65,7 @@ class PotionEffectAdapter implements GenericSerializer<PotionEffect> {
 
     @NotNull
     @Override
-    public Class<PotionEffect> getTypeClass() {
-        return PotionEffect.class;
+    public TypeToken<PotionEffect> getComplexType() {
+        return TypeToken.get(PotionEffect.class);
     }
 }

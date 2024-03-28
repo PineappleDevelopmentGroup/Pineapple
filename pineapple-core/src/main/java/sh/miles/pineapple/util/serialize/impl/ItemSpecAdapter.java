@@ -14,7 +14,8 @@ import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.item.ItemSpec;
-import sh.miles.pineapple.util.serialize.GenericSerializer;
+import sh.miles.pineapple.util.serialize.base.ComplexGenericSerializer;
+import sh.miles.pineapple.util.serialize.base.GenericSerializer;
 import sh.miles.pineapple.util.serialize.exception.FieldNotFoundException;
 
 import java.awt.Color;
@@ -25,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-class ItemSpecAdapter implements GenericSerializer<ItemSpec> {
+class ItemSpecAdapter implements ComplexGenericSerializer<ItemSpec> {
 
     public static final String ITEM_TYPE_KEY = "item_type";
     public static final String AMOUNT_KEY = "amount";
@@ -330,7 +331,7 @@ class ItemSpecAdapter implements GenericSerializer<ItemSpec> {
 
     @NotNull
     @Override
-    public Class<ItemSpec> getTypeClass() {
-        return ItemSpec.class;
+    public TypeToken<ItemSpec> getComplexType() {
+        return TypeToken.get(ItemSpec.class);
     }
 }

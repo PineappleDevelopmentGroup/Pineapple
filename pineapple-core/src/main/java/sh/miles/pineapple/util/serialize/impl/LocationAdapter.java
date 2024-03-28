@@ -1,16 +1,18 @@
 package sh.miles.pineapple.util.serialize.impl;
 
+import com.google.gson.reflect.TypeToken;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
-import sh.miles.pineapple.util.serialize.GenericSerializer;
+import sh.miles.pineapple.util.serialize.base.ComplexGenericSerializer;
+import sh.miles.pineapple.util.serialize.base.GenericSerializer;
 import sh.miles.pineapple.util.serialize.exception.FieldNotFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
 
-class LocationAdapter implements GenericSerializer<Location> {
+class LocationAdapter implements ComplexGenericSerializer<Location> {
 
     public static final String X = "x";
     public static final String Y = "y";
@@ -40,7 +42,7 @@ class LocationAdapter implements GenericSerializer<Location> {
 
     @NotNull
     @Override
-    public Class<Location> getTypeClass() {
-        return Location.class;
+    public TypeToken<Location> getComplexType() {
+        return TypeToken.get(Location.class);
     }
 }

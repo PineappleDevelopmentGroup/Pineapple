@@ -1,17 +1,17 @@
 package sh.miles.pineapple.util.serialize.impl;
 
-import com.google.common.reflect.TypeToken;
+import com.google.gson.reflect.TypeToken;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.enchantments.Enchantment;
 import org.jetbrains.annotations.NotNull;
-import sh.miles.pineapple.util.serialize.GenericSerializer;
+import sh.miles.pineapple.util.serialize.base.ComplexGenericSerializer;
 import sh.miles.pineapple.util.serialize.exception.FieldNotFoundException;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
-class EnchantmentAdapter implements GenericSerializer<Map<Enchantment, Integer>> {
+class EnchantmentAdapter implements ComplexGenericSerializer<Map<Enchantment, Integer>> {
 
     @NotNull
     @Override
@@ -27,8 +27,8 @@ class EnchantmentAdapter implements GenericSerializer<Map<Enchantment, Integer>>
 
     @NotNull
     @Override
-    public Class<Map<Enchantment, Integer>> getTypeClass() {
-        return (Class<Map<Enchantment, Integer>>) new TypeToken<Map<Enchantment, Integer>>() {
-        }.getRawType();
+    public TypeToken<Map<Enchantment, Integer>> getComplexType() {
+        return new TypeToken<Map<Enchantment, Integer>>() {
+        };
     }
 }

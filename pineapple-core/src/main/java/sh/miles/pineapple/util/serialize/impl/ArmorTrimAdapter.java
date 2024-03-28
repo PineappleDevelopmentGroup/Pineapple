@@ -1,18 +1,20 @@
 package sh.miles.pineapple.util.serialize.impl;
 
+import com.google.gson.reflect.TypeToken;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
 import org.jetbrains.annotations.NotNull;
-import sh.miles.pineapple.util.serialize.GenericSerializer;
+import sh.miles.pineapple.util.serialize.base.ComplexGenericSerializer;
+import sh.miles.pineapple.util.serialize.base.GenericSerializer;
 import sh.miles.pineapple.util.serialize.exception.FieldNotFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ArmorTrimAdapter implements GenericSerializer<ArmorTrim> {
+public class ArmorTrimAdapter implements ComplexGenericSerializer<ArmorTrim> {
 
     public static final String MATERIAL_KEY = "trim_material";
     public static final String PATTERN_KEY = "trim_pattern";
@@ -36,7 +38,7 @@ public class ArmorTrimAdapter implements GenericSerializer<ArmorTrim> {
 
     @NotNull
     @Override
-    public Class<ArmorTrim> getTypeClass() {
-        return ArmorTrim.class;
+    public TypeToken<ArmorTrim> getComplexType() {
+        return TypeToken.get(ArmorTrim.class);
     }
 }

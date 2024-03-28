@@ -1,14 +1,16 @@
 package sh.miles.pineapple.util.serialize.impl;
 
+import com.google.gson.reflect.TypeToken;
 import org.bukkit.attribute.AttributeModifier;
 import org.jetbrains.annotations.NotNull;
-import sh.miles.pineapple.util.serialize.GenericSerializer;
+import sh.miles.pineapple.util.serialize.base.ComplexGenericSerializer;
+import sh.miles.pineapple.util.serialize.base.GenericSerializer;
 import sh.miles.pineapple.util.serialize.exception.FieldNotFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
 
-class AttributeModifierAdapter implements GenericSerializer<AttributeModifier> {
+class AttributeModifierAdapter implements ComplexGenericSerializer<AttributeModifier> {
 
     public static final String NAME_KEY = "name";
     public static final String AMOUNT_KEY = "amount";
@@ -41,7 +43,7 @@ class AttributeModifierAdapter implements GenericSerializer<AttributeModifier> {
 
     @NotNull
     @Override
-    public Class<AttributeModifier> getTypeClass() {
-        return AttributeModifier.class;
+    public TypeToken<AttributeModifier> getComplexType() {
+        return TypeToken.get(AttributeModifier.class);
     }
 }

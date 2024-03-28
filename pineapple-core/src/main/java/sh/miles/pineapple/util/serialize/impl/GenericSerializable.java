@@ -1,8 +1,8 @@
 package sh.miles.pineapple.util.serialize.impl;
 
 import org.jetbrains.annotations.NotNull;
-import sh.miles.pineapple.util.serialize.GenericSerializer;
 import sh.miles.pineapple.util.serialize.GenericSerializerPlatform;
+import sh.miles.pineapple.util.serialize.base.GenericSerializer;
 import sh.miles.pineapple.util.serialize.exception.GenericSerializerNotFoundException;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public final class GenericSerializable {
 
     public static final GenericSerializable INSTANCE = new GenericSerializable();
 
-    private final Map<Class<?>, GenericSerializer<?>> serializers;
+    private final Map<Class<?>, GenericSerializer<?, ?>> serializers;
     private final List<GenericSerializerPlatform> platforms;
 
     private GenericSerializable() {
@@ -47,7 +47,7 @@ public final class GenericSerializable {
     public <T> T deserialize(@NotNull final Map<String, Object> map, @NotNull final Class<T> type) {
         checkArgument(map != null, "the given map must not be null");
         checkArgument(type != null, "the given type must not be null");
-        final var serializer = (GenericSerializer<T>) serializers.get(type);
+        final var serializer = (GenericSerializer<T, Map<String, Object>>) serializers.get(type);
         if (serializer == null) {
             throw new GenericSerializerNotFoundException(type);
         }
