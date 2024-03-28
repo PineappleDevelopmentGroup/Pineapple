@@ -41,19 +41,25 @@ public class GenericAdapters implements GenericSerializationContext {
     @Override
     public <S, C> S serialize(@NotNull final C complex, @NotNull Class<C> complexType, final @NotNull Class<S> storedType) throws GenericSerializerNotFoundException {
         if (!serializers.containsKey(complexType)) {
-            throw new GenericSerializerNotFoundException(complexType);
+            throw new GenericSerializerNotFoundException(complexType, storedType);
         }
-        final GenericSerializer<S, C> serializer = (GenericSerializer<S, C>) this.serializers.get(complexType);
-        return serializer.serialize(complex, this);
+        var present = this.serializers.get(complexType);
+        if (!present.getStoredType().getRawType().equals(storedType)) {
+            throw new GenericSerializerNotFoundException(complexType, storedType);
+        }
+        return ((GenericSerializer<S, C>) present).serialize(complex, this);
     }
 
     @NotNull
     @Override
     public <S, C> C deserialize(@NotNull final S stored, final @NotNull Class<S> storedType, final @NotNull Class<C> complexType) throws GenericSerializerNotFoundException {
         if (!serializers.containsKey(complexType)) {
-            throw new GenericSerializerNotFoundException(complexType);
+            throw new GenericSerializerNotFoundException(complexType, storedType);
         }
-        final GenericSerializer<S, C> serializer = (GenericSerializer<S, C>) this.serializers.get(complexType);
-        return serializer.deserialize(stored, this);
+        var present = this.serializers.get(complexType);
+        if (!present.getStoredType().getRawType().equals(storedType)) {
+            throw new GenericSerializerNotFoundException(complexType, storedType);
+        }
+        return ((GenericSerializer<S, C>) present).deserialize(stored, this);
     }
 }
