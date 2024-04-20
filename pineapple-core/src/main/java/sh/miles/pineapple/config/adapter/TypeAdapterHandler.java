@@ -1,6 +1,7 @@
 package sh.miles.pineapple.config.adapter;
 
 import org.jetbrains.annotations.ApiStatus;
+import sh.miles.pineapple.collection.Pair;
 import sh.miles.pineapple.collection.WeightedRandom;
 import sh.miles.pineapple.collection.registry.WriteableRegistry;
 import sh.miles.pineapple.config.ConfigType;
@@ -18,7 +19,7 @@ public class TypeAdapterHandler extends WriteableRegistry<TypeAdapter<?, ?>, Con
      */
     public TypeAdapterHandler() {
         register(new BooleanAdapter<>(boolean.class));
-        register( new BooleanAdapter<>(Boolean.class));
+        register(new BooleanAdapter<>(Boolean.class));
 
         register(new DoubleAdapter<>(double.class));
         register(new DoubleAdapter<>(Double.class));
@@ -38,7 +39,6 @@ public class TypeAdapterHandler extends WriteableRegistry<TypeAdapter<?, ?>, Con
         register(new MaterialAdapter());
         register(new ItemStackAdapter());
         register(new PineappleComponentAdapter());
-        register(new EnchantmentAdapter());
     }
 
     /**
@@ -68,6 +68,10 @@ public class TypeAdapterHandler extends WriteableRegistry<TypeAdapter<?, ?>, Con
             return new CollectionAdapter<>(type);
         }
 
-        throw new IllegalArgumentException("The given type could not be registered as it is not supported!");
+        if (Pair.class.isAssignableFrom(type.getType())) {
+            return new PairAdapter<>(type);
+        }
+
+        throw new IllegalArgumentException("The given type of " + type.getType() + " could not be registered as it is not supported!");
     }
 }

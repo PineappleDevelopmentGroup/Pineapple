@@ -51,29 +51,35 @@ public class ConfigType<T> {
     }
 
     private static List<String> splitTypeName(String str, int start, int end) {
-        final StringBuilder current = new StringBuilder();
-        final List<String> splitOff = new ArrayList<>();
-        char cur = str.charAt(end);
-        if (cur != '>') {
-            return splitOff; // there is no generics no need to initiate loop
-        }
-
-        for (int i = end - 1; i >= start; i--) {
-            cur = str.charAt(i);
-
-            if (cur == ',') {
-                splitOff.add(current.toString().trim());
-                current.setLength(0);
-                continue;
+        int depth = 0;
+        StringBuilder current = new StringBuilder();
+        List<String> split = new ArrayList<>();
+        for (int i = start; i < end; i++) {
+            char c = str.charAt(i);
+            switch (c) {
+                case '<':
+                    depth++;
+                    break;
+                case '>':
+                    depth--;
+                    break;
+                case ',':
+                    if (depth != 0) {
+                        break;
+                    }
+                    split.add(current.toString().trim());
+                    current = new StringBuilder();
+                    continue;
+                default:
+                    // do nothing
             }
-            current.insert(0, cur);
+            current.append(c);
         }
-
-        if (!current.isEmpty()) {
-            splitOff.add(current.toString());
+        String last = current.toString().trim();
+        if (last.length() != 0) {
+            split.add(last);
         }
-
-        return splitOff;
+        return split;
     }
 
     public ConfigType(Class<T> clazz, List<ConfigType<?>> componentTypes) {
