@@ -38,6 +38,7 @@ public class TypeAdapterHandler extends WriteableRegistry<TypeAdapter<?, ?>, Con
         register(new MaterialAdapter());
         register(new ItemStackAdapter());
         register(new PineappleComponentAdapter());
+        register(new EnchantmentAdapter());
     }
 
     /**
