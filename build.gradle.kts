@@ -30,6 +30,10 @@ tasks.build {
 subprojects {
     apply(plugin = "java")
 
+    java {
+        disableAutoTargetJvm()
+    }
+
     dependencies {
         testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
@@ -67,6 +71,7 @@ tasks.withType<Javadoc> {
         "NMS:a:Requires NMS",
         "PullRequested:a:A Pull Request is open"
     )
+    options.encoding = "UTF-8"
 }
 
 tasks.publish {
