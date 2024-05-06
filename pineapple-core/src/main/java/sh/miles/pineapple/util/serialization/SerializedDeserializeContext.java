@@ -1,11 +1,8 @@
 package sh.miles.pineapple.util.serialization;
 
 import org.jetbrains.annotations.NotNull;
-import sh.miles.pineapple.util.serialization.SerializedElement;
 import sh.miles.pineapple.util.serialization.exception.SerializedAdaptationException;
 import sh.miles.pineapple.util.serialization.exception.SerializedAdapterNotFoundException;
-
-import java.lang.reflect.Type;
 
 /**
  * Context for Serialized adapters to use that allows access to other adapters to be used within any adapter

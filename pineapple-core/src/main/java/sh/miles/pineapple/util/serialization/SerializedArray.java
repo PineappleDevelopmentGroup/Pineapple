@@ -104,8 +104,12 @@ public final class SerializedArray extends SerializedElement implements Iterable
 
     @Override
     public boolean equals(final Object object) {
-        if (this == object) return true;
-        if (!(object instanceof final SerializedArray array)) return false;
+        if (this == object) {
+            return true;
+        }
+        if (!(object instanceof final SerializedArray array)) {
+            return false;
+        }
         return Objects.equals(elements, array.elements);
     }
 

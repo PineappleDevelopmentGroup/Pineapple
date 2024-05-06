@@ -2,7 +2,6 @@ package sh.miles.pineapple.util.serialization.bridges;
 
 import sh.miles.pineapple.util.serialization.adapter.SerializedAdapter;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**

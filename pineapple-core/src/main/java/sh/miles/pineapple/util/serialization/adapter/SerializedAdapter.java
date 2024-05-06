@@ -8,8 +8,6 @@ import sh.miles.pineapple.util.serialization.SerializedSerializeContext;
 import sh.miles.pineapple.util.serialization.bridges.SerializedBridge;
 import sh.miles.pineapple.util.serialization.exception.SerializedAdaptationException;
 
-import java.lang.reflect.Type;
-
 /**
  * An interface for the Serialized system which becomes adapter to different platforms when used alongside
  * {@link SerializedBridge}

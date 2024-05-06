@@ -19,7 +19,6 @@ public final class SerializedAdapterRegistry extends WriteableRegistry<Serialize
     private final Set<SerializedBridge> bridges;
 
     private SerializedAdapterRegistry() {
-        super();
         this.bridges = new HashSet<>();
         bridges.addAll(SerializedBridge.getDefaultBridges());
 

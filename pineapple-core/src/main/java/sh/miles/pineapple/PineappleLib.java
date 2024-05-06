@@ -9,7 +9,6 @@ import sh.miles.pineapple.gui.manage.GuiManager;
 import sh.miles.pineapple.nms.annotations.NMS;
 import sh.miles.pineapple.nms.api.PineappleNMS;
 import sh.miles.pineapple.nms.loader.NMSLoader;
-import sh.miles.pineapple.util.serialization.Serialized;
 import sh.miles.pineapple.util.serialization.adapter.SerializedAdapterRegistry;
 import sh.miles.pineapple.util.serialization.bridges.yaml.YamlSerializedBridge;
 

@@ -164,8 +164,12 @@ public final class SerializedPrimitive extends SerializedElement {
 
     @Override
     public boolean equals(final Object object1) {
-        if (this == object1) return true;
-        if (!(object1 instanceof final SerializedPrimitive that)) return false;
+        if (this == object1) {
+            return true;
+        }
+        if (!(object1 instanceof final SerializedPrimitive that)) {
+            return false;
+        }
         return Objects.equals(object, that.object);
     }
 

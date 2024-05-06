@@ -18,6 +18,8 @@ import java.util.Set;
  */
 public final class SerializedObject extends SerializedElement {
 
+    private static final String KEY_NULL_PRECONDITIONS_MESSAGE = "The given key must not be null";
+
     private final LinkedTreeMap<String, SerializedElement> map;
 
     SerializedObject() {
@@ -33,7 +35,7 @@ public final class SerializedObject extends SerializedElement {
      */
     @Nullable
     public SerializedElement getOrNull(@NotNull final String key) {
-        Preconditions.checkArgument(key != null, "The given key must not be null");
+        Preconditions.checkArgument(key != null, KEY_NULL_PRECONDITIONS_MESSAGE);
         return this.map.get(key);
     }
 
@@ -178,7 +180,7 @@ public final class SerializedObject extends SerializedElement {
      * @since 1.0.0-SNAPSHOT
      */
     public void add(@NotNull final String key, @NotNull final SerializedElement value) {
-        Preconditions.checkArgument(key != null && value != null, "The key and value must not be null");
+        Preconditions.checkArgument(key != null && value != null, KEY_NULL_PRECONDITIONS_MESSAGE);
         this.map.put(key, value);
     }
 
@@ -190,7 +192,7 @@ public final class SerializedObject extends SerializedElement {
      * @since 1.0.0-SNAPSHOT
      */
     public void add(@NotNull final String key, final int integer) {
-        Preconditions.checkArgument(key != null, "the key must not be null");
+        Preconditions.checkArgument(key != null, KEY_NULL_PRECONDITIONS_MESSAGE);
         this.map.put(key, new SerializedPrimitive(integer));
     }
 
@@ -202,7 +204,7 @@ public final class SerializedObject extends SerializedElement {
      * @since 1.0.0-SNAPSHOT
      */
     public void add(@NotNull final String key, final double decimal) {
-        Preconditions.checkArgument(key != null, "the key must not be null");
+        Preconditions.checkArgument(key != null, KEY_NULL_PRECONDITIONS_MESSAGE);
         this.map.put(key, new SerializedPrimitive(decimal));
     }
 
@@ -215,7 +217,7 @@ public final class SerializedObject extends SerializedElement {
      * @since 1.0.0-SNAPSHOT
      */
     public void add(@NotNull final String key, final long int64) {
-        Preconditions.checkArgument(key != null, "the key must not be null");
+        Preconditions.checkArgument(key != null, KEY_NULL_PRECONDITIONS_MESSAGE);
         this.map.put(key, new SerializedPrimitive(int64));
     }
 
@@ -227,7 +229,7 @@ public final class SerializedObject extends SerializedElement {
      * @since 1.0.0-SNAPSHOT
      */
     public void add(@NotNull final String key, final boolean bool) {
-        Preconditions.checkArgument(key != null, "the key must not be null");
+        Preconditions.checkArgument(key != null, KEY_NULL_PRECONDITIONS_MESSAGE);
         this.map.put(key, new SerializedPrimitive(bool));
     }
 
@@ -239,7 +241,7 @@ public final class SerializedObject extends SerializedElement {
      * @since 1.0.0-SNAPSHOT
      */
     public void add(@NotNull final String key, @NotNull final String string) {
-        Preconditions.checkArgument(key != null, "the key must not be null");
+        Preconditions.checkArgument(key != null, KEY_NULL_PRECONDITIONS_MESSAGE);
         this.map.put(key, new SerializedPrimitive(string));
     }
 
@@ -251,7 +253,7 @@ public final class SerializedObject extends SerializedElement {
      * @since 1.0.0-SNAPSHOT
      */
     public boolean has(@NotNull final String key) {
-        Preconditions.checkArgument(key != null, "the key must not be null");
+        Preconditions.checkArgument(key != null, KEY_NULL_PRECONDITIONS_MESSAGE);
         return this.map.containsKey(key);
     }
 
@@ -267,8 +269,12 @@ public final class SerializedObject extends SerializedElement {
 
     @Override
     public boolean equals(final Object object) {
-        if (this == object) return true;
-        if (!(object instanceof final SerializedObject that)) return false;
+        if (this == object) {
+            return true;
+        }
+        if (!(object instanceof final SerializedObject that)) {
+            return false;
+        }
         return Objects.equals(map, that.map);
     }
 

@@ -250,7 +250,8 @@ public final class ReflectionUtils {
      * Uses the MethodHandle API to get a MethodHandle attached to the provided fields in the given class as getters and
      * setters
      *
-     * @param clazz the class to get the field from
+     * @param clazz  the class to get the field from
+     * @param filter filters the fields via this predicate
      * @return the fields as MethodHandle's in the class
      * @since 1.0.0-SNAPSHOT
      */

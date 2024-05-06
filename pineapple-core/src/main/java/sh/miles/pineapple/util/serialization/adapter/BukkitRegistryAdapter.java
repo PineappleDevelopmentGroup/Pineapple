@@ -5,18 +5,14 @@ import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.jetbrains.annotations.NotNull;
-import sh.miles.pineapple.ReflectionUtils;
 import sh.miles.pineapple.util.serialization.SerializedDeserializeContext;
 import sh.miles.pineapple.util.serialization.SerializedElement;
 import sh.miles.pineapple.util.serialization.SerializedSerializeContext;
 import sh.miles.pineapple.util.serialization.exception.SerializedAdaptationException;
 
-import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 class BukkitRegistryAdapter<R extends Keyed> implements SerializedAdapter<R> {
 

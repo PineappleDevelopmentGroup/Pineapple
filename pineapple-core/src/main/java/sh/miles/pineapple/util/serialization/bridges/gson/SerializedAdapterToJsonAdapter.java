@@ -73,7 +73,6 @@ class SerializedAdapterToJsonAdapter<T> implements JsonSerializer<T>, JsonDeseri
     }
 
     private JsonPrimitive fromSerializedPrimitive(@NotNull final SerializedPrimitive serializedPrimitive) {
-        JsonPrimitive primitive;
         if (serializedPrimitive.isInt()) {
             return new JsonPrimitive(serializedPrimitive.getAsInt());
         } else if (serializedPrimitive.isLong()) {
