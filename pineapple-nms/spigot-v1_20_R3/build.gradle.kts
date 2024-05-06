@@ -10,9 +10,3 @@ dependencies {
 tasks.remap {
     this.version.set("1.20.4")
 }
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-
-}
