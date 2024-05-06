@@ -7,12 +7,16 @@ import sh.miles.pineapple.function.ThrowingSupplier;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
  * Provides a handful of utilities for reflection
@@ -222,6 +226,49 @@ public final class ReflectionUtils {
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    /**
+     * Gets a field as a VarHandle
+     *
+     * @param field the field to get
+     * @return the newly created VarHandle from the field
+     * @since 1.0.0-SNAPSHOT
+     */
+    public static VarHandle getFieldAsVarHandle(@NotNull final Field field) {
+        try {
+            field.setAccessible(true);
+            var handle = lookup.unreflectVarHandle(field);
+            field.setAccessible(false);
+            return handle;
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Uses the MethodHandle API to get a MethodHandle attached to the provided fields in the given class as getters and
+     * setters
+     *
+     * @param clazz the class to get the field from
+     * @return the fields as MethodHandle's in the class
+     * @since 1.0.0-SNAPSHOT
+     */
+    @NotNull
+    public static List<VarHandle> getAllFields(@NotNull final Class<?> clazz, Predicate<Field> filter) {
+        final List<VarHandle> handles = new ArrayList<>();
+        for (final Field field : clazz.getDeclaredFields()) {
+            if (filter.test(field)) {
+                try {
+                    field.setAccessible(true);
+                    handles.add(lookup.unreflectVarHandle(field));
+                    field.setAccessible(false);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return handles;
     }
 
     /**

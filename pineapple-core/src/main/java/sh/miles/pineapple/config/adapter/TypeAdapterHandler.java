@@ -33,12 +33,8 @@ public class TypeAdapterHandler extends WriteableRegistry<TypeAdapter<?, ?>, Con
         register(new LongAdapter<>(long.class));
         register(new LongAdapter<>(Long.class));
 
-        register(new ChatColorAdapter());
         register(new StringAdapter());
-        register(new NamespacedKeyAdapter());
-        register(new MaterialAdapter());
         register(new ItemStackAdapter());
-        register(new PineappleComponentAdapter());
     }
 
     /**

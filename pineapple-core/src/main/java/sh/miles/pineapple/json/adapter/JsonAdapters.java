@@ -1,11 +1,7 @@
 package sh.miles.pineapple.json.adapter;
 
 import com.google.gson.GsonBuilder;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Particle;
-import org.bukkit.damage.DamageType;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.UUID;
 
@@ -32,13 +28,7 @@ public final class JsonAdapters {
      * @since 1.0.0-SNAPSHOT
      */
     public static void registerAll(GsonBuilder builder) {
-        builder.registerTypeAdapter(UUID.class, new UUIDAdapter());
         builder.registerTypeHierarchyAdapter(ItemStack.class, new ItemStackAdapter());
-        builder.registerTypeHierarchyAdapter(NamespacedKey.class, new NamespacedKeyAdapter());
-        builder.registerTypeHierarchyAdapter(PotionEffectType.class, new PotionEffectTypeAdapter());
-        builder.registerTypeHierarchyAdapter(DamageType.class, new DamageTypeAdapter());
-        builder.registerTypeHierarchyAdapter(Particle.class, new ParticleAdapter());
-        builder.registerTypeHierarchyAdapter(PotionEffectType.class, new PotionEffectTypeAdapter());
     }
 
 }
