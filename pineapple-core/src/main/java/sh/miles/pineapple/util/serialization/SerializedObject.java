@@ -258,6 +258,16 @@ public final class SerializedObject extends SerializedElement {
     }
 
     /**
+     * Gets the keySet of this SerializedObject
+     *
+     * @return the key set
+     * @since 1.0.0-SNAPSHOT
+     */
+    public Set<String> keySet() {
+        return this.map.keySet();
+    }
+
+    /**
      * Gets the entry set of this serialized object
      *
      * @return the entry set

@@ -28,7 +28,6 @@ public final class JsonAdapters {
      * @since 1.0.0-SNAPSHOT
      */
     public static void registerAll(GsonBuilder builder) {
-        builder.registerTypeHierarchyAdapter(ItemStack.class, new ItemStackAdapter());
     }
 
 }

@@ -2,6 +2,7 @@ package sh.miles.pineapple.util.serialization;
 
 import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -82,6 +83,18 @@ public final class SerializedArray extends SerializedElement implements Iterable
      */
     public void add(final boolean bool) {
         this.elements.add(new SerializedPrimitive(bool));
+    }
+
+    /**
+     * Gets the SerializedElement as the given index
+     *
+     * @param index the index to get the SerializedElement from
+     * @return a SerializedElement
+     * @since 1.0.0-SNAPSHOT
+     */
+    @Nullable
+    public SerializedElement get(final int index) {
+        return this.elements.get(index);
     }
 
     /**

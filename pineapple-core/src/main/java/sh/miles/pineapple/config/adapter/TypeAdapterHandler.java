@@ -34,7 +34,6 @@ public class TypeAdapterHandler extends WriteableRegistry<TypeAdapter<?, ?>, Con
         register(new LongAdapter<>(Long.class));
 
         register(new StringAdapter());
-        register(new ItemStackAdapter());
     }
 
     /**

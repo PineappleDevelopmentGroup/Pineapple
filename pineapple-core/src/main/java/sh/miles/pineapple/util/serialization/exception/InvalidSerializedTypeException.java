@@ -17,6 +17,6 @@ public class InvalidSerializedTypeException extends SerializedException {
      * @since 1.0.0-SNAPSHOT
      */
     public InvalidSerializedTypeException(Class<?> expected, Class<?> found) {
-        super("Invalid SerializedType found, expected %s, but found %s");
+        super("Invalid SerializedType found, expected %s, but found %s".formatted(expected.getName(), found.getName()));
     }
 }

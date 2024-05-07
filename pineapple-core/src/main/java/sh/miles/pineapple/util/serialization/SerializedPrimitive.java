@@ -32,7 +32,7 @@ public final class SerializedPrimitive extends SerializedElement {
      * @since 1.0.0-SNAPSHOT
      */
     public int getAsInt() throws InvalidSerializedTypeException {
-        if (this.object instanceof Integer || this.object.getClass().isAssignableFrom(int.class)) {
+        if (isInt()) {
             return (int) this.object;
         }
         throw new InvalidSerializedTypeException(int.class, this.object.getClass());
@@ -46,8 +46,10 @@ public final class SerializedPrimitive extends SerializedElement {
      * @since 1.0.0-SNAPSHOT
      */
     public double getAsDouble() throws InvalidSerializedTypeException {
-        if (this.object instanceof Double || this.object.getClass().isAssignableFrom(double.class)) {
+        if (isDouble()) {
             return (double) this.object;
+        } else if (isInt()) {
+            return Integer.valueOf((int) object).doubleValue();
         }
         throw new InvalidSerializedTypeException(double.class, this.object.getClass());
     }
@@ -60,8 +62,10 @@ public final class SerializedPrimitive extends SerializedElement {
      * @since 1.0.0-SNAPSHOT
      */
     public long getAsLong() throws InvalidSerializedTypeException {
-        if (this.object instanceof Long || this.object.getClass().isAssignableFrom(long.class)) {
+        if (isLong()) {
             return (long) this.object;
+        } else if (isInt()) {
+            return Integer.valueOf((int) object).longValue();
         }
 
         throw new InvalidSerializedTypeException(long.class, this.object.getClass());
@@ -75,7 +79,7 @@ public final class SerializedPrimitive extends SerializedElement {
      * @since 1.0.0-SNAPSHOT
      */
     public boolean getAsBoolean() throws InvalidSerializedTypeException {
-        if (this.object instanceof Boolean || this.object.getClass().isAssignableFrom(boolean.class)) {
+        if (isBoolean()) {
             return (boolean) this.object;
         }
 
@@ -91,7 +95,7 @@ public final class SerializedPrimitive extends SerializedElement {
      */
     @NotNull
     public String getAsString() throws InvalidSerializedTypeException {
-        if (this.object instanceof String) {
+        if (isString()) {
             return (String) this.object;
         }
         throw new InvalidSerializedTypeException(String.class, this.object.getClass());

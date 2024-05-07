@@ -23,11 +23,17 @@ public final class SerializedAdapterRegistry extends WriteableRegistry<Serialize
         bridges.addAll(SerializedBridge.getDefaultBridges());
 
         // Adapters
+        register(new ArmorTrimAdapter());
+        register(new AttributeModifierAdapter());
+        register(new BukkitColorAdapter());
         BukkitRegistryAdapter.getRegistryAdapters().forEach(this::register);
         register(new ChatColorAdapter());
+        register(new ItemSpecAdapter());
+        register(new LocationAdapter());
         register(new MaterialAdapter());
         register(new NamespacedKeyAdapter());
         register(new PineappleComponentAdapter());
+        register(new PotionEffectsAdapter());
         register(new UUIDAdapter());
     }
 

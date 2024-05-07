@@ -5,6 +5,7 @@ import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.jetbrains.annotations.NotNull;
+import sh.miles.pineapple.ReflectionUtils;
 import sh.miles.pineapple.util.serialization.SerializedDeserializeContext;
 import sh.miles.pineapple.util.serialization.SerializedElement;
 import sh.miles.pineapple.util.serialization.SerializedSerializeContext;
@@ -54,9 +55,10 @@ class BukkitRegistryAdapter<R extends Keyed> implements SerializedAdapter<R> {
 
         try {
             for (final Field field : Registry.class.getDeclaredFields()) {
-                list.add(new BukkitRegistryAdapter((Class) field.getGenericType()));
+                list.add(new BukkitRegistryAdapter(ReflectionUtils.getParameterizedTypes(field).get(0)));
             }
         } catch (Exception ignored) { // while not usually advised we need to catch an exception here for Unit Test
+            ignored.printStackTrace();
         }
 
         return list;

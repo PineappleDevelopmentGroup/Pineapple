@@ -9,6 +9,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.google.gson.internal.LazilyParsedNumber;
 import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.ReflectionUtils;
 import sh.miles.pineapple.util.serialization.Serialized;
@@ -118,7 +119,20 @@ class SerializedAdapterToJsonAdapter<T> implements JsonSerializer<T>, JsonDeseri
 
     private SerializedPrimitive fromJsonPrimitive(@NotNull final JsonPrimitive primitive) {
         try {
-            return SerializedElement.primitive(JSON_PRIMITIVE_VALUE_FIELD.bindTo(primitive).invoke());
+            final Object value = JSON_PRIMITIVE_VALUE_FIELD.invoke(primitive);
+            if (value instanceof LazilyParsedNumber number) {
+                final String stringNumber = number.toString();
+                if (stringNumber.contains(".")) {
+                    return SerializedElement.primitive(number.doubleValue());
+                } else {
+                    final long int64 = Long.parseLong(stringNumber);
+                    if (int64 > Integer.MAX_VALUE) {
+                        return SerializedElement.primitive(int64);
+                    }
+                    return SerializedElement.primitive(number.intValue());
+                }
+            }
+            return SerializedElement.primitive(value);
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
