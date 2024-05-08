@@ -205,7 +205,6 @@ public class NonNullArray<E> implements Collection<E> {
     @Override
     public boolean addAll(@NotNull final Collection<? extends E> c) {
         final List<Integer> openIndexes = new ArrayList<>();
-        System.out.println(openIndexes);
         var baseValue = this.nullValue.get();
         for (int i = 0; i < this.objects.length; i++) {
             if (objects[i].equals(baseValue)) {

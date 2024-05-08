@@ -35,7 +35,7 @@ public interface JsonAdapter<T> extends JsonSerializer<T>, JsonDeserializer<T> {
     }
 
     /**
-     * Gets a json value from the provided parent JsonObject or throws an error with a default message
+     * Gets a json value from the provided parent SerializedObject or throws an error with a default message
      *
      * @param key        the key of the value to get
      * @param parent     the parent json object
@@ -50,7 +50,7 @@ public interface JsonAdapter<T> extends JsonSerializer<T>, JsonDeserializer<T> {
     }
 
     /**
-     * Gets a json value from the provided parent JsonObject or throws an error with a default message
+     * Gets a json value from the provided parent SerializedObject or throws an error with a default message
      *
      * @param key         the key of the value to get
      * @param parent      the parent json object

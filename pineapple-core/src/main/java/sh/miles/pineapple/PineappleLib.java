@@ -9,6 +9,8 @@ import sh.miles.pineapple.gui.manage.GuiManager;
 import sh.miles.pineapple.nms.annotations.NMS;
 import sh.miles.pineapple.nms.api.PineappleNMS;
 import sh.miles.pineapple.nms.loader.NMSLoader;
+import sh.miles.pineapple.util.serialization.adapter.SerializedAdapterRegistry;
+import sh.miles.pineapple.util.serialization.bridges.yaml.YamlSerializedBridge;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -52,6 +54,9 @@ public final class PineappleLib {
         this.guiManager = new GuiManager(plugin);
         this.anomalyFactory = new AnomalyFactory(plugin.getLogger());
         loadVersion();
+
+        // Serialized
+        SerializedAdapterRegistry.INSTANCE.registerBridge(new YamlSerializedBridge(configurationManager));
     }
 
     /**

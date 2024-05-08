@@ -48,11 +48,12 @@ public class ItemSpec {
 
     // Display Data
     private String name;
-    private Function<String, BaseComponent> nameMutator = TextComponent::new;
+    private Function<String, BaseComponent> nameMutator = null;
     private final List<String> lore = new ArrayList<>(0);
-    private Function<String, BaseComponent> loreMutator = TextComponent::new;
+    private Function<String, BaseComponent> loreMutator = null;
     private final List<ItemFlag> hideToolTips = new ArrayList<>(0);
     private int customModelData = INT_DATA_UNSET;
+    private Function<String, BaseComponent> defaultTextMutator = TextComponent::new;
     // Display Data end
 
     // Attributes
@@ -269,14 +270,15 @@ public class ItemSpec {
     }
 
     /**
-     * Gets the lore mutator
+     * Sets the default text mutator to be used if no {@link #setNameMutator(Function)} or
+     * {@link #setLoreMutator(Function)} have not been given a non null value
      *
-     * @return the lore mutator
+     * @param defaultTextMutator the mutation to apply to transition a string to a BaseComponent
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
-    public Function<String, BaseComponent> getLoreMutator() {
-        return loreMutator;
+    public void setDefaultTextMutator(@NotNull final Function<String, BaseComponent> defaultTextMutator) {
+        checkArgument(defaultTextMutator != null, "The default text mutator must not be null");
+        this.defaultTextMutator = defaultTextMutator;
     }
 
     /**
@@ -719,11 +721,11 @@ public class ItemSpec {
 
         // Display Data
         if (name != null) { // must be done first
-            item = nms.setItemDisplayName(item, this.nameMutator.apply(this.name));
+            item = nms.setItemDisplayName(item, this.nameMutator != null ? this.nameMutator.apply(name) : this.defaultTextMutator.apply(name));
         }
 
         if (!lore.isEmpty()) { // must be done second
-            item = nms.setItemLore(item, lore.stream().map(this.loreMutator).toList());
+            item = nms.setItemLore(item, lore.stream().map(this.loreMutator != null ? this.loreMutator : this.defaultTextMutator).toList());
         }
 
         // must be set here due to NMS
@@ -854,5 +856,125 @@ public class ItemSpec {
 
         item.setItemMeta(meta);
         return item;
+    }
+
+    /**
+     * Creates a new ItemSpec from an existing ItemStack
+     *
+     * @param item the item to convert to an ItemSpec
+     * @return the ItemSpec
+     * @since 1.0.0-SNAPSHOT
+     */
+    public static ItemSpec fromStack(@NotNull final ItemStack item) {
+        final ItemSpec spec = new ItemSpec(item.getType());
+        spec.amount = item.getAmount();
+
+        final ItemMeta meta = item.getItemMeta();
+
+        // Display Data
+        spec.name = meta.hasDisplayName() ? meta.getDisplayName() : null;
+        spec.lore.addAll(meta.hasLore() ? meta.getLore() : new ArrayList<>());
+        spec.hideToolTips.addAll(meta.getItemFlags());
+        spec.customModelData = meta.hasCustomModelData() ? meta.getCustomModelData() : INT_DATA_UNSET;
+        // Display Data end
+
+        // Attributes
+        spec.attributeModifiers.putAll(meta.hasAttributeModifiers() ? meta.getAttributeModifiers() : ArrayListMultimap.create());
+        // Attributes end
+
+        // Enchantments
+        spec.enchantments.putAll(meta.hasEnchants() ? meta.getEnchants() : new HashMap<>());
+        // Enchantments end
+
+        // Durability
+        final Damageable dmeta = (Damageable) meta;
+        spec.durability = dmeta.hasDamage() ? dmeta.getDamage() : INT_DATA_UNSET;
+        spec.unbreakable = dmeta.isUnbreakable();
+        // Durability end
+
+        // Potion Effects
+        if (meta instanceof PotionMeta pmeta) {
+            spec.effects.addAll(pmeta.hasCustomEffects() ? pmeta.getCustomEffects() : new ArrayList<>());
+            spec.potionColor = pmeta.getColor();
+        }
+        // Potion Effects end
+
+        // Armor
+        if (meta instanceof ArmorMeta ameta) {
+            spec.armorTrim = ameta.getTrim();
+        }
+
+        if (meta instanceof LeatherArmorMeta lmeta) {
+            spec.armorColor = lmeta.getColor();
+        }
+        // Armor end
+
+        // Armor Stands, Spawn Eggs, Item Frames and Paintings
+        // SKIPPED
+        // Armor Stands, Spawn Eggs, Item Frames and Paintings end
+
+        // Book and Quills
+        // SKIPPED
+        // Book and Quills end
+
+        // Written Books
+        // SKIPPED
+        // Written Books end
+
+        // Knowledge Books
+        if (meta instanceof EnchantmentStorageMeta emeta) {
+            spec.storedEnchantments.putAll(emeta.hasStoredEnchants() ? emeta.getStoredEnchants() : new HashMap<>());
+        }
+        // Knowledge Books end
+
+        // Buckets of Aquatic Mob
+        if (meta instanceof TropicalFishBucketMeta tmeta) {
+            spec.fishPattern = tmeta.getPattern();
+            spec.fishPatternColor = tmeta.getPatternColor();
+            spec.fishBodyColor = tmeta.getBodyColor();
+        }
+        // Buckets of Aquatic Mob end
+
+        // Bundle
+        // SKIPPED
+        // Bundle end
+
+        // Compasses
+        if (meta instanceof CompassMeta compassMeta) {
+            spec.isLodestoneTracked = compassMeta.isLodestoneTracked();
+            spec.lodestoneLocation = compassMeta.getLodestone();
+        }
+        // Compasses end
+
+        // Crossbows
+        if (meta instanceof CrossbowMeta cmeta) {
+            spec.chargedProjectiles.addAll(cmeta.hasChargedProjectiles() ? cmeta.getChargedProjectiles() : new ArrayList<>());
+        }
+        // Crossbows end
+
+        // Firework Rockets
+        // SKIPPED
+        // Firework Rockets end
+
+        // Firework Stars
+        // SKIPPED
+        // Firework Stars end
+
+        // Goat Horns
+        // SKIPPED
+        // Goat Horns end
+
+        // Maps
+        // SKIPPED
+        // Maps end
+
+        // Player Heads
+        // SKIPPED
+        // Player Heads end
+
+        // Suspicious Stew
+        // SKIPPED
+        // Suspicious Stew end
+        return spec;
     }
 }
