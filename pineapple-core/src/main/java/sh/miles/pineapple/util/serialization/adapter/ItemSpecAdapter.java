@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
+import sh.miles.pineapple.chat.PineappleChat;
 import sh.miles.pineapple.function.Option;
 import sh.miles.pineapple.function.Option.Some;
 import sh.miles.pineapple.item.ItemSpec;
@@ -136,7 +137,6 @@ class ItemSpecAdapter implements SerializedAdapter<ItemSpec> {
     public SerializedElement serialize(@NotNull final ItemSpec spec, @NotNull final SerializedSerializeContext context) throws SerializedAdaptationException {
         final SerializedObject item = object();
 
-        // Required
         item.add(ITEM_TYPE, spec.getItemType().toString().toLowerCase());
         item.add(AMOUNT, spec.getAmount());
         // Required end
@@ -313,8 +313,8 @@ class ItemSpecAdapter implements SerializedAdapter<ItemSpec> {
         final Material itemType = Material.matchMaterial(object.getPrimitive(ITEM_TYPE).orThrow().getAsString());
         final int amount = (object.getPrimitive(AMOUNT) instanceof Some<SerializedPrimitive> primitive) ? primitive.some().getAsInt() : 1;
         final ItemSpec spec = new ItemSpec(itemType);
+        spec.setDefaultTextMutator(PineappleChat::parse);
         spec.setAmount(amount);
-        // Required End
 
         // Display Data
         final String name = object.getPrimitive(NAME) instanceof Some<SerializedPrimitive> primitive ? primitive.some().getAsString() : null;
