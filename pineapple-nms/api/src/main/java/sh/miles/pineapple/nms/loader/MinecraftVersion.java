@@ -25,7 +25,8 @@ public class MinecraftVersion {
         final Map<String, MinecraftVersion> temp = new HashMap<>();
         temp.put("1.20.4", new MinecraftVersion("1.20.4", "v1_20_R3"));
         temp.put("1.20.5", new MinecraftVersion("1.20.5", "v1_20_R4"));
-        temp.put("1.20.6", new MinecraftVersion("1.20.6", "v1.20.R4"));
+        temp.put("1.20.6", new MinecraftVersion("1.20.6", "v1_20_R4"));
+        temp.put("1.21", new MinecraftVersion("1.21", "v1_21_R1"));
         protocolMap = ImmutableMap.copyOf(temp);
 
         String[] split = Bukkit.getBukkitVersion().split("-")[0].split("\\.");
