@@ -7,6 +7,7 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 
     withJavadocJar()
+    withSourcesJar()
 }
 
 val compileOnlyAndTest = configurations.create("compileOnlyAndTest")

@@ -58,6 +58,10 @@ subprojects {
     tasks.withType<Javadoc> {
         exclude("sh/miles/pineapple/nms/impl/**")
     }
+
+    afterEvaluate {
+        if (tasks.findByName("sourcesJar") != null) tasks.named<Jar>("sourcesJar")
+    }
 }
 
 tasks.withType<Javadoc> {
@@ -85,11 +89,27 @@ tasks.publishToMavenLocal {
     dependsOn(tasks.getByName("checkstyleProject"))
 }
 
+tasks.register<Jar>("allSourcesJar") {
+    archiveClassifier.set("sources")
+    val sourcesJars: MutableList<TaskProvider<Jar>> = mutableListOf()
+    for (subproject in subprojects) {
+        if (subproject.tasks.findByName("sourcesJar") == null) continue
+        sourcesJars.add(subproject.tasks.named<Jar>("sourcesJar"))
+    }
+
+    dependsOn(sourcesJars)
+
+    sourcesJars.forEach { sourcesJarTask ->
+        from(sourcesJarTask.flatMap { it.archiveFile.map { zipTree(it) } })
+    }
+}
+
 publishing {
     publications {
         create<MavenPublication>("Maven") {
             project.shadow.component(this)
             this.artifact(tasks.aggregateJavadocJar)
+            this.artifact(tasks.named("allSourcesJar"))
         }
     }
 
