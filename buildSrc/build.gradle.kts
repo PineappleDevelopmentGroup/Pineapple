@@ -9,5 +9,5 @@ repositories {
 }
 
 dependencies {
-    implementation("io.github.patrick.remapper:io.github.patrick.remapper.gradle.plugin:1.4.1")
+    implementation(libs.patrick.remapper)
 }
