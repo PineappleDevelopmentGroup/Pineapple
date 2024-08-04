@@ -7,6 +7,7 @@ gradle.rootProject {
 include(
     "pineapple-common",
     "pineapple-bundle",
+    "pineapple-infstack",
     "pineapple-bundle:pineapple-core",
     "pineapple-bundle:pineapple-nms",
     "pineapple-bundle:pineapple-nms:api",
