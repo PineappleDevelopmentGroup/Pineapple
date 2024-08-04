@@ -1,7 +1,7 @@
 rootProject.name = "Pineapple"
 
 gradle.rootProject {
-    group = "sh.miles.testing"
+    group = "sh.miles"
 }
 
 include(
