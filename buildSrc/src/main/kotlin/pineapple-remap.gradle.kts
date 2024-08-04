@@ -1,10 +1,10 @@
 plugins {
-    id("java")
+    java
     id("io.github.patrick.remapper")
 }
 
 dependencies {
-    compileOnly(project(":pineapple-nms:api"))
+    compileOnly(project(":pineapple-bundle:pineapple-nms:api"))
 }
 
 tasks.jar {

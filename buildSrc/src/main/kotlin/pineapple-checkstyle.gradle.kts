@@ -1,6 +1,6 @@
 plugins {
-    id("java")
-    id("checkstyle")
+    java
+    checkstyle
 }
 
 tasks.checkstyleMain {
@@ -12,4 +12,3 @@ checkstyle {
     configFile = file(rootDir.resolve("config/checkstyle/checkstyle.xml"))
     sourceSets = mutableListOf(project.sourceSets.main.get())
 }
-
