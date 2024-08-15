@@ -3,6 +3,7 @@ package sh.miles.crown.infstacks;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import sh.miles.pineapple.collection.Pair;
 
 public class InfStackFactory {
 
@@ -26,12 +27,14 @@ public class InfStackFactory {
      * @return the InfStack
      */
     public InfStack create(@NotNull final ItemStack item) {
-        if (item.getType().isAir()) air();
+        if (item.getType().isAir()) {
+            return air();
+        }
 
-        final ItemStack display = InfStackUtils.setupDisplay(item, settings);
-        final ItemStack comparator = InfStackUtils.setupComparator(item);
+        final ItemStack comparator = InfStackUtils.setupComparator(item, settings);
+        final Pair<ItemStack, Long> display = InfStackUtils.setupDisplay(item, comparator, settings);
 
-        return new InfStack(display, comparator, item.getAmount(), settings);
+        return new InfStack(display.left(), comparator, display.right(), settings);
     }
 
     /**

@@ -16,6 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
@@ -297,6 +298,18 @@ public class ItemBuilder {
      */
     public <T, Z> ItemBuilder persistentData(NamespacedKey key, PersistentDataType<T, Z> type, Z value) {
         this.meta.getPersistentDataContainer().set(key, type, value);
+        return this;
+    }
+
+    /**
+     * Allows a function to be executed on the given meta
+     *
+     * @param consumer the function to be executed on the PersistentDataContainer
+     * @return the ItemBuilder
+     * @since 1.0.0-SNAPSHOT
+     */
+    public ItemBuilder persistentData(Consumer<PersistentDataContainer> consumer) {
+        consumer.accept(this.meta.getPersistentDataContainer());
         return this;
     }
 

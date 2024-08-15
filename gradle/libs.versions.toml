@@ -16,6 +16,7 @@ javadoc-ver = "8.6"
 mockbukkit = { module = "com.github.seeseemelk:MockBukkit-v1.20", version.ref = "mockbukkit-version" }
 morepdc = { module = "com.jeff_media:MorePersistentDataTypes", version.ref = "morepdc-version" }
 patrick-remapper = { module = "io.github.patrick.remapper:io.github.patrick.remapper.gradle.plugin", version.ref = "patrick-remapper-version" }
+kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-jvm-ver" }
 # Deprecated
 pineapplechat-core = { module = "sh.miles.pineapplechat:pineapplechat-core", version.ref = "pineapplechat-version" }
 pineapplechat-bungee = { module = "sh.miles.pineapplechat:pineapplechat-bungee", version.ref = "pineapplechat-version" }

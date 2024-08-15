@@ -14,3 +14,9 @@ dependencies {
         implementation(subproject)
     }
 }
+
+tasks.build {
+    for (subproject in subprojects) {
+        dependsOn(subproject.tasks.getByName("jar"))
+    }
+}

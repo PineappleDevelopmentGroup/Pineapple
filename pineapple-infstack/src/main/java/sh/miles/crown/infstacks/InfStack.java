@@ -37,7 +37,9 @@ public class InfStack {
      * @return true if the InfStack could be grown
      */
     public boolean grow(@NotNull final ItemStack item) {
-        if (isAir()) return false;
+        if (isAir()) {
+            return false;
+        }
         if (!this.comparator.isSimilar(item)) {
             return false;
         }
@@ -54,16 +56,20 @@ public class InfStack {
      */
     @NotNull
     public ItemStack extract(int amount) {
-        if (isAir()) return new ItemStack(Material.AIR);
-        if (amount > 64 || amount < 0)
+        if (isAir()) {
+            return new ItemStack(Material.AIR);
+        }
+        if (amount > 64 || amount < 0) {
             throw new IllegalStateException("The given amount %d is not within the range 0 to 64".formatted(amount));
+        }
 
         if (this.stackSize < amount) {
             amount = (int) this.stackSize;
         }
-
         final ItemStack extracted = comparator.clone();
-        assert shrink(amount);
+        if (!shrink(amount)) {
+            throw new IllegalStateException("Extracted stack unable to shrink, this is a bug!");
+        }
         extracted.setAmount(amount);
         return extracted;
     }
@@ -75,9 +81,13 @@ public class InfStack {
      * @return true if the growth succeeded, otherwise false
      */
     public boolean grow(final long amount) {
-        if (isAir() || isEmpty()) return false;
+        if (isAir() || isEmpty()) {
+            return false;
+        }
         final long finalAmount = amount + this.stackSize;
-        if (finalAmount > this.settings.maxStackSize()) return false;
+        if (finalAmount > this.settings.maxStackSize()) {
+            return false;
+        }
 
         this.stackSize = finalAmount;
         update();
@@ -91,9 +101,13 @@ public class InfStack {
      * @return true if the growth succeeded, otherwise false
      */
     public boolean shrink(final long amount) {
-        if (isAir()) return false;
+        if (isAir()) {
+            return false;
+        }
         final long finalAmount = this.stackSize - amount;
-        if (finalAmount < 0) return false;
+        if (finalAmount < 0) {
+            return false;
+        }
 
         this.stackSize = finalAmount;
         update();
@@ -101,7 +115,7 @@ public class InfStack {
     }
 
     private void update() {
-        this.display = this.settings.loreApplier().apply(this.settings.lore(), this.stackSize, this.display);
+        this.display = this.settings.loreApplier().apply(this.settings.lore(), this.stackSize, this.display, this.comparator, true);
 
         var meta = this.display.getItemMeta();
         assert meta != null;

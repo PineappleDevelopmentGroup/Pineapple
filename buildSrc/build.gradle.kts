@@ -9,5 +9,6 @@ repositories {
 }
 
 dependencies {
+    implementation(libs.kotlin)
     implementation(libs.patrick.remapper)
 }

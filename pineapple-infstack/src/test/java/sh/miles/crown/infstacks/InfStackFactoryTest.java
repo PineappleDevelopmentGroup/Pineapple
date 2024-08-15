@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import sh.miles.pineapple.chat.PineappleChat;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,11 +20,11 @@ public class InfStackFactoryTest extends AbstractPluginTest {
     @BeforeEach
     public void setup() {
         super.setup();
-        this.factory = new InfStackFactory(new InfStackSettings(PineappleChat.component("Amount %s"), Long.MAX_VALUE,
-                (lore, amount, item) -> {
+        this.factory = new InfStackFactory(new InfStackSettings(List.of(PineappleChat.component("Amount %s")), Long.MAX_VALUE,
+                (lore, amount, item, display, removeOldLore) -> {
                     final ItemMeta meta = item.getItemMeta();
                     final var list = new ArrayList<String>();
-                    list.add(lore.getSource().formatted(amount));
+                    list.add(lore.get(0).getSource().formatted(amount));
                     meta.setLore(list);
                     item.setItemMeta(meta);
                     return item;
@@ -68,7 +69,7 @@ public class InfStackFactoryTest extends AbstractPluginTest {
     void test_CanOverExtract() {
         final InfStack stack = factory.create(new ItemStack(Material.FEATHER, 10));
         assertEquals(10, stack.getStackSize());
-        final ItemStack extracted = stack.extract(10);
+        final ItemStack extracted = stack.extract(64);
         assertEquals(new ItemStack(Material.FEATHER, 10), extracted);
         assertEquals(0, stack.getStackSize());
         assertTrue(stack.isEmpty());
