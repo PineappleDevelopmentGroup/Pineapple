@@ -48,6 +48,11 @@ public final class TileGeneralInteractionListener implements Listener {
         this.registry = registry;
     }
 
+    /**
+     * _
+     *
+     * @param event _
+     */
     @EventHandler
     public void onBlockBreak(@NotNull final BlockBreakEvent event) {
         final Tile tile = cache.get(event.getBlock().getLocation());
@@ -63,6 +68,11 @@ public final class TileGeneralInteractionListener implements Listener {
         }
     }
 
+    /**
+     * _
+     *
+     * @param event _
+     */
     @EventHandler
     public void onBlockPlace(@NotNull final BlockPlaceEvent event) {
         final PersistentDataContainer container = event.getItemInHand().getItemMeta().getPersistentDataContainer();
@@ -83,6 +93,11 @@ public final class TileGeneralInteractionListener implements Listener {
         }
     }
 
+    /**
+     * _
+     *
+     * @param event _
+     */
     @EventHandler
     public void onBlockDrop(@NotNull final BlockDropItemEvent event) {
         final Tile dropping = broken.getIfPresent(event.getBlock().getLocation());
@@ -91,6 +106,11 @@ public final class TileGeneralInteractionListener implements Listener {
         }
     }
 
+    /**
+     * _
+     *
+     * @param event _
+     */
     @EventHandler
     public void onBlockInteract(@NotNull final PlayerInteractEvent event) {
         if (!event.hasBlock()) {

@@ -53,6 +53,13 @@ public final class TileChunkIOUtils {
         }
     }
 
+    /**
+     * Saves tiles to the given cache from the given chunk
+     *
+     * @param cache the cache
+     * @param chunk the chunk
+     * @since 1.0.0-SNAPSHOT
+     */
     public static void saveTiles(@NotNull final ServerTileCache cache, @NotNull final Chunk chunk) {
         final var tiles = cache.evict(chunk);
         final PersistentDataContainer chunkContainer = chunk.getPersistentDataContainer();

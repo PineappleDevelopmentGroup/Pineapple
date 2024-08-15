@@ -86,6 +86,12 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
         tick((T) tile);
     }
 
+    /**
+     * Creates an item from a possible tile
+     *
+     * @param tile the tile
+     * @return the item stack
+     */
     public ItemStack createItem(@Nullable final T tile) {
         return createItemShell(tile)
                 .persistentData(TileKeys.TILE_TYPE_KEY, PersistentDataType.STRING, getKey().toString())

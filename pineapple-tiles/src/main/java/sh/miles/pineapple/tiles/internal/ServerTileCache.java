@@ -32,10 +32,19 @@ public class ServerTileCache implements Iterable<Map.Entry<ChunkRelPos, Tile>> {
      * Creates a new instance of ServerTileCache
      *
      * @param plugin the plugin to be used for task creation
+     * @since 1.0.0-SNAPSHOT
      */
     public ServerTileCache(@NotNull final Plugin plugin) {
         task = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-
+            for (final var serverEntry : cache.entrySet()) {
+                for (final Map.Entry<ChunkRelPos, Tile> chunkRelPosTileEntry : serverEntry.getValue()) {
+                    final var tile = chunkRelPosTileEntry.getValue();
+                    final var tileType = tile.getTileType();
+                    if (tileType.isTicking) {
+                        tileType.onTickLoop(tile);
+                    }
+                }
+            }
         }, 0L, 1L);
     }
 
@@ -73,6 +82,7 @@ public class ServerTileCache implements Iterable<Map.Entry<ChunkRelPos, Tile>> {
      * method is useful, however using this method outside internal use cases can cause memory leaks or worse.
      *
      * @param chunkPos the chunk position to use this illegal method at
+     * @return ChunkTileCache
      * @since 1.0.0-SNAPSHOT
      * @deprecated DO NOT USE THIS METHOD
      */
