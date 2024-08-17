@@ -4,6 +4,7 @@ import com.google.common.collect.Streams;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.ApiStatus;
@@ -139,7 +140,12 @@ public class ServerTileCache implements Iterable<Map.Entry<ChunkRelPos, Tile>> {
      * @since 1.0.0-SNAPSHOT
      */
     public void evictAndSaveAll() {
-        // TODO: Implement
+        for (final Map.Entry<ChunkPos, ChunkTileCache> chunkEntry : this.cache.entrySet()) {
+            final PersistentDataContainer container = chunkEntry.getKey().toChunk().getPersistentDataContainer();
+            for (final Map.Entry<ChunkRelPos, Tile> entry : chunkEntry.getValue()) {
+                entry.getValue().save(container);
+            }
+        }
     }
 
     /**
