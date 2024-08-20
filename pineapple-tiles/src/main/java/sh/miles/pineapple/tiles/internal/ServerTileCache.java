@@ -13,7 +13,9 @@ import org.jetbrains.annotations.Nullable;
 import sh.miles.pineapple.tiles.api.Tile;
 import sh.miles.pineapple.tiles.api.pos.ChunkPos;
 import sh.miles.pineapple.tiles.api.pos.ChunkRelPos;
+import sh.miles.pineapple.tiles.internal.util.TileChunkIOUtils;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -112,9 +114,14 @@ public class ServerTileCache implements Iterable<Map.Entry<ChunkRelPos, Tile>> {
      */
     @Nullable
     public Tile evict(@NotNull final Location location) {
-        final ChunkPos position = ChunkPos.fromChunk(location.getChunk());
+        return evict(location.getChunk(), ChunkRelPos.fromLocation(location));
+    }
+
+    @Nullable
+    public Tile evict(@NotNull final Chunk chunk, @NotNull final ChunkRelPos relPos) {
+        final ChunkPos position = ChunkPos.fromChunk(chunk);
         final ChunkTileCache chunkCache = cache.get(position);
-        final Tile tile = chunkCache != null ? chunkCache.evict(ChunkRelPos.fromLocation(location)) : null;
+        final Tile tile = chunkCache != null ? chunkCache.evict(relPos) : null;
         if (chunkCache.isEmpty()) {
             cache.remove(position);
         }
@@ -140,12 +147,11 @@ public class ServerTileCache implements Iterable<Map.Entry<ChunkRelPos, Tile>> {
      * @since 1.0.0-SNAPSHOT
      */
     public void evictAndSaveAll() {
-        for (final Map.Entry<ChunkPos, ChunkTileCache> chunkEntry : this.cache.entrySet()) {
-            final PersistentDataContainer container = chunkEntry.getKey().toChunk().getPersistentDataContainer();
-            for (final Map.Entry<ChunkRelPos, Tile> entry : chunkEntry.getValue()) {
-                entry.getValue().save(container);
-            }
+        final List<Chunk> chunks = this.cache.keySet().stream().map(ChunkPos::toChunk).toList();
+        for (final Chunk chunk : chunks) {
+            TileChunkIOUtils.saveTiles(this, chunk);
         }
+
     }
 
     /**

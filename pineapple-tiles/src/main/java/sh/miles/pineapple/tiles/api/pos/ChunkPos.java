@@ -55,6 +55,11 @@ public record ChunkPos(@NotNull long[] data) {
         return Arrays.hashCode(data);
     }
 
+    @Override
+    public String toString() {
+        return "ChunkPos[%s(%d,%d)]".formatted(Bukkit.getWorld(new UUID(data[0], data[1])), (int) (data[2] >> 32), (int) data[2]);
+    }
+
     /**
      * Creates a ChunkPos from the given chunk
      *

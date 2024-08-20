@@ -1,5 +1,6 @@
 package sh.miles.pineapple.tiles.api.pos;
 
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 

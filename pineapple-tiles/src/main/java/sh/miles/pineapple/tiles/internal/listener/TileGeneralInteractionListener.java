@@ -4,23 +4,31 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import sh.miles.pineapple.PineappleLib;
+import sh.miles.pineapple.collection.Pair;
 import sh.miles.pineapple.tiles.api.Tile;
 import sh.miles.pineapple.tiles.api.TileType;
 import sh.miles.pineapple.tiles.api.TileTypeRegistry;
 import sh.miles.pineapple.tiles.internal.ServerTileCache;
+import sh.miles.pineapple.tiles.internal.util.TileChunkIOUtils;
 import sh.miles.pineapple.tiles.internal.util.TileKeys;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * The listeners related to general tile interaction
@@ -34,7 +42,7 @@ public final class TileGeneralInteractionListener implements Listener {
     private final ServerTileCache cache;
     @NotNull
     private final TileTypeRegistry registry;
-    private final Cache<Location, Tile> broken = CacheBuilder.newBuilder().expireAfterAccess(Duration.ofMinutes(1)).build();
+    private final Cache<Location, Tile> broken = CacheBuilder.newBuilder().expireAfterWrite(Duration.ofMinutes(1)).build();
 
     /**
      * Creates a new tile interaction listener
@@ -64,7 +72,7 @@ public final class TileGeneralInteractionListener implements Listener {
         if (!event.isCancelled()) {
             final Location location = event.getBlock().getLocation();
             broken.put(location, tile);
-            cache.evict(location);
+            TileChunkIOUtils.deleteTile(cache, location);
         }
     }
 
@@ -103,6 +111,7 @@ public final class TileGeneralInteractionListener implements Listener {
         final Tile dropping = broken.getIfPresent(event.getBlock().getLocation());
         if (dropping != null) {
             dropping.getTileType().onBlockDropItemEvent(event, dropping);
+            broken.invalidate(event.getBlock().getLocation());
         }
     }
 
@@ -119,6 +128,61 @@ public final class TileGeneralInteractionListener implements Listener {
         final Tile tile = cache.get(event.getClickedBlock().getLocation());
         if (tile != null) {
             tile.getTileType().onPlayerInteractEvent(event, tile);
+        }
+    }
+
+    /**
+     * _
+     *
+     * @param event _
+     */
+    @EventHandler
+    public void onBlockExplode(@NotNull final BlockExplodeEvent event) {
+        final List<Pair<Tile, Block>> explodedTiles = event.blockList().stream()
+                .map((block) -> Pair.of(cache.get(block.getLocation()), block))
+                .filter((pair) -> pair.left() != null)
+                .toList();
+        if (explodedTiles.isEmpty()) {
+            return;
+        }
+
+        Tile tile;
+        Block block;
+        for (final Pair<Tile, Block> explodedTile : explodedTiles) {
+            tile = explodedTile.left();
+            block = explodedTile.right();
+
+            tile.getTileType().onBlockExplodeEvent(event, tile, block);
+            if (event.isCancelled() || !event.blockList().contains(block)) {
+                return;
+            }
+
+            broken.put(block.getLocation(), tile);
+        }
+    }
+
+    @EventHandler
+    public void onEntityExplode(@NotNull final EntityExplodeEvent event) {
+        final List<Pair<Tile, Block>> explodedTiles = event.blockList().stream()
+                .map((block) -> Pair.of(cache.get(block.getLocation()), block))
+                .filter((pair) -> pair.left() != null)
+                .toList();
+        if (explodedTiles.isEmpty()) {
+            return;
+        }
+
+        Tile tile;
+        Block block;
+        for (final Pair<Tile, Block> explodedTile : explodedTiles) {
+            tile = explodedTile.left();
+            block = explodedTile.right();
+
+            tile.getTileType().onEntityExplodeEvent(event, tile, block);
+            if (event.isCancelled() || !event.blockList().contains(block)) {
+                return;
+            }
+
+            broken.put(block.getLocation(), tile);
         }
     }
 

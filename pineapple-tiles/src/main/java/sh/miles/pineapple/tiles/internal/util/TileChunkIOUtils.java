@@ -1,6 +1,7 @@
 package sh.miles.pineapple.tiles.internal.util;
 
 import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -80,5 +81,44 @@ public final class TileChunkIOUtils {
         if (!container.isEmpty()) {
             chunkContainer.set(TileKeys.TILE_CONTAINER_KEY, PersistentDataType.TAG_CONTAINER, container);
         }
+    }
+
+    /**
+     * Deletes a tile from the given chunk and relative position
+     *
+     * @param cache the cache
+     * @param chunk the chunk the relative position is in
+     * @param pos   the relative position to delete the tile from
+     * @return true if the tile was successfully deleted
+     */
+    public static boolean deleteTile(@NotNull final ServerTileCache cache, @NotNull final Chunk chunk, @NotNull final ChunkRelPos pos) {
+        final Tile tile = cache.evict(chunk, pos);
+        if (tile == null) {
+            return false;
+        }
+        final PersistentDataContainer chunkContainer = chunk.getPersistentDataContainer();
+        if (!chunkContainer.has(TileKeys.TILE_CONTAINER_KEY)) {
+            return false;
+        }
+        final PersistentDataContainer container = chunkContainer.get(TileKeys.TILE_CONTAINER_KEY, PersistentDataType.TAG_CONTAINER);
+        container.remove(TileKeys.buildChunkRelPosKey(pos));
+        if (!container.getKeys().isEmpty()) {
+            return true;
+        }
+
+        chunkContainer.remove(TileKeys.TILE_CONTAINER_KEY);
+        return true;
+
+    }
+
+    /**
+     * Deletes the tile from the given location
+     *
+     * @param cache    the cache
+     * @param location the location to delete the tile from
+     * @return true if the tile was successfully deleted
+     */
+    public static boolean deleteTile(@NotNull final ServerTileCache cache, @NotNull final Location location) {
+        return deleteTile(cache, location.getChunk(), ChunkRelPos.fromLocation(location));
     }
 }

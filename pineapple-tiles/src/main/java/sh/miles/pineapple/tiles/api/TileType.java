@@ -1,10 +1,14 @@
 package sh.miles.pineapple.tiles.api;
 
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Block;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -37,6 +41,7 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
      *
      * @param event event
      * @param tile  tile
+     * @since 1.0.0-SNAPSHOT
      */
     @ApiStatus.Internal
     public final void onBlockDropItemEvent(@NotNull final BlockDropItemEvent event, @NotNull final Tile tile) {
@@ -46,8 +51,35 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
     /**
      * Wrapper method used for casting for internal use only
      *
+     * @param event     the event
+     * @param tile      the tile
+     * @param tileBlock the block the tile is
+     * @since 1.0.0-SNAPSHOT
+     */
+    @ApiStatus.Internal
+    public final void onBlockExplodeEvent(@NotNull final BlockExplodeEvent event, @NotNull final Tile tile, @NotNull final Block tileBlock) {
+        onBlockExplode(event, (T) tile, tileBlock);
+    }
+
+    /**
+     * Wrapper method used for casting for internal use only
+     *
+     * @param event     the event
+     * @param tile      the tile
+     * @param tileBlock the block the tile is
+     * @since 1.0.0-SNAPSHOT
+     */
+    @ApiStatus.Internal
+    public final void onEntityExplodeEvent(@NotNull final EntityExplodeEvent event, @NotNull final Tile tile, @NotNull final Block tileBlock) {
+        onEntityExplode(event, (T) tile, tileBlock);
+    }
+
+    /**
+     * Wrapper method used for casting for internal use only
+     *
      * @param event event
      * @param tile  tile
+     * @since 1.0.0-SNAPSHOT
      */
     @ApiStatus.Internal
     public final void onPlayerInteractEvent(@NotNull final PlayerInteractEvent event, @NotNull final Tile tile) {
@@ -59,6 +91,7 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
      *
      * @param event event
      * @param tile  tile
+     * @since 1.0.0-SNAPSHOT
      */
     @ApiStatus.Internal
     public final void onBlockBreakEvent(@NotNull final BlockBreakEvent event, @NotNull final Tile tile) {
@@ -70,6 +103,7 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
      *
      * @param event event
      * @param tile  tile
+     * @since 1.0.0-SNAPSHOT
      */
     @ApiStatus.Internal
     public final void onBlockPlaceEvent(@NotNull final BlockPlaceEvent event, @NotNull final Tile tile) {
@@ -80,6 +114,7 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
      * Wrapper method used for casting for internal use only
      *
      * @param tile tile
+     * @since 1.0.0-SNAPSHOT
      */
     @ApiStatus.Internal
     public final void onTickLoop(@NotNull final Tile tile) {
@@ -91,6 +126,7 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
      *
      * @param tile the tile
      * @return the item stack
+     * @since 1.0.0-SNAPSHOT
      */
     public ItemStack createItem(@Nullable final T tile) {
         return createItemShell(tile)
@@ -113,6 +149,30 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
             throw new UnsupportedOperationException("The default implementation of TileType#onDrop can not handle multi or no drop blocks");
         }
         event.getItems().get(0).setItemStack(createItem(tile));
+    }
+
+    /**
+     * Defines explosion logic for this tile type.
+     *
+     * @param event     the explode event
+     * @param tile      the tile being exploded
+     * @param tileBlock the block the tile is
+     * @since 1.0.0-SNAPSHOT
+     */
+    protected void onBlockExplode(@NotNull final BlockExplodeEvent event, @NotNull final T tile, @NotNull final Block tileBlock) {
+        event.blockList().remove(tileBlock);
+    }
+
+    /**
+     * Defines explosion logic for this tile type.
+     *
+     * @param event     the explode event
+     * @param tile      the tile being exploded
+     * @param tileBlock the block the tile is
+     * @since 1.0.0-SNAPSHOT
+     */
+    protected void onEntityExplode(@NotNull final EntityExplodeEvent event, @NotNull final T tile, @NotNull final Block tileBlock) {
+        event.blockList().remove(tileBlock);
     }
 
     /**
