@@ -6,6 +6,9 @@ repositories {
     mavenCentral()
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
 }
+java {
+    withSourcesJar()
+}
 
 dependencies {
     compileOnly("org.jetbrains:annotations-java5:24.0.1")

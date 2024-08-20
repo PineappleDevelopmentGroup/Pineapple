@@ -1,5 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.ShadowExtension
-
 plugins {
     id("pineapple-module-simple")
     id("pineapple-module-publishing")
@@ -51,24 +49,29 @@ tasks.publishToMavenLocal {
     dependsOn(aggregateCheckstyle)
 }
 
-val aggregateSources by tasks.register<Jar>("aggregateSources") {
-    archiveClassifier.set("sources")
-    val sourcesJars: MutableList<TaskProvider<Jar>> = mutableListOf()
-    for (subproject in subprojects) {
-        if (subproject.tasks.findByName("sourcesJar") == null) continue
-        sourcesJars.add(subproject.tasks.named<Jar>("sourcesJar"))
-    }
+afterEvaluate {
+    tasks.register<Jar>("aggregateSources") {
+        archiveClassifier.set("sources")
+        val sourcesJars: MutableList<TaskProvider<Jar>> = mutableListOf()
+        for (subproject in subprojects) {
+            println(subproject.name)
+            println("exists: ${subproject.tasks.findByName("sourcesJar") != null}")
+            if (subproject.tasks.findByName("sourcesJar") == null) continue
+            sourcesJars.add(subproject.tasks.named<Jar>("sourcesJar"))
+        }
 
-    dependsOn(sourcesJars)
+        dependsOn(sourcesJars)
 
-    sourcesJars.forEach { sourcesJarTask ->
-        from(sourcesJarTask.flatMap { it.archiveFile.map { zipTree(it) } })
+        sourcesJars.forEach { sourcesJarTask ->
+            from(sourcesJarTask.flatMap { it.archiveFile.map { zipTree(it) } })
+        }
     }
 }
 
 tasks.build {
     dependsOn(tasks.shadowJar)
     dependsOn(aggregateCheckstyle)
+    dependsOn(tasks.named("aggregateSources"))
 }
 
 publishing {
@@ -76,7 +79,9 @@ publishing {
         create<MavenPublication>("Maven") {
             shadow.component(this)
             this.artifact(tasks.aggregateJavadocJar)
-            this.artifact(aggregateSources)
+            afterEvaluate {
+                this@create.artifact(tasks.named("aggregateSources"))
+            }
 
             group = rootProject.group
             version = project.version as String
