@@ -140,7 +140,7 @@ public class PineappleNMSImpl implements PineappleNMS {
         Preconditions.checkState(nmsItem != null, "Failed to acquire the handle for the Nms Item");
 
         final CompoundTag itemCompound = nmsItem.getTag();
-        if (!itemCompound.contains(net.minecraft.world.item.ItemStack.TAG_DISPLAY, CraftMagicNumbers.NBT.TAG_COMPOUND)) {
+        if (itemCompound == null || !itemCompound.contains(net.minecraft.world.item.ItemStack.TAG_DISPLAY, CraftMagicNumbers.NBT.TAG_COMPOUND)) {
             return new ArrayList<>();
         }
 
