@@ -4,6 +4,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -28,6 +29,16 @@ class GuiListener implements Listener {
     @EventHandler
     public void onClick(@NotNull final InventoryClickEvent event) {
         manager.getGui(event.getInventory()).ifPresent(menu -> menu.handleClick(event));
+    }
+
+    @EventHandler
+    public void onDrag(@NotNull final InventoryDragEvent event) {
+        for (final Integer rawSlot : event.getRawSlots()) {
+            if (rawSlot < event.getView().getTopInventory().getSize()) {
+                manager.getGui(event.getView().getTopInventory()).ifPresent(menu -> menu.handleDrag(event));
+                break;
+            }
+        }
     }
 
     @EventHandler
