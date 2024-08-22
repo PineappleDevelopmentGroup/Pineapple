@@ -2,6 +2,7 @@ package sh.miles.pineapple.gui.slot;
 
 import com.google.common.base.Preconditions;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -22,6 +23,14 @@ public interface GuiSlot {
      * @since 1.0.0-SNAPSHOT
      */
     void click(@NotNull final InventoryClickEvent event);
+
+    /**
+     * An Action that occurs when dragging items
+     *
+     * @param event the drag event
+     * @since 1.0.0-SNAPSHOT
+     */
+    void drag(@NotNull final InventoryDragEvent event);
 
     /**
      * Sets the content of this gui slot
@@ -58,6 +67,8 @@ public interface GuiSlot {
         private Inventory inventory = null;
         private int index = -999;
         private Consumer<InventoryClickEvent> click = null;
+        private Consumer<InventoryDragEvent> drag = (d) -> {
+        };
         private ItemStack item = null;
 
         public GuiSlotBuilder() {
@@ -103,6 +114,19 @@ public interface GuiSlot {
         }
 
         /**
+         * Sets the drag event
+         *
+         * @param drag the drag event
+         * @return the current GuiSlotBuilder
+         * @since 1.0.0-SNAPSHOT
+         */
+        public GuiSlotBuilder drag(final Consumer<InventoryDragEvent> drag) {
+            Preconditions.checkArgument(drag != null, "The given click consumer must not be null");
+            this.drag = drag;
+            return this;
+        }
+
+        /**
          * Sets the item icon
          *
          * @param item the item
@@ -131,7 +155,7 @@ public interface GuiSlot {
             if (this.click == null) {
                 slot = new DummyGuiSlot(this.inventory, index);
             } else {
-                slot = new SimpleGuiSlot(this.inventory, index, click);
+                slot = new SimpleGuiSlot(this.inventory, index, click, drag);
             }
 
             if (item != null) {

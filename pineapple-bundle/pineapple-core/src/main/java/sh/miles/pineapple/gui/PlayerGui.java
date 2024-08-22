@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.ApiStatus;
@@ -175,6 +176,19 @@ public abstract class PlayerGui<T extends MenuScene> {
         if (event.getClickedInventory() != null && event.getClickedInventory().equals(topInventory)) {
             final var slot = event.getSlot();
             this.slots.get(slot).click(event);
+        }
+    }
+
+    /**
+     * Handles the drag event for this inventory
+     *
+     * @param event the event
+     */
+    public void handleDrag(@NotNull final InventoryDragEvent event) {
+        if (event.getInventory().equals(topInventory)) {
+            for (final Integer slot : event.getInventorySlots()) {
+                this.slots.get(slot).drag(event);
+            }
         }
     }
 
