@@ -32,7 +32,12 @@ import sh.miles.pineapple.PineappleLib;
 import sh.miles.pineapple.nms.annotations.NMS;
 import sh.miles.pineapple.nms.api.PineappleNMS;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -147,6 +152,39 @@ public class ItemSpec {
     public ItemSpec(@NotNull final Material itemType) {
         checkArgument(itemType.isItem(), "The provided itemType of %s is not an item".formatted(itemType));
         this.itemType = itemType;
+    }
+
+    /**
+     * Creates a new item spec
+     *
+     * @param other the other item spec to copy form
+     * @since 1.0.0-SNAPSHOT
+     */
+    public ItemSpec(@NotNull final ItemSpec other) {
+        checkArgument(other != null, "The provided spec must not be null");
+        final Class<?> specClass = this.getClass();
+        for (final Field field : specClass.getDeclaredFields()) {
+            field.setAccessible(true);
+            try {
+                if (Modifier.isStatic(field.getModifiers())) {
+                    continue;
+                }
+
+                if (Modifier.isFinal(field.getModifiers())) {
+                    final Object otherObject = field.get(other);
+                    final Object thisObject = field.get(this);
+                    final Method findPutOrAddAll = Arrays.stream(thisObject.getClass().getMethods()).filter(method -> (method.getName().equals("putAll") || method.getName().equals("addAll") && method.getParameterCount() == 1)).findFirst().orElseThrow();
+                    findPutOrAddAll.setAccessible(true);
+                    findPutOrAddAll.invoke(thisObject, otherObject);
+                    findPutOrAddAll.setAccessible(false);
+                } else {
+                    field.set(this, field.get(other));
+                }
+                field.setAccessible(false);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     /**
