@@ -19,6 +19,6 @@ public final class PineappleSceneFactory {
 
     @SuppressWarnings("all")
     public static <T extends MenuScene> T make(MenuType<T> type, CraftInventoryView view) {
-        return (T) factory.getOrDefault(((PineappleMenuType<T>) type).getHandle(), PineappleMenuScene::new).apply(view);
+        return (T) factory.getOrDefault(((PineappleMenuType<T>) type), PineappleMenuScene::new).apply(view);
     }
 }
