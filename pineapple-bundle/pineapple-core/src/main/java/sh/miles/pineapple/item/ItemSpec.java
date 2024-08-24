@@ -173,7 +173,10 @@ public class ItemSpec {
                 if (Modifier.isFinal(field.getModifiers())) {
                     final Object otherObject = field.get(other);
                     final Object thisObject = field.get(this);
-                    final Method findPutOrAddAll = Arrays.stream(thisObject.getClass().getMethods()).filter(method -> (method.getName().equals("putAll") || method.getName().equals("addAll") && method.getParameterCount() == 1)).findFirst().orElseThrow();
+                    final Method findPutOrAddAll = Arrays.stream(thisObject.getClass().getMethods())
+                            .filter(method -> method.getName().equals("putAll") || method.getName().equals("addAll"))
+                            .filter(method -> method.getParameterCount() == 1)
+                            .findFirst().orElseThrow();
                     findPutOrAddAll.setAccessible(true);
                     findPutOrAddAll.invoke(thisObject, otherObject);
                     findPutOrAddAll.setAccessible(false);
