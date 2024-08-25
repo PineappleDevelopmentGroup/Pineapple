@@ -2,8 +2,10 @@ package sh.miles.pineapple.tiles.api;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +16,7 @@ import sh.miles.pineapple.tiles.internal.ServerTileCache;
 import sh.miles.pineapple.tiles.internal.listener.TileChunkIOListener;
 import sh.miles.pineapple.tiles.internal.listener.TileGeneralInteractionListener;
 import sh.miles.pineapple.tiles.internal.util.TileChunkIOUtils;
+import sh.miles.pineapple.tiles.internal.util.TileKeys;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -163,6 +166,22 @@ public final class Tiles {
         }
 
         return deleted;
+    }
+
+    /**
+     * Loads all spawn chunks
+     *
+     * @since 1.0.0-SNAPSHOT
+     */
+    public void loadSpawnChunks() {
+        for (final World world : Bukkit.getWorlds()) {
+            for (final Chunk loadedChunk : world.getLoadedChunks()) {
+                if (!loadedChunk.getPersistentDataContainer().has(TileKeys.TILE_CONTAINER_KEY)) {
+                    continue;
+                }
+                TileChunkIOUtils.loadTiles(this.cache, this.registry, loadedChunk);
+            }
+        }
     }
 
     /**

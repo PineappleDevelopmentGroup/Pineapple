@@ -64,22 +64,22 @@ public final class TileChunkIOUtils {
     public static void saveTiles(@NotNull final ServerTileCache cache, @NotNull final Chunk chunk) {
         final var tiles = cache.evict(chunk);
         final PersistentDataContainer chunkContainer = chunk.getPersistentDataContainer();
-        final PersistentDataContainer container;
+        final PersistentDataContainer tilesContainer;
         if (chunkContainer.has(TileKeys.TILE_CONTAINER_KEY)) {
-            container = chunkContainer.get(TileKeys.TILE_CONTAINER_KEY, PersistentDataType.TAG_CONTAINER);
+            tilesContainer = chunkContainer.get(TileKeys.TILE_CONTAINER_KEY, PersistentDataType.TAG_CONTAINER);
         } else {
-            container = chunkContainer.getAdapterContext().newPersistentDataContainer();
+            tilesContainer = chunkContainer.getAdapterContext().newPersistentDataContainer();
         }
-        final PersistentDataAdapterContext context = container.getAdapterContext();
+        final PersistentDataAdapterContext context = tilesContainer.getAdapterContext();
         for (final Map.Entry<ChunkRelPos, Tile> entry : tiles) {
             final PersistentDataContainer tileContainer = context.newPersistentDataContainer();
             tileContainer.set(TileKeys.TILE_TYPE_KEY, PersistentDataType.STRING, entry.getValue().getTileType().getKey().toString());
             entry.getValue().save(tileContainer);
-            container.set(TileKeys.buildChunkRelPosKey(entry.getKey()), PersistentDataType.TAG_CONTAINER, tileContainer);
+            tilesContainer.set(TileKeys.buildChunkRelPosKey(entry.getKey()), PersistentDataType.TAG_CONTAINER, tileContainer);
         }
 
-        if (!container.isEmpty()) {
-            chunkContainer.set(TileKeys.TILE_CONTAINER_KEY, PersistentDataType.TAG_CONTAINER, container);
+        if (!tilesContainer.isEmpty()) {
+            chunkContainer.set(TileKeys.TILE_CONTAINER_KEY, PersistentDataType.TAG_CONTAINER, tilesContainer);
         }
     }
 
