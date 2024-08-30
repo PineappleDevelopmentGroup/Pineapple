@@ -1,6 +1,6 @@
 plugins {
     `kotlin-dsl`
-    kotlin("jvm") version "1.9.20"
+    alias(libs.plugins.jvm)
 }
 
 repositories {
@@ -9,5 +9,6 @@ repositories {
 }
 
 dependencies {
-    implementation("io.github.patrick.remapper:io.github.patrick.remapper.gradle.plugin:1.4.1")
+    implementation(libs.kotlin)
+    implementation(libs.patrick.remapper)
 }
