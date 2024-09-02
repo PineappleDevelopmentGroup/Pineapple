@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * An Option that can contain or not contain a value
@@ -63,6 +64,21 @@ public sealed class Option<E> permits Option.None, Option.Some {
     public E orElse(@NotNull final E value) {
         if (!(this instanceof Some<E> some)) {
             return Objects.requireNonNull(value);
+        }
+
+        return some.some;
+    }
+
+    /**
+     * Gets some value or runs the supplying function
+     *
+     * @param value the value function to run
+     * @return the value
+     */
+    @NotNull
+    public E orElse(@NotNull final Supplier<E> value) {
+        if (!(this instanceof Some<E> some)) {
+            return Objects.requireNonNull(value.get());
         }
 
         return some.some;
