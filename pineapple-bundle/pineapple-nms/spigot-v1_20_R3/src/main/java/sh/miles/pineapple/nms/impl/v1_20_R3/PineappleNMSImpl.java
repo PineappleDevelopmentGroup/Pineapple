@@ -118,7 +118,7 @@ public class PineappleNMSImpl implements PineappleNMS {
         final CraftItemStack craftItem = ensureCraftItemStack(item);
         final net.minecraft.world.item.ItemStack nmsItem = getItemStackHandle(craftItem);
 
-        final CompoundTag tag = nmsItem.getTag() == null ? new CompoundTag() : nmsItem.getTag();
+        final CompoundTag tag = nmsItem.getOrCreateTag();
         if (!tag.contains(net.minecraft.world.item.ItemStack.TAG_DISPLAY)) {
             tag.put(net.minecraft.world.item.ItemStack.TAG_DISPLAY, new CompoundTag());
         }
