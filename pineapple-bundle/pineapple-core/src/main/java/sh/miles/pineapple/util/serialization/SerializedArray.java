@@ -7,6 +7,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Represents a SerializedArray of elements.
@@ -107,6 +109,17 @@ public final class SerializedArray extends SerializedElement implements Iterable
     public boolean contains(@NotNull final SerializedElement primitive) {
         Preconditions.checkArgument(primitive != null, "The given primitive must not be null");
         return this.elements.contains(primitive);
+    }
+
+    /**
+     * Streams over this serialized elements
+     *
+     * @return a stream of elements
+     * @since 1.0.0-SNAPSHOT
+     */
+    @NotNull
+    public Stream<SerializedElement> stream() {
+        return StreamSupport.stream(spliterator(), false);
     }
 
     @NotNull
