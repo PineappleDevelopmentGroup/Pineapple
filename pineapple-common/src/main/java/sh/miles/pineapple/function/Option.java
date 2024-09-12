@@ -47,8 +47,19 @@ public sealed class Option<E> permits Option.None, Option.Some {
      * @throws IllegalStateException if no value was found
      */
     public E orThrow() throws IllegalStateException {
+        return orThrow("Unable to find some value");
+    }
+
+    /**
+     * Gets some value or throws with the given message
+     *
+     * @param message the message to throw with
+     * @return the value
+     * @throws IllegalStateException if no value was found
+     */
+    public E orThrow(String message) throws IllegalStateException {
         if (!(this instanceof Some<E> some)) {
-            throw new IllegalStateException("Unable to find some value");
+            throw new IllegalStateException(message);
         }
 
         return some.some;
