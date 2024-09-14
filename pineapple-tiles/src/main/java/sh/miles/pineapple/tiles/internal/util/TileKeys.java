@@ -3,6 +3,7 @@ package sh.miles.pineapple.tiles.internal.util;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import sh.miles.pineapple.tiles.api.Tiles;
 import sh.miles.pineapple.tiles.api.pos.ChunkRelPos;
 
 /**
@@ -13,11 +14,33 @@ import sh.miles.pineapple.tiles.api.pos.ChunkRelPos;
 @ApiStatus.Internal
 public final class TileKeys {
 
-    public static final NamespacedKey TILE_CONTAINER_KEY = NamespacedKey.fromString("pineapple_tiles:tile_container");
-    public static final NamespacedKey TILE_TYPE_KEY = NamespacedKey.fromString("pineapple_tiles:tile_type_key");
+    private static NamespacedKey tileContainerKey = null;
+    private static NamespacedKey tileTypeKey = null;
 
     private TileKeys() {
         throw new UnsupportedOperationException("Can not instantiate utility class");
+    }
+
+    /**
+     * Gets the tile container key
+     *
+     * @return the tile container key
+     */
+    @NotNull
+    public static NamespacedKey getTileContainerKey() {
+        if (tileContainerKey == null) {
+            tileContainerKey = Tiles.getInstance().makeKey("tile_container");
+        }
+
+        return tileContainerKey;
+    }
+
+    public static NamespacedKey getTileTypeKey() {
+        if (tileTypeKey == null) {
+            tileTypeKey = Tiles.getInstance().makeKey("tile_type");
+        }
+
+        return tileTypeKey;
     }
 
     /**
@@ -25,7 +48,6 @@ public final class TileKeys {
      *
      * @param pos the position
      * @return the key
-     *
      * @since 1.0.0-SNAPSHOT
      */
     @NotNull

@@ -130,7 +130,7 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
      */
     public ItemStack createItem(@Nullable final T tile) {
         return createItemShell(tile)
-                .persistentData(TileKeys.TILE_TYPE_KEY, PersistentDataType.STRING, getKey().toString())
+                .persistentData(TileKeys.getTileTypeKey(), PersistentDataType.STRING, getKey().toString())
                 .build();
     }
 

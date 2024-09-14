@@ -43,7 +43,7 @@ public final class TileChunkIOListener implements Listener {
      */
     @EventHandler
     public void onChunkLoad(@NotNull final ChunkLoadEvent event) {
-        if (!event.getChunk().getPersistentDataContainer().has(TileKeys.TILE_CONTAINER_KEY)) {
+        if (!event.getChunk().getPersistentDataContainer().has(TileKeys.getTileContainerKey())) {
             return;
         }
         TileChunkIOUtils.loadTiles(cache, registry, event.getChunk());

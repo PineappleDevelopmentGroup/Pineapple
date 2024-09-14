@@ -39,12 +39,12 @@ public final class TileChunkIOUtils {
      * @since 1.0.0-SNAPSHOT
      */
     public static void loadTiles(@NotNull final ServerTileCache cache, @NotNull final TileTypeRegistry registry, @NotNull final Chunk chunk) throws IllegalStateException {
-        final PersistentDataContainer container = chunk.getPersistentDataContainer().get(TileKeys.TILE_CONTAINER_KEY, PersistentDataType.TAG_CONTAINER);
+        final PersistentDataContainer container = chunk.getPersistentDataContainer().get(TileKeys.getTileContainerKey(), PersistentDataType.TAG_CONTAINER);
         assert container != null;
         for (final NamespacedKey key : container.getKeys()) {
             final ChunkRelPos chunkPos = new ChunkRelPos(Long.parseLong(key.getKey()));
             final PersistentDataContainer tileContainer = container.get(key, PersistentDataType.TAG_CONTAINER);
-            final TileType<?> tileType = registry.getOrNull(NamespacedKey.fromString(tileContainer.get(TileKeys.TILE_TYPE_KEY, PersistentDataType.STRING)));
+            final TileType<?> tileType = registry.getOrNull(NamespacedKey.fromString(tileContainer.get(TileKeys.getTileTypeKey(), PersistentDataType.STRING)));
             if (tileType == null) {
                 throw new IllegalStateException("Unable to load tile at chunk position %s in chunk %s".formatted(chunkPos, chunk));
             }
@@ -65,21 +65,21 @@ public final class TileChunkIOUtils {
         final var tiles = cache.evict(chunk);
         final PersistentDataContainer chunkContainer = chunk.getPersistentDataContainer();
         final PersistentDataContainer tilesContainer;
-        if (chunkContainer.has(TileKeys.TILE_CONTAINER_KEY)) {
-            tilesContainer = chunkContainer.get(TileKeys.TILE_CONTAINER_KEY, PersistentDataType.TAG_CONTAINER);
+        if (chunkContainer.has(TileKeys.getTileContainerKey())) {
+            tilesContainer = chunkContainer.get(TileKeys.getTileContainerKey(), PersistentDataType.TAG_CONTAINER);
         } else {
             tilesContainer = chunkContainer.getAdapterContext().newPersistentDataContainer();
         }
         final PersistentDataAdapterContext context = tilesContainer.getAdapterContext();
         for (final Map.Entry<ChunkRelPos, Tile> entry : tiles) {
             final PersistentDataContainer tileContainer = context.newPersistentDataContainer();
-            tileContainer.set(TileKeys.TILE_TYPE_KEY, PersistentDataType.STRING, entry.getValue().getTileType().getKey().toString());
+            tileContainer.set(TileKeys.getTileTypeKey(), PersistentDataType.STRING, entry.getValue().getTileType().getKey().toString());
             entry.getValue().save(tileContainer);
             tilesContainer.set(TileKeys.buildChunkRelPosKey(entry.getKey()), PersistentDataType.TAG_CONTAINER, tileContainer);
         }
 
         if (!tilesContainer.isEmpty()) {
-            chunkContainer.set(TileKeys.TILE_CONTAINER_KEY, PersistentDataType.TAG_CONTAINER, tilesContainer);
+            chunkContainer.set(TileKeys.getTileContainerKey(), PersistentDataType.TAG_CONTAINER, tilesContainer);
         }
     }
 
@@ -97,16 +97,16 @@ public final class TileChunkIOUtils {
             return false;
         }
         final PersistentDataContainer chunkContainer = chunk.getPersistentDataContainer();
-        if (!chunkContainer.has(TileKeys.TILE_CONTAINER_KEY)) {
+        if (!chunkContainer.has(TileKeys.getTileContainerKey())) {
             return false;
         }
-        final PersistentDataContainer container = chunkContainer.get(TileKeys.TILE_CONTAINER_KEY, PersistentDataType.TAG_CONTAINER);
+        final PersistentDataContainer container = chunkContainer.get(TileKeys.getTileContainerKey(), PersistentDataType.TAG_CONTAINER);
         container.remove(TileKeys.buildChunkRelPosKey(pos));
         if (!container.getKeys().isEmpty()) {
             return true;
         }
 
-        chunkContainer.remove(TileKeys.TILE_CONTAINER_KEY);
+        chunkContainer.remove(TileKeys.getTileContainerKey());
         return true;
 
     }

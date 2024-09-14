@@ -84,10 +84,10 @@ public final class TileGeneralInteractionListener implements Listener {
     @EventHandler
     public void onBlockPlace(@NotNull final BlockPlaceEvent event) {
         final PersistentDataContainer container = event.getItemInHand().getItemMeta().getPersistentDataContainer();
-        if (!container.has(TileKeys.TILE_TYPE_KEY)) {
+        if (!container.has(TileKeys.getTileTypeKey())) {
             return;
         }
-        final String tileTypeKeyRaw = container.get(TileKeys.TILE_TYPE_KEY, PersistentDataType.STRING);
+        final String tileTypeKeyRaw = container.get(TileKeys.getTileTypeKey(), PersistentDataType.STRING);
         final NamespacedKey tileTypeKey = NamespacedKey.fromString(tileTypeKeyRaw);
         final TileType<?> tileType = registry.getOrNull(tileTypeKey);
         if (tileType == null) {

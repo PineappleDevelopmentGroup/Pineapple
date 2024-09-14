@@ -5,6 +5,7 @@ import com.google.common.base.Predicate;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
@@ -33,10 +34,12 @@ public final class Tiles {
 
     private static Tiles instance;
 
+    private final Plugin plugin;
     private final ServerTileCache cache;
     private final TileTypeRegistry registry;
 
     private Tiles(@NotNull final Plugin plugin) {
+        this.plugin = plugin;
         this.cache = new ServerTileCache(plugin);
         this.registry = new TileTypeRegistry();
         plugin.getServer().getPluginManager().registerEvents(new TileChunkIOListener(cache, registry), plugin);
@@ -176,12 +179,23 @@ public final class Tiles {
     public void loadSpawnChunks() {
         for (final World world : Bukkit.getWorlds()) {
             for (final Chunk loadedChunk : world.getLoadedChunks()) {
-                if (!loadedChunk.getPersistentDataContainer().has(TileKeys.TILE_CONTAINER_KEY)) {
+                if (!loadedChunk.getPersistentDataContainer().has(TileKeys.getTileContainerKey())) {
                     continue;
                 }
                 TileChunkIOUtils.loadTiles(this.cache, this.registry, loadedChunk);
             }
         }
+    }
+
+    /**
+     * Creates a namespaced key with the given key name
+     *
+     * @param name the key name
+     * @return the created namespaced key
+     */
+    @NotNull
+    public NamespacedKey makeKey(String name) {
+        return new NamespacedKey(plugin, name);
     }
 
     /**
