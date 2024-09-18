@@ -23,8 +23,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ConfigInstanceTest extends BukkitTest {
 
@@ -36,9 +35,9 @@ public class ConfigInstanceTest extends BukkitTest {
         super.setup();
         PineappleLib.initialize(super.plugin, false);
         this.instanceMock = new ConfigInstanceMock();
-        PineappleLib.getConfigurationManager()
+        assertDoesNotThrow(() -> PineappleLib.getConfigurationManager()
                 .createConfiguration(new File(plugin.getDataFolder(), "config.yml"), ConfigInstanceMock.class, instanceMock).save(false)
-                .load();
+                .load());
     }
 
     @AfterEach

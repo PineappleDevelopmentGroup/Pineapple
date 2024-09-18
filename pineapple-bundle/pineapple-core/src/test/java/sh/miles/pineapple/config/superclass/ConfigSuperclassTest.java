@@ -13,6 +13,8 @@ import sh.miles.pineapple.config.type.Configuration;
 import java.io.File;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 public class ConfigSuperclassTest extends BukkitTest {
 
     private ConfigSubclassMock instanceMock;
@@ -27,11 +29,11 @@ public class ConfigSuperclassTest extends BukkitTest {
         file = new File(plugin.getDataFolder(), "config.yml");
         PineappleLib.initialize(super.plugin, false);
         this.instanceMock = new ConfigSubclassMock();
-        this.configuration = PineappleLib.getConfigurationManager()
+        this.configuration = assertDoesNotThrow(() -> PineappleLib.getConfigurationManager()
                 .createConfiguration(file, ConfigSubclassMock.class,
                         instanceMock
                 ).save(false)
-                .load();
+                .load());
     }
 
     @AfterEach

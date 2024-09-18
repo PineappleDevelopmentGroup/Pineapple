@@ -32,7 +32,9 @@ public class ConfigStaticTest extends BukkitTest {
     public void setup() {
         super.setup();
         PineappleLib.initialize(super.plugin, false);
-        PineappleLib.getConfigurationManager().createConfiguration(new File(plugin.getDataFolder(), "config.yml"), ConfigStaticMock.class).save(false).load();
+        assertDoesNotThrow(() ->PineappleLib.getConfigurationManager()
+                .createConfiguration(new File(plugin.getDataFolder(), "config.yml"), ConfigStaticMock.class).save(false)
+                .load());
     }
 
     @AfterEach

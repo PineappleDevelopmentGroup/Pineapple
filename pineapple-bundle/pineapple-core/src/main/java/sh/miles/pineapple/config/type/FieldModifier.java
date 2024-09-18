@@ -4,9 +4,7 @@ import java.lang.reflect.Field;
 
 public class FieldModifier {
 
-    public static final FieldModifier INSTANCE = new FieldModifier();
-
-    public Object getValue(Field field, Object instance) {
+    public static Object getValue(Field field, Object instance) {
         try {
             return field.get(instance);
         } catch (IllegalAccessException ex) {
@@ -14,7 +12,7 @@ public class FieldModifier {
         }
     }
 
-    public void setField(Field field, Object value, Object instance) {
+    public static void setField(Field field, Object value, Object instance) {
         try {
             field.set(instance, value);
         } catch (IllegalAccessException ex) {

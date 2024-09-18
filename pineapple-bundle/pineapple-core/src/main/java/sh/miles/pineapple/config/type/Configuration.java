@@ -4,7 +4,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.VisibleForTesting;
 import sh.miles.pineapple.PineappleLib;
 import sh.miles.pineapple.config.ConfigField;
 import sh.miles.pineapple.config.ConfigManager;
@@ -24,7 +23,6 @@ import java.util.logging.Level;
 public class Configuration {
 
     private final File file;
-    private final FieldModifier fieldModifier;
     private final Class<?> clazz;
 
     private final List<ConfigField> fields = new ArrayList<>();
@@ -32,7 +30,6 @@ public class Configuration {
 
     public Configuration(@NotNull File file, @NotNull Class<?> configClass, @Nullable Object instance) {
         this.file = file;
-        this.fieldModifier = FieldModifier.INSTANCE;
         this.clazz = configClass;
         this.instance = instance;
 
@@ -200,11 +197,11 @@ public class Configuration {
     }
 
     private void setField(Field field, Object value) {
-        this.fieldModifier.setField(field, value, instance);
+        FieldModifier.setField(field, value, instance);
     }
 
     private Object getValue(Field field) {
-        return this.fieldModifier.getValue(field, instance);
+        return FieldModifier.getValue(field, instance);
     }
 
 
@@ -214,7 +211,7 @@ public class Configuration {
                 return false;
             }
 
-            if (!this.file.getParentFile().exists() && !this.file.getParentFile().mkdirs()) {
+            if (!this.file.getParentFile().mkdirs()) {
                 return false;
             }
 
