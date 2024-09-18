@@ -221,6 +221,7 @@ public class Configuration {
 
             return true;
         } catch (IOException ex) {
+            PineappleLib.getLogger().log(Level.WARNING, ex, () -> "SetupFile Error Details:");
             return false;
         }
     }
