@@ -4,6 +4,13 @@ import java.lang.reflect.Field;
 
 public class FieldModifier {
 
+    /**
+     * Retrieve the value of a field
+     *
+     * @param field to get the value of
+     * @param instance instance if required
+     * @return the value
+     */
     public static Object getValue(Field field, Object instance) {
         try {
             return field.get(instance);
@@ -12,6 +19,13 @@ public class FieldModifier {
         }
     }
 
+    /**
+     * Sets the value of a field
+     *
+     * @param field to set the value of
+     * @param value value to set
+     * @param instance instance if required
+     */
     public static void setField(Field field, Object value, Object instance) {
         try {
             field.set(instance, value);

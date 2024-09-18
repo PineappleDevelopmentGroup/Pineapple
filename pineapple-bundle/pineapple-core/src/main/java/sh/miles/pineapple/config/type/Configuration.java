@@ -28,6 +28,13 @@ public class Configuration {
     private final List<ConfigField> fields = new ArrayList<>();
     private Object instance;
 
+    /**
+     * Create a new configuration. Should only be used by ConfigManager
+     *
+     * @param file the configs file
+     * @param configClass the class to retrieve fields from
+     * @param instance the instance to retrieve values from if required
+     */
     public Configuration(@NotNull File file, @NotNull Class<?> configClass, @Nullable Object instance) {
         this.file = file;
         this.clazz = configClass;
@@ -57,6 +64,11 @@ public class Configuration {
         }
     }
 
+    /**
+     * Load the config from config using paths from found fields
+     *
+     * @return instance for chaining
+     */
     public Configuration load() {
         if (!setupFile()) {
             PineappleLib.getLogger().log(Level.WARNING, "Unable to load file for {0}", this.file.getName());
@@ -124,6 +136,12 @@ public class Configuration {
         return this;
     }
 
+    /**
+     * Saves the config to its respective file
+     *
+     * @param replace Should the config replace existing values
+     * @return instance for chaining
+     */
     public Configuration save(boolean replace) {
         if (!setupFile()) {
             PineappleLib.getLogger().log(Level.WARNING, "Unable to create config {0}", this.file.getName());
