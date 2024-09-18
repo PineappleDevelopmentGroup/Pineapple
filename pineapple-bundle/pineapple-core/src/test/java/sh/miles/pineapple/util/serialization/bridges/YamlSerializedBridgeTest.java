@@ -9,7 +9,7 @@ import sh.miles.pineapple.ReflectionUtils;
 import sh.miles.pineapple.collection.registry.AbstractRegistry;
 import sh.miles.pineapple.config.ConfigManager;
 import sh.miles.pineapple.config.ConfigType;
-import sh.miles.pineapple.config.ConfigWrapper;
+import sh.miles.pineapple.config.type.Configuration;
 import sh.miles.pineapple.util.serialization.adapter.SerializedAdapterRegistry;
 import sh.miles.pineapple.util.serialization.adapter.mock.ComplexObjectMock;
 import sh.miles.pineapple.util.serialization.adapter.mock.ComplexObjectMockAdapter;
@@ -54,7 +54,7 @@ public class YamlSerializedBridgeTest extends BukkitTest {
     @Test
     void test_ShouldDeserializeSerializeCorrectly() {
         test_ShouldRegisterAdapter();
-        ConfigWrapper wrapper = assertDoesNotThrow(() -> PineappleLib.getConfigurationManager().createDefault(new File(plugin.getDataFolder(), "config.yml"), YamlConfigMock.class));
+        Configuration wrapper = assertDoesNotThrow(() -> PineappleLib.getConfigurationManager().createConfiguration(new File(plugin.getDataFolder(), "config.yml"), YamlConfigMock.class).save(false).load());
         wrapper = wrapper.save(false);
         wrapper.load();
         assertEquals(ComplexObjectMock.basic(), YamlConfigMock.objectMock);
@@ -64,7 +64,7 @@ public class YamlSerializedBridgeTest extends BukkitTest {
     void test_ShouldFailWithMalformed() {
         SerializedAdapterRegistry.INSTANCE.register(new MalformedComplexObjectMockAdapter());
         assertNotNull(configManager.getTypeAdapter(ConfigType.create(ComplexObjectMock.class)));
-        ConfigWrapper wrapper = assertDoesNotThrow(() -> PineappleLib.getConfigurationManager().createDefault(new File(plugin.getDataFolder(), "config.yml"), YamlConfigMock.class));
+        Configuration wrapper = assertDoesNotThrow(() -> PineappleLib.getConfigurationManager().createConfiguration(new File(plugin.getDataFolder(), "config.yml"), YamlConfigMock.class).save(false).load());
         wrapper = wrapper.save(false);
         wrapper.load();
         assertNotEquals(ComplexObjectMock.basic(), YamlConfigMock.objectMock);

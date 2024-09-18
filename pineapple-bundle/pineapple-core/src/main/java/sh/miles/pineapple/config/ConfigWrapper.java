@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
+@Deprecated(forRemoval = true)
 public class ConfigWrapper {
 
     private final List<ConfigField> fields = new ArrayList<>();
@@ -27,6 +28,7 @@ public class ConfigWrapper {
      * @param clazz the config class
      */
     public ConfigWrapper(File file, Class<?> clazz) {
+        PineappleLib.getLogger().warning("ConfigWrapper in use, please note ConfigWrapper is now deprecated and should be replaced by Configuration");
         this.file = file;
 
         cacheFields(clazz);

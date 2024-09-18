@@ -1,8 +1,9 @@
-package sh.miles.pineapple.config;
+package sh.miles.pineapple.config.instance;
 
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import sh.miles.pineapple.BukkitTest;
@@ -10,6 +11,7 @@ import sh.miles.pineapple.PineappleLib;
 import sh.miles.pineapple.chat.PineappleChat;
 import sh.miles.pineapple.chat.PineappleComponent;
 import sh.miles.pineapple.collection.WeightedRandom;
+import sh.miles.pineapple.config.EnumMock;
 
 import java.io.File;
 import java.util.ArrayDeque;
@@ -23,14 +25,19 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TypeAdapterTest extends BukkitTest {
+public class ConfigInstanceTest extends BukkitTest {
+
+    private ConfigInstanceMock instanceMock;
 
     @BeforeEach
     @Override
     public void setup() {
         super.setup();
         PineappleLib.initialize(super.plugin, false);
-        PineappleLib.getConfigurationManager().createDefault(new File(plugin.getDataFolder(), "config.yml"), ConfigMock.class);
+        this.instanceMock = new ConfigInstanceMock();
+        assertDoesNotThrow(() -> PineappleLib.getConfigurationManager()
+                .createConfiguration(new File(plugin.getDataFolder(), "config.yml"), ConfigInstanceMock.class, instanceMock).save(false)
+                .load());
     }
 
     @AfterEach
@@ -42,7 +49,7 @@ public class TypeAdapterTest extends BukkitTest {
 
     @Test
     public void test_Collection_List_TypeAdapter() {
-        List<String> collection = ConfigMock.COLLECTION_LIST;
+        List<String> collection = instanceMock.COLLECTION_LIST;
         assertEquals(3, collection.size());
         assertEquals("a", collection.get(0));
         assertEquals("b", collection.get(1));
@@ -52,7 +59,7 @@ public class TypeAdapterTest extends BukkitTest {
 
     @Test
     public void test_Collection_Set_TypeAdapter() {
-        Set<String> collection = ConfigMock.COLLECTION_SET;
+        Set<String> collection = instanceMock.COLLECTION_SET;
         assertEquals(3, collection.size());
         assertTrue(collection.contains("a"));
         assertTrue(collection.contains("b"));
@@ -62,7 +69,7 @@ public class TypeAdapterTest extends BukkitTest {
 
     @Test
     public void test_Collection_Queue_TypeAdapter() {
-        Queue<String> collection = ConfigMock.COLLECTION_QUEUE;
+        Queue<String> collection = instanceMock.COLLECTION_QUEUE;
         assertEquals(3, collection.size());
         assertEquals("a", collection.poll());
         assertEquals("b", collection.poll());
@@ -72,7 +79,7 @@ public class TypeAdapterTest extends BukkitTest {
 
     @Test
     public void test_Collection_Map_TypeAdapter() {
-        Map<String, String> collection = ConfigMock.COLLECTION_MAP;
+        Map<String, String> collection = instanceMock.COLLECTION_MAP;
         assertEquals(3, collection.size());
         assertEquals("1", collection.get("a"));
         assertEquals("2", collection.get("b"));
@@ -83,59 +90,59 @@ public class TypeAdapterTest extends BukkitTest {
     @Test
     @SuppressWarnings("deprecation")
     public void test_Color_TypeAdapter() {
-        assertEquals(ChatColor.of("#ff5555"), ConfigMock.COLOR_RED);
-        assertEquals(ChatColor.of("#55ff55"), ConfigMock.COLOR_GREEN);
-        assertEquals(ChatColor.of("#5555ff"), ConfigMock.COLOR_BLUE);
+        assertEquals(ChatColor.of("#ff5555"), instanceMock.COLOR_RED);
+        assertEquals(ChatColor.of("#55ff55"), instanceMock.COLOR_GREEN);
+        assertEquals(ChatColor.of("#5555ff"), instanceMock.COLOR_BLUE);
     }
 
     @Test
     public void test_Enum_TypeAdapter() {
-        assertEquals(EnumMock.VALUE1, ConfigMock.ENUM_1);
-        assertEquals(EnumMock.VALUE2, ConfigMock.ENUM_2);
-        assertEquals(EnumMock.VALUE3, ConfigMock.ENUM_3);
+        Assertions.assertEquals(EnumMock.VALUE1, instanceMock.ENUM_1);
+        assertEquals(EnumMock.VALUE2, instanceMock.ENUM_2);
+        assertEquals(EnumMock.VALUE3, instanceMock.ENUM_3);
     }
 
     @Test
     public void test_Material_TypeAdapter() {
-        assertEquals(Material.BARRIER, ConfigMock.MATERIAL);
+        assertEquals(Material.BARRIER, instanceMock.MATERIAL);
     }
 
     @Test
     public void test_PineappleComponent_TypeAdapter() {
         PineappleComponent real = PineappleChat.component("<green></bold>Test");
-        PineappleComponent config = ConfigMock.CHAT;
+        PineappleComponent config = instanceMock.CHAT;
         assertEquals(real, config);
         assertEquals(real.getSource(), config.getSource());
     }
 
     @Test
     public void test_Boolean_TypeAdapter() {
-        assertTrue(ConfigMock.PRIMITIVE_BOOLEAN);
-        assertTrue(ConfigMock.OBJECT_BOOLEAN);
+        assertTrue(instanceMock.PRIMITIVE_BOOLEAN);
+        assertTrue(instanceMock.OBJECT_BOOLEAN);
     }
 
     @Test
     public void test_Int_TypeAdapter() {
-        assertEquals(1, ConfigMock.PRIMITIVE_INT);
-        assertEquals(1, ConfigMock.OBJECT_INTEGER);
+        assertEquals(1, instanceMock.PRIMITIVE_INT);
+        assertEquals(1, instanceMock.OBJECT_INTEGER);
     }
 
     @Test
     public void test_Long_TypeAdapter() {
-        assertEquals(4294967299L, ConfigMock.PRIMITIVE_LONG);
-        assertEquals(4294967299L, ConfigMock.OBJECT_LONG);
+        assertEquals(4294967299L, instanceMock.PRIMITIVE_LONG);
+        assertEquals(4294967299L, instanceMock.OBJECT_LONG);
     }
 
     @Test
     public void test_WeightedRandom_TypeAdapter() {
-        WeightedRandom<String> real = ConfigMock.getWeightedRandom();
-        WeightedRandom<String> config = ConfigMock.WEIGHTED_RANDOM;
+        WeightedRandom<String> real = instanceMock.getWeightedRandom();
+        WeightedRandom<String> config = instanceMock.WEIGHTED_RANDOM;
         assertEquals(3, config.size());
     }
 
     @Test
     public void test_Private_Fields() {
-        assertEquals("full private string", ConfigMock.getFullPrivateString());
-        assertEquals("package private string", ConfigMock.PACKAGE_PRIVATE_STRING);
+        assertEquals("full private string", instanceMock.getFullPrivateString());
+        assertEquals("package private string", instanceMock.PACKAGE_PRIVATE_STRING);
     }
 }
