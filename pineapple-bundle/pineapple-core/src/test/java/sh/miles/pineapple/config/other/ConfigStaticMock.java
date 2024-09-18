@@ -1,11 +1,11 @@
-package sh.miles.pineapple.config;
+package sh.miles.pineapple.config.other;
 
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
-import org.junit.jupiter.api.Test;
 import sh.miles.pineapple.chat.PineappleChat;
 import sh.miles.pineapple.chat.PineappleComponent;
 import sh.miles.pineapple.collection.WeightedRandom;
+import sh.miles.pineapple.config.EnumMock;
 import sh.miles.pineapple.config.annotation.ConfigPath;
 
 import java.util.ArrayDeque;
@@ -18,7 +18,7 @@ import java.util.Queue;
 import java.util.Set;
 
 @SuppressWarnings("deprecation")
-public class ConfigMock {
+public class ConfigStaticMock {
 
     @ConfigPath("test.collection.list")
     public static List<String> COLLECTION_LIST = new ArrayList<>(List.of("a", "b", "c"));
