@@ -229,7 +229,7 @@ public class Configuration {
                 return false;
             }
 
-            if (!this.file.getParentFile().mkdirs()) {
+            if (!this.file.getParentFile().exists() && !this.file.getParentFile().mkdirs()) {
                 return false;
             }
 
