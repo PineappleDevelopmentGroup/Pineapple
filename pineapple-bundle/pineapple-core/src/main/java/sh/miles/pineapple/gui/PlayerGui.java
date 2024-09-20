@@ -28,8 +28,8 @@ import java.util.function.Function;
 @NMS
 public abstract class PlayerGui<T extends MenuScene> {
 
-    private final T scene;
-    private final Player viewer;
+    protected final T scene;
+    protected final Player viewer;
     private final Inventory topInventory;
     protected final List<GuiSlot> slots;
 
@@ -43,9 +43,7 @@ public abstract class PlayerGui<T extends MenuScene> {
         Preconditions.checkState(this.topInventory != null, "The top inventory must not be null! This is a spigot bug!");
         this.slots = new ArrayList<>(this.topInventory.getSize());
 
-        for (int i = 0; i < this.topInventory.getSize(); i++) {
-            this.slots.add(new DummyGuiSlot(this.topInventory, i));
-        }
+        regenerateEmptySlots();
     }
 
     /**
@@ -146,6 +144,12 @@ public abstract class PlayerGui<T extends MenuScene> {
      */
     protected int size() {
         return this.topInventory.getSize();
+    }
+
+    protected void regenerateEmptySlots() {
+        for (int i = 0; i < this.topInventory.getSize(); i++) {
+            this.slots.add(new DummyGuiSlot(this.topInventory, i));
+        }
     }
 
     /**
