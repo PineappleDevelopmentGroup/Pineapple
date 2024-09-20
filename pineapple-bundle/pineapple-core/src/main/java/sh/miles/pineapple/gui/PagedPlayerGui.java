@@ -33,7 +33,7 @@ public abstract class PagedPlayerGui<T extends MenuScene> extends PlayerGui<T> {
         this.currentPage = 0;
 
         for (int i = 0; i < findMaxPage(); i++) {
-            this.pages.put(i, new NonNullArray<>(0, () -> new DummyGuiSlot(topInventory, -1)));
+            this.pages.put(i, new NonNullArray<>(topInventory.getSize(), () -> new DummyGuiSlot(topInventory, 0)));
         }
     }
 
