@@ -2,6 +2,7 @@ package sh.miles.pineapple.tiles.api;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
+import com.google.common.collect.Streams;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -11,6 +12,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import sh.miles.pineapple.collection.Pair;
 import sh.miles.pineapple.tiles.api.pos.ChunkRelPos;
 import sh.miles.pineapple.tiles.internal.ChunkTileCache;
 import sh.miles.pineapple.tiles.internal.ServerTileCache;
@@ -20,6 +22,7 @@ import sh.miles.pineapple.tiles.internal.util.TileChunkIOUtils;
 import sh.miles.pineapple.tiles.internal.util.TileKeys;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,6 +71,28 @@ public final class Tiles {
     @Nullable
     public Tile getTile(@NotNull final Location location) {
         return getTile(location, (__) -> true);
+    }
+
+    /**
+     * Gets all loaded tiles
+     *
+     * @return a list of all loaded tiles
+     */
+    @NotNull
+    public List<Pair<ChunkRelPos, Tile>> getAllLoadedTiles() {
+        return getAllLoadedTiles((tile) -> true);
+    }
+
+    /**
+     * Gets all currently loaded tiles within the server
+     *
+     * @param filter filters the result
+     * @return the list of all loaded tiles
+     * @since 1.0.0-SNAPSHOT
+     */
+    @NotNull
+    public List<Pair<ChunkRelPos, Tile>> getAllLoadedTiles(Predicate<Tile> filter) {
+        return Streams.stream(this.cache.iterator()).filter((entry) -> filter.apply(entry.getValue())).map((entry) -> Pair.of(entry.getKey(), entry.getValue())).toList();
     }
 
     /**
