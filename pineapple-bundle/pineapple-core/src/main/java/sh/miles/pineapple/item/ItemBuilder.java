@@ -210,6 +210,18 @@ public class ItemBuilder {
     }
 
     /**
+     * Changes the lore of the ItemStack
+     *
+     * @param lore the lore to add on the item
+     * @return the ItemBuilder
+     * @since 1.0.0-SNAPSHOT
+     */
+    @NMS
+    public ItemBuilder lore(BaseComponent... lore) {
+        return lore(Arrays.asList(lore));
+    }
+
+    /**
      * Enchants the given item at the given level
      *
      * @param enchantment the enchantment
