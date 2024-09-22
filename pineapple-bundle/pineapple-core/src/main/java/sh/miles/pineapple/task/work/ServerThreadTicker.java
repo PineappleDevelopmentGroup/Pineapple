@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.collection.Pair;
 
 import java.util.Deque;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
@@ -26,7 +27,7 @@ public class ServerThreadTicker implements Runnable {
      */
     public static final int MAX_NANOS_PER_TICK = (int) (MAX_MILLIS_PER_TICK * 1E6);
 
-    private final Deque<Pair<ServerThreadWorker, ServerThreadCallback<Object>>> workers = new ConcurrentLinkedDeque<>();
+    private final Deque<Pair<ServerThreadWorker, CompletableFuture<Object>>> workers = new ConcurrentLinkedDeque<>();
 
     public ServerThreadTicker(@NotNull final Plugin plugin) {
         Bukkit.getScheduler().runTaskTimer(plugin, this, 1L, 1L);
@@ -49,8 +50,21 @@ public class ServerThreadTicker implements Runnable {
      * @param callback the callback to execute when the worker finished
      * @since 1.0.0-SNAPSHOT
      */
-    public void queue(@NotNull final ServerThreadWorker worker, @NotNull final ServerThreadCallback<Object> callback) {
+    public void queue(@NotNull final ServerThreadWorker worker, @NotNull final CompletableFuture<Object> callback) {
         this.workers.add(Pair.of(worker, callback));
+    }
+
+    /**
+     * Queues a task on the main thread with a callback
+     *
+     * @param worker   the worker to queue
+     * @param callback the callback to execute when the worker finished
+     * @param <E>      The type of worker
+     * @since 1.0.0-SNAPSHOT
+     */
+
+    public <E> void queue(@NotNull final ServerThreadSupplier<E> worker, @NotNull final CompletableFuture<E> callback) {
+        this.workers.add(Pair.of(worker, (CompletableFuture<Object>) callback));
     }
 
     @ApiStatus.Internal
@@ -58,9 +72,9 @@ public class ServerThreadTicker implements Runnable {
     public void run() {
         long stopTime = System.nanoTime() + MAX_NANOS_PER_TICK;
 
-        Pair<ServerThreadWorker, ServerThreadCallback<Object>> next;
+        Pair<ServerThreadWorker, CompletableFuture<Object>> next;
         ServerThreadWorker worker;
-        ServerThreadCallback<Object> callback;
+        CompletableFuture<Object> callback;
         while (System.nanoTime() <= stopTime && (next = this.workers.poll()) != null) {
             worker = next.left();
             callback = next.right();
