@@ -31,7 +31,14 @@ public abstract class PagedPlayerGui<T extends MenuScene> extends PlayerGui<T> {
         this.topInventory = topInventory();
         this.pages = new HashMap<>();
         this.currentPage = 0;
+    }
 
+    /**
+     * initializes the pages
+     *
+     * @since 1.0.0-SNAPSHOT
+     */
+    protected void init() {
         for (int i = 0; i < findMaxPage(); i++) {
             this.pages.put(i, new NonNullArray<>(topInventory.getSize(), () -> new DummyGuiSlot(topInventory, 0)));
         }
