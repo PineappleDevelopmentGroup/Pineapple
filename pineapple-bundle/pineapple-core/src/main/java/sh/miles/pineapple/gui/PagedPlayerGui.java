@@ -55,7 +55,7 @@ public abstract class PagedPlayerGui<T extends MenuScene> extends PlayerGui<T> {
      */
     public void slot(final int page, final int index, @NotNull final Function<Inventory, GuiSlot> slotMaker) throws IllegalArgumentException {
         verifySlotIndex(index);
-        this.pages.get(page).set(index, slotMaker.apply(this.topInventory));
+        this.pages.computeIfAbsent(page, (key) -> new NonNullArray<>(this.topInventory.getSize(), () -> new DummyGuiSlot(this.topInventory, 0))).set(index, slotMaker.apply(this.topInventory));
     }
 
     /**
@@ -92,7 +92,7 @@ public abstract class PagedPlayerGui<T extends MenuScene> extends PlayerGui<T> {
      * @param page the page to deploy
      */
     protected void deployPage(int page) {
-        final NonNullArray<GuiSlot> slots = pages.get(page);
+        final NonNullArray<GuiSlot> slots = pages.computeIfAbsent(page, (key) -> new NonNullArray<>(this.topInventory.getSize(), () -> new DummyGuiSlot(this.topInventory, 0)));
         regenerateEmptySlots();
 
         for (int i = 0; i < slots.size(); i++) {
