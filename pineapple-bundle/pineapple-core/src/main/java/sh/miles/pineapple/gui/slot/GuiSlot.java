@@ -70,6 +70,7 @@ public interface GuiSlot {
         private Consumer<InventoryDragEvent> drag = (d) -> {
         };
         private ItemStack item = null;
+        private boolean deployable = false;
 
         public GuiSlotBuilder() {
         }
@@ -127,6 +128,17 @@ public interface GuiSlot {
         }
 
         /**
+         * Marks the slot as re-deployable
+         *
+         * @return the current GuiSlotBuilder
+         * @since 1.0.0-SNAPSHOT
+         */
+        public GuiSlotBuilder deployable() {
+            this.deployable = true;
+            return this;
+        }
+
+        /**
          * Sets the item icon
          *
          * @param item the item
@@ -155,7 +167,11 @@ public interface GuiSlot {
             if (this.click == null) {
                 slot = new DummyGuiSlot(this.inventory, index);
             } else {
-                slot = new SimpleGuiSlot(this.inventory, index, click, drag);
+                if (deployable) {
+                    slot = new DeployableSlot(this.inventory, index, click, drag);
+                } else {
+                    slot = new SimpleGuiSlot(this.inventory, index, click, drag);
+                }
             }
 
             if (item != null) {

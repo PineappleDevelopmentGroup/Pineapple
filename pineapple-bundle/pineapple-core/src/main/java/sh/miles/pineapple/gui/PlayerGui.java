@@ -147,6 +147,7 @@ public abstract class PlayerGui<T extends MenuScene> {
     }
 
     protected void regenerateEmptySlots() {
+        this.slots.clear();
         for (int i = 0; i < this.topInventory.getSize(); i++) {
             this.slots.add(new DummyGuiSlot(this.topInventory, i));
         }

@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.collection.NonNullArray;
+import sh.miles.pineapple.gui.slot.Deployable;
 import sh.miles.pineapple.gui.slot.DummyGuiSlot;
 import sh.miles.pineapple.gui.slot.GuiSlot;
 import sh.miles.pineapple.nms.annotations.NMS;
@@ -31,17 +32,6 @@ public abstract class PagedPlayerGui<T extends MenuScene> extends PlayerGui<T> {
         this.topInventory = topInventory();
         this.pages = new HashMap<>();
         this.currentPage = 0;
-    }
-
-    /**
-     * initializes the pages
-     *
-     * @since 1.0.0-SNAPSHOT
-     */
-    protected void init() {
-        for (int i = 0; i < findMaxPage(); i++) {
-            this.pages.put(i, new NonNullArray<>(topInventory.getSize(), () -> new DummyGuiSlot(topInventory, 0)));
-        }
     }
 
     /**
@@ -87,6 +77,16 @@ public abstract class PagedPlayerGui<T extends MenuScene> extends PlayerGui<T> {
     }
 
     /**
+     * Gets the current page.
+     *
+     * @return the current page
+     * @since 1.0.0-SNAPSHOT
+     */
+    public int currentPage() {
+        return this.currentPage;
+    }
+
+    /**
      * Deploys the given page to the gui
      *
      * @param page the page to deploy
@@ -97,11 +97,13 @@ public abstract class PagedPlayerGui<T extends MenuScene> extends PlayerGui<T> {
 
         for (int i = 0; i < slots.size(); i++) {
             final GuiSlot slot = slots.get(i);
-            if (slot instanceof DummyGuiSlot) {
-                continue;
+            if (slot instanceof Deployable deployable) {
+                deployable.deploy();
             }
             slot(i, (inventory) -> slot);
         }
+
+        // redeploy all slots
     }
 
     /**
