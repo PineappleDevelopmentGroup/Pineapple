@@ -27,7 +27,7 @@ public class ServerThreadTicker implements Runnable {
      */
     public static final int MAX_NANOS_PER_TICK = (int) (MAX_MILLIS_PER_TICK * 1E6);
 
-    private final Deque<Pair<ServerThreadWorker, CompletableFuture<Object>>> workers = new ConcurrentLinkedDeque<>();
+    private final Deque<Pair<ServerThreadWorker, ServerThreadCallback<Object>>> workers = new ConcurrentLinkedDeque<>();
 
     public ServerThreadTicker(@NotNull final Plugin plugin) {
         Bukkit.getScheduler().runTaskTimer(plugin, this, 1L, 1L);
@@ -50,7 +50,7 @@ public class ServerThreadTicker implements Runnable {
      * @param callback the callback to execute when the worker finished
      * @since 1.0.0-SNAPSHOT
      */
-    public void queue(@NotNull final ServerThreadWorker worker, @NotNull final CompletableFuture<Object> callback) {
+    public void queue(@NotNull final ServerThreadWorker worker, @NotNull final ServerThreadCallback<Object> callback) {
         this.workers.add(Pair.of(worker, callback));
     }
 
@@ -63,8 +63,8 @@ public class ServerThreadTicker implements Runnable {
      * @since 1.0.0-SNAPSHOT
      */
 
-    public <E> void queueSupplier(@NotNull final ServerThreadSupplier<E> worker, @NotNull final CompletableFuture<E> callback) {
-        this.workers.add(Pair.of(worker, (CompletableFuture<Object>) callback));
+    public <E> void queueSupplier(@NotNull final ServerThreadSupplier<E> worker, @NotNull final ServerThreadCallback<E> callback) {
+        this.workers.add(Pair.of(worker, (ServerThreadCallback<Object>) callback));
     }
 
     @ApiStatus.Internal
@@ -72,9 +72,9 @@ public class ServerThreadTicker implements Runnable {
     public void run() {
         long stopTime = System.nanoTime() + MAX_NANOS_PER_TICK;
 
-        Pair<ServerThreadWorker, CompletableFuture<Object>> next;
+        Pair<ServerThreadWorker, ServerThreadCallback<Object>> next;
         ServerThreadWorker worker;
-        CompletableFuture<Object> callback;
+        ServerThreadCallback<Object> callback;
         while (System.nanoTime() <= stopTime && (next = this.workers.poll()) != null) {
             worker = next.left();
             callback = next.right();
