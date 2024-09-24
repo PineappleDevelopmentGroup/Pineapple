@@ -63,7 +63,7 @@ public class ServerThreadTicker implements Runnable {
      * @since 1.0.0-SNAPSHOT
      */
 
-    public <E> void queue(@NotNull final ServerThreadSupplier<E> worker, @NotNull final CompletableFuture<E> callback) {
+    public <E> void queueSupplier(@NotNull final ServerThreadSupplier<E> worker, @NotNull final CompletableFuture<E> callback) {
         this.workers.add(Pair.of(worker, (CompletableFuture<Object>) callback));
     }
 
