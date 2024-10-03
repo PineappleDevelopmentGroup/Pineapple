@@ -22,7 +22,6 @@ import sh.miles.pineapple.tiles.internal.util.TileChunkIOUtils;
 import sh.miles.pineapple.tiles.internal.util.TileKeys;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -142,6 +141,17 @@ public final class Tiles {
         }
 
         return chunkCache.stream().filter((entry) -> filter.apply(entry.getValue())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    /**
+     * Places a tile at the given position
+     *
+     * @param location the location to place the tile at
+     * @param tile     the tile to place
+     * @since 1.0.0-SNAPSHOT
+     */
+    public void placeTile(@NotNull final Location location, @NotNull final Tile tile) {
+        this.cache.cache(location, tile);
     }
 
     /**
