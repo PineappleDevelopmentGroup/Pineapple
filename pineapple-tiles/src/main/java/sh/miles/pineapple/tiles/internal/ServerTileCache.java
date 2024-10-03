@@ -121,6 +121,9 @@ public class ServerTileCache implements Iterable<Map.Entry<ChunkRelPos, Tile>> {
     public Tile evict(@NotNull final Chunk chunk, @NotNull final ChunkRelPos relPos) {
         final ChunkPos position = ChunkPos.fromChunk(chunk);
         final ChunkTileCache chunkCache = cache.get(position);
+        if (chunkCache == null) {
+            return null;
+        }
         final Tile tile = chunkCache != null ? chunkCache.evict(relPos) : null;
         if (chunkCache.isEmpty()) {
             cache.remove(position);

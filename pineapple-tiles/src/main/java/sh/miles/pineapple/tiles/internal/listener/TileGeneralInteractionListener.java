@@ -72,7 +72,7 @@ public final class TileGeneralInteractionListener implements Listener {
         if (!event.isCancelled()) {
             final Location location = event.getBlock().getLocation();
             broken.put(location, tile);
-            TileChunkIOUtils.deleteTile(cache, location);
+            TileChunkIOUtils.deleteTile(cache, location, false);
         }
     }
 

@@ -169,7 +169,29 @@ public final class Tiles {
         if (tile == null || !filter.apply(tile)) {
             return null;
         }
-        TileChunkIOUtils.deleteTile(cache, location);
+        TileChunkIOUtils.deleteTile(cache, location, false);
+        return tile;
+    }
+
+    /**
+     * Attempts to delete a tile at the given location
+     *
+     * @param location the location
+     * @param hard     whether or not to hard delete the tile even if it isn't loaded, in the case where a tile isn't
+     *                 loaded and hard is selected, the deleted tile is not ever loaded.
+     * @return the deleted tile or null, this method returns null so long as the tile was never cached.
+     * @throws IllegalArgumentException thrown if the location is null
+     * @since 1.0.0-SNAPSHOT
+     */
+    public Tile deleteTile(@NotNull final Location location, boolean hard) {
+        final Tile tile = cache.evict(location);
+        if (tile == null && !hard) {
+            System.out.println("Tile null and not hard");
+            return null;
+        }
+
+        TileChunkIOUtils.deleteTile(cache, location, true);
+        System.out.println("Deleting hard");
         return tile;
     }
 
@@ -199,7 +221,7 @@ public final class Tiles {
         for (final ChunkRelPos chunkRelPos : deathMark) {
             final Tile tile = chunkCache.evict(chunkRelPos);
             assert tile != null;
-            TileChunkIOUtils.deleteTile(cache, chunk, chunkRelPos);
+            TileChunkIOUtils.deleteTile(cache, chunk, chunkRelPos, false);
             deleted.put(chunkRelPos, tile);
         }
 

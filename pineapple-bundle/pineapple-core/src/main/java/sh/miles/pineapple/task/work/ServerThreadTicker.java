@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.collection.Pair;
 
 import java.util.Deque;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**

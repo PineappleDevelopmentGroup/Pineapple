@@ -8,6 +8,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import sh.miles.pineapple.PineappleLib;
 import sh.miles.pineapple.tiles.api.Tile;
 import sh.miles.pineapple.tiles.api.TileType;
 import sh.miles.pineapple.tiles.api.TileTypeRegistry;
@@ -49,7 +50,12 @@ public final class TileChunkIOUtils {
                 throw new IllegalStateException("Unable to load tile at chunk position %s in chunk %s".formatted(chunkPos, chunk));
             }
             final Tile tile = tileType.createTile();
-            tile.load(tileContainer);
+            try {
+                tile.load(tileContainer);
+            } catch (Exception e) {
+                e.printStackTrace();
+                continue;
+            }
             cache.getChunkCacheNaive(ChunkPos.fromChunk(chunk)).cache(chunkPos, tile);
         }
     }
@@ -89,20 +95,25 @@ public final class TileChunkIOUtils {
      * @param cache the cache
      * @param chunk the chunk the relative position is in
      * @param pos   the relative position to delete the tile from
+     * @param hard  whether or not to delete the tile even if it is not cached
      * @return true if the tile was successfully deleted
      */
-    public static boolean deleteTile(@NotNull final ServerTileCache cache, @NotNull final Chunk chunk, @NotNull final ChunkRelPos pos) {
+    public static boolean deleteTile(@NotNull final ServerTileCache cache, @NotNull final Chunk chunk, @NotNull final ChunkRelPos pos, boolean hard) {
+        System.out.printf("Deleting Tile hard: %s%n", hard);
         final Tile tile = cache.evict(chunk, pos);
         if (tile == null) {
-            return false;
+            if (!hard) return false;
         }
+
         final PersistentDataContainer chunkContainer = chunk.getPersistentDataContainer();
         if (!chunkContainer.has(TileKeys.getTileContainerKey())) {
             return false;
         }
+
         final PersistentDataContainer container = chunkContainer.get(TileKeys.getTileContainerKey(), PersistentDataType.TAG_CONTAINER);
         container.remove(TileKeys.buildChunkRelPosKey(pos));
         if (!container.getKeys().isEmpty()) {
+            chunkContainer.set(TileKeys.getTileContainerKey(), PersistentDataType.TAG_CONTAINER, container);
             return true;
         }
 
@@ -116,9 +127,10 @@ public final class TileChunkIOUtils {
      *
      * @param cache    the cache
      * @param location the location to delete the tile from
+     * @param hard     whether or not to delete the tile even if it is not cached
      * @return true if the tile was successfully deleted
      */
-    public static boolean deleteTile(@NotNull final ServerTileCache cache, @NotNull final Location location) {
-        return deleteTile(cache, location.getChunk(), ChunkRelPos.fromLocation(location));
+    public static boolean deleteTile(@NotNull final ServerTileCache cache, @NotNull final Location location, boolean hard) {
+        return deleteTile(cache, location.getChunk(), ChunkRelPos.fromLocation(location), hard);
     }
 }
