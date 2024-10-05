@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import sh.miles.pineapple.PineappleLib;
 import sh.miles.pineapple.collection.Pair;
 
 import java.util.Deque;
@@ -30,6 +31,10 @@ public class ServerThreadTicker implements Runnable {
 
     public ServerThreadTicker(@NotNull final Plugin plugin) {
         Bukkit.getScheduler().runTaskTimer(plugin, this, 1L, 1L);
+    }
+
+    public ServerThreadTicker() {
+        PineappleLib.getLogger().info("Initialized ServerThreadTicker without task timer");
     }
 
     /**
