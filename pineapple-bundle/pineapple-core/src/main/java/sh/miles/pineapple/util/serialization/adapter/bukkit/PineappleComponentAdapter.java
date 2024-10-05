@@ -1,4 +1,4 @@
-package sh.miles.pineapple.util.serialization.adapter;
+package sh.miles.pineapple.util.serialization.adapter.bukkit;
 
 import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.chat.PineappleChat;
@@ -6,6 +6,7 @@ import sh.miles.pineapple.chat.PineappleComponent;
 import sh.miles.pineapple.util.serialization.SerializedDeserializeContext;
 import sh.miles.pineapple.util.serialization.SerializedElement;
 import sh.miles.pineapple.util.serialization.SerializedSerializeContext;
+import sh.miles.pineapple.util.serialization.adapter.SerializedAdapter;
 import sh.miles.pineapple.util.serialization.exception.SerializedAdaptationException;
 
 class PineappleComponentAdapter implements SerializedAdapter<PineappleComponent> {

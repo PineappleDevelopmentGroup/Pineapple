@@ -1,4 +1,4 @@
-package sh.miles.pineapple.util.serialization.adapter;
+package sh.miles.pineapple.util.serialization.adapter.bukkit;
 
 import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.util.serialization.SerializedDeserializeContext;
 import sh.miles.pineapple.util.serialization.SerializedElement;
 import sh.miles.pineapple.util.serialization.SerializedSerializeContext;
+import sh.miles.pineapple.util.serialization.adapter.SerializedAdapter;
 import sh.miles.pineapple.util.serialization.exception.SerializedAdaptationException;
 
 class ArmorTrimAdapter implements SerializedAdapter<ArmorTrim> {

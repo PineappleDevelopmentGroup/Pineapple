@@ -1,4 +1,4 @@
-package sh.miles.pineapple.util.serialization.adapter;
+package sh.miles.pineapple.util.serialization.adapter.bukkit;
 
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.EquipmentSlot;
@@ -7,6 +7,7 @@ import sh.miles.pineapple.util.serialization.SerializedDeserializeContext;
 import sh.miles.pineapple.util.serialization.SerializedElement;
 import sh.miles.pineapple.util.serialization.SerializedObject;
 import sh.miles.pineapple.util.serialization.SerializedSerializeContext;
+import sh.miles.pineapple.util.serialization.adapter.SerializedAdapter;
 import sh.miles.pineapple.util.serialization.exception.SerializedAdaptationException;
 
 import static sh.miles.pineapple.util.serialization.SerializedElement.object;

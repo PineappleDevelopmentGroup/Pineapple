@@ -2,6 +2,9 @@ package sh.miles.pineapple.util.serialization.adapter;
 
 import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.collection.registry.WriteableRegistry;
+import sh.miles.pineapple.util.serialization.adapter.bukkit.BukkitAdapterPack;
+import sh.miles.pineapple.util.serialization.adapter.javalang.JavaLangAdapterPack;
+import sh.miles.pineapple.util.serialization.adapter.spec.SpecAdapterPack;
 import sh.miles.pineapple.util.serialization.bridges.SerializedBridge;
 
 import java.util.HashSet;
@@ -23,18 +26,9 @@ public final class SerializedAdapterRegistry extends WriteableRegistry<Serialize
         bridges.addAll(SerializedBridge.getDefaultBridges());
 
         // Adapters
-        register(new ArmorTrimAdapter());
-        register(new AttributeModifierAdapter());
-        register(new BukkitColorAdapter());
-        BukkitRegistryAdapter.getRegistryAdapters().forEach(this::register);
-        register(new ChatColorAdapter());
-        register(new ItemSpecAdapter());
-        register(new LocationAdapter());
-        register(new MaterialAdapter());
-        register(new NamespacedKeyAdapter());
-        register(new PineappleComponentAdapter());
-        register(new PotionEffectsAdapter());
-        register(new UUIDAdapter());
+        BukkitAdapterPack.INSTANCE.bootstrap(this::register);
+        JavaLangAdapterPack.INSTANCE.bootstrap(this::register);
+        SpecAdapterPack.INSTANCE.bootstrap(this::register);
     }
 
     @Override

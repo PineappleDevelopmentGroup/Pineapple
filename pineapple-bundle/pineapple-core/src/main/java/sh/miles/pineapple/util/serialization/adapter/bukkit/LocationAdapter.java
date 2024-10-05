@@ -1,4 +1,4 @@
-package sh.miles.pineapple.util.serialization.adapter;
+package sh.miles.pineapple.util.serialization.adapter.bukkit;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -10,6 +10,7 @@ import sh.miles.pineapple.util.serialization.SerializedElement;
 import sh.miles.pineapple.util.serialization.SerializedObject;
 import sh.miles.pineapple.util.serialization.SerializedPrimitive;
 import sh.miles.pineapple.util.serialization.SerializedSerializeContext;
+import sh.miles.pineapple.util.serialization.adapter.SerializedAdapter;
 import sh.miles.pineapple.util.serialization.exception.SerializedAdaptationException;
 
 class LocationAdapter implements SerializedAdapter<Location> {

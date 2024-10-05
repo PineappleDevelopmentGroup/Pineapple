@@ -1,4 +1,4 @@
-package sh.miles.pineapple.util.serialization.adapter;
+package sh.miles.pineapple.util.serialization.adapter.bukkit;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
@@ -9,6 +9,7 @@ import sh.miles.pineapple.ReflectionUtils;
 import sh.miles.pineapple.util.serialization.SerializedDeserializeContext;
 import sh.miles.pineapple.util.serialization.SerializedElement;
 import sh.miles.pineapple.util.serialization.SerializedSerializeContext;
+import sh.miles.pineapple.util.serialization.adapter.SerializedAdapter;
 import sh.miles.pineapple.util.serialization.exception.SerializedAdaptationException;
 
 import java.lang.reflect.Field;
