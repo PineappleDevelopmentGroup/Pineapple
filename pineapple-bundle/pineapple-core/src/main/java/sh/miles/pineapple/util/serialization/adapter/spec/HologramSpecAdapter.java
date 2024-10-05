@@ -27,7 +27,12 @@ final class HologramSpecAdapter implements SerializedAdapter<HologramSpec> {
         final PineappleComponent text = PineappleChat.component(parent.getArray(TEXT).orElse(SerializedElement.array())
                 .stream()
                 .map((e) -> e.getAsPrimitive().getAsString())
-                .reduce("", (first, second) -> first + "\n" + second));
+                .reduce("", (first, second) -> {
+                    if (first.isBlank()) {
+                        return second;
+                    }
+                    return first + "\n" + second;
+                }));
         final VectorSpec vector = parent.getObject(VECTOR)
                 .map((raw) -> context.deserialize(raw, VectorSpec.class))
                 .orElse(new VectorSpec(0.0, 0.0, 0.0));

@@ -186,12 +186,10 @@ public final class Tiles {
     public Tile deleteTile(@NotNull final Location location, boolean hard) {
         final Tile tile = cache.evict(location);
         if (tile == null && !hard) {
-            System.out.println("Tile null and not hard");
             return null;
         }
 
         TileChunkIOUtils.deleteTile(cache, location, true);
-        System.out.println("Deleting hard");
         return tile;
     }
 
