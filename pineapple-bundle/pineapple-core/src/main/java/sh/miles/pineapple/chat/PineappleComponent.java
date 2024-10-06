@@ -66,6 +66,6 @@ public class PineappleComponent {
 
     @Override
     public int hashCode() {
-        return Objects.hash(source, parsed);
+        return Objects.hash(source);
     }
 }
