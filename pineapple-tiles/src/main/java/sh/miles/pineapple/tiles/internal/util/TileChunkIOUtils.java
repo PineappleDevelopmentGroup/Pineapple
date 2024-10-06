@@ -99,7 +99,6 @@ public final class TileChunkIOUtils {
      * @return true if the tile was successfully deleted
      */
     public static boolean deleteTile(@NotNull final ServerTileCache cache, @NotNull final Chunk chunk, @NotNull final ChunkRelPos pos, boolean hard) {
-        System.out.printf("Deleting Tile hard: %s%n", hard);
         final Tile tile = cache.evict(chunk, pos);
         if (tile == null) {
             if (!hard) return false;
