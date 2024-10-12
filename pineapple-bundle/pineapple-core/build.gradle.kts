@@ -32,7 +32,6 @@ dependencies {
     implementation(libs.pineapplechat.bungee)
     implementation(libs.pineapplechat.legacy)
     // Deprecated End
-    implementation(libs.morepdc)
 
     compileOnly(project(":pineapple-bundle:pineapple-nms:api"))
     compileOnlyAndTest(project(":pineapple-common"))

@@ -1,6 +1,5 @@
 [versions]
 mockbukkit-version = "3.9.0"
-morepdc-version = "2.4.0"
 patrick-remapper-version = "1.4.2"
 # Deprecated
 pineapplechat-version = "1.0.0-SNAPSHOT"
@@ -14,7 +13,6 @@ javadoc-ver = "8.6"
 
 [libraries]
 mockbukkit = { module = "com.github.seeseemelk:MockBukkit-v1.20", version.ref = "mockbukkit-version" }
-morepdc = { module = "com.jeff_media:MorePersistentDataTypes", version.ref = "morepdc-version" }
 patrick-remapper = { module = "io.github.patrick.remapper:io.github.patrick.remapper.gradle.plugin", version.ref = "patrick-remapper-version" }
 kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-jvm-ver" }
 # Deprecated

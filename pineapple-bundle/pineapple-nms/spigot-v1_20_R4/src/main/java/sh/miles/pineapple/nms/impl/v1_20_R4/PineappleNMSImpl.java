@@ -3,14 +3,9 @@ package sh.miles.pineapple.nms.impl.v1_20_R4;
 import com.google.common.base.Preconditions;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtIo;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.ContainerHelper;
@@ -22,23 +17,16 @@ import org.bukkit.craftbukkit.v1_20_R4.CraftWorld;
 import org.bukkit.craftbukkit.v1_20_R4.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_20_R4.event.CraftEventFactory;
 import org.bukkit.craftbukkit.v1_20_R4.inventory.CraftContainer;
-import org.bukkit.craftbukkit.v1_20_R4.inventory.CraftInventoryView;
 import org.bukkit.craftbukkit.v1_20_R4.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_20_R4.util.CraftMagicNumbers;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import sh.miles.pineapple.ReflectionUtils;
 import sh.miles.pineapple.nms.api.PineappleNMS;
 import sh.miles.pineapple.nms.api.PineappleUnsafe;
-import sh.miles.pineapple.nms.api.menu.scene.MenuScene;
-import sh.miles.pineapple.nms.api.menu.scene.custom.CustomMenuListener;
 import sh.miles.pineapple.nms.impl.v1_20_R4.internal.ComponentUtils;
-import sh.miles.pineapple.nms.impl.v1_20_R4.inventory.scene.PineappleMenuScene;
-import sh.miles.pineapple.nms.impl.v1_20_R4.inventory.scene.custom.PineappleMenu;
 import sh.miles.pineapple.nms.impl.v1_20_R4.packet.PineapplePacketsImpl;
 
 import java.io.ByteArrayInputStream;
@@ -72,22 +60,6 @@ public class PineappleNMSImpl implements PineappleNMS {
         this.packets = new PineapplePacketsImpl();
     }
 
-    @NotNull
-    @Override
-    public MenuScene createMenuCustom(@NotNull final Player player, @NotNull final CustomMenuListener menuListener, final int rows, @NotNull final BaseComponent title) {
-        Preconditions.checkArgument(player != null, "The given player must not be null");
-        Preconditions.checkArgument(menuListener != null, "The given menuListener must not be null");
-        Preconditions.checkArgument(title != null, "The given title must not be null");
-        Preconditions.checkArgument(rows > 0 && rows < 7, "The given rows must be between 1 and 6 inclusive");
-
-        final ServerPlayer splayer = ((CraftPlayer) player).getHandle();
-        final MenuType<?> menuType = CHEST_TYPES[rows - 1];
-        final PineappleMenu menu = new PineappleMenu(menuListener, menuType, splayer.nextContainerCounter(), splayer.getInventory(), rows);
-        menu.setTitle(ComponentUtils.toMinecraftChat(title));
-        return new PineappleMenuScene<>((CraftInventoryView) menu.getBukkitView());
-    }
-
-    @Nullable
     @Override
     public InventoryView openInventory(@NotNull final Player player, @NotNull final Inventory inventory, @NotNull final BaseComponent title) {
         ServerPlayer nms = ((CraftPlayer) player).getHandle();

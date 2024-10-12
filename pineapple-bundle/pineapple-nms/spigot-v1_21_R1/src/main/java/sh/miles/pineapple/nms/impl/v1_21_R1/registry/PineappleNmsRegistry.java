@@ -10,6 +10,7 @@ import org.bukkit.craftbukkit.v1_21_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_21_R1.util.CraftNamespacedKey;
 import sh.miles.pineapple.collection.registry.FrozenRegistry;
 import sh.miles.pineapple.collection.registry.RegistryKey;
+import sh.miles.pineapple.nms.api.PineappleNMS;
 import sh.miles.pineapple.nms.api.menu.MenuType;
 import sh.miles.pineapple.nms.impl.v1_21_R1.inventory.PineappleMenuType;
 
