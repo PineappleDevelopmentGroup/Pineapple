@@ -32,6 +32,8 @@ dependencies {
     implementation(libs.pineapplechat.bungee)
     implementation(libs.pineapplechat.legacy)
     // Deprecated End
+    implementation(libs.adventure)
+    implementation(libs.minimessage)
 
     compileOnly(project(":pineapple-bundle:pineapple-nms:api"))
     compileOnlyAndTest(project(":pineapple-common"))

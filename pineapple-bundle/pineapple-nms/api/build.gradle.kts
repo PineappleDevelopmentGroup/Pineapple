@@ -13,6 +13,7 @@ java {
 dependencies {
     compileOnly("org.jetbrains:annotations-java5:24.0.1")
     compileOnly(libs.spigot.api)
+    compileOnly(libs.adventure)
     compileOnly(project(":pineapple-common"))
 }
 

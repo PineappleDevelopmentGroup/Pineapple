@@ -1,5 +1,6 @@
 package sh.miles.pineapple;
 
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.command.CommandRegistry;
@@ -31,6 +32,7 @@ public final class PineappleLib {
 
     private final Plugin plugin;
     private PineappleNMS nmsProvider;
+    private final BukkitAudiences adventure;
     private final CommandRegistry commandRegistry;
     private final ConfigManager configurationManager;
     private final GuiManager guiManager;
@@ -49,6 +51,7 @@ public final class PineappleLib {
             NMSLoader.INSTANCE.activate();
             this.nmsProvider = NMSLoader.INSTANCE.getPineapple();
         }
+        this.adventure = BukkitAudiences.create(plugin);
         this.commandRegistry = new CommandRegistry(plugin);
         this.configurationManager = new ConfigManager();
         this.guiManager = new GuiManager(plugin);
@@ -57,6 +60,15 @@ public final class PineappleLib {
 
         // Serialized
         SerializedAdapterRegistry.INSTANCE.registerBridge(new YamlSerializedBridge(configurationManager));
+    }
+
+    /**
+     * @return adventure
+     * @since 1.0.0-SNAPSHOT
+     */
+    @NotNull
+    public static BukkitAudiences getAdventure() {
+        return instance.adventure;
     }
 
     /**

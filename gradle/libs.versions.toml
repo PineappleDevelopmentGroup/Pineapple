@@ -1,4 +1,6 @@
 [versions]
+adventure-version = "4.3.4"
+minimessage-version = "4.17.0"
 mockbukkit-version = "3.9.0"
 patrick-remapper-version = "1.4.2"
 # Deprecated
@@ -21,6 +23,8 @@ pineapplechat-bungee = { module = "sh.miles.pineapplechat:pineapplechat-bungee",
 pineapplechat-legacy = { module = "sh.miles.pineapplechat:pineapplechat-minecraft-legacy", version.ref = "pineapplechat-version" }
 # Deprecated End
 spigot-api = { module = "org.spigotmc:spigot-api", version.ref = "spigot-api-version" }
+adventure = { module = "net.kyori:adventure-platform-bukkit", version.ref = "adventure-version" }
+minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "minimessage-version" }
 
 [plugins]
 jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-jvm-ver" }
