@@ -2,6 +2,7 @@ package sh.miles.pineapple.nms.loader;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -9,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A class that represents a minecraft version
@@ -18,8 +20,10 @@ import java.util.Objects;
 public class MinecraftVersion {
 
     private static final Map<String, MinecraftVersion> protocolMap;
+    private static final Set<MinecraftVersion> deprecated;
 
     public static final MinecraftVersion CURRENT;
+    public static final boolean CURRENT_DEPRECATED;
 
     static {
         final Map<String, MinecraftVersion> temp = new HashMap<>();
@@ -30,6 +34,7 @@ public class MinecraftVersion {
         temp.put("1.21.1", new MinecraftVersion("1.21.1", "v1_21_R1"));
         temp.put("1.21.2", new MinecraftVersion("1.21.2", "v1_21_R2"));
         protocolMap = ImmutableMap.copyOf(temp);
+        deprecated = ImmutableSet.<MinecraftVersion>builder().add(protocolMap.get("1.20.4")).build();
 
         String[] split = Bukkit.getBukkitVersion().split("-")[0].split("\\.");
         final int major = Integer.parseInt(split[0]);
@@ -37,6 +42,7 @@ public class MinecraftVersion {
         boolean hasPatch = split.length == 3;
         final int patch = hasPatch ? Integer.parseInt(split[2]) : 0;
         CURRENT = protocolMap.getOrDefault("%d.%d.%d".formatted(major, minor, patch), new MinecraftVersion(major, minor, hasPatch ? patch : 0, null));
+        CURRENT_DEPRECATED = deprecated.contains(CURRENT);
     }
 
     private final int major;

@@ -47,12 +47,8 @@ public final class PineappleLib {
     private PineappleLib(final Plugin plugin, final boolean useNms) {
         this.plugin = plugin;
         if (useNms) {
-            NMSLoader.INSTANCE.activate();
+            NMSLoader.INSTANCE.activate(plugin.getLogger());
             this.nmsProvider = NMSLoader.INSTANCE.getPineapple();
-            if (MinecraftVersion.CURRENT.equals(MinecraftVersion.fromArray(new int[] {1, 20, 4}, "v1_20_R3"))) {
-                getLogger().warning("You are using Minecraft Version 1.20.4 which PineappleLib is now deprecating and will be removing support for in 1.21.3.");
-                getLogger().warning("We recommend you update your server's version as newer versions of the game contain bug and security fixes.");
-            }
         }
         this.commandRegistry = new CommandRegistry(plugin);
         this.configurationManager = new ConfigManager();

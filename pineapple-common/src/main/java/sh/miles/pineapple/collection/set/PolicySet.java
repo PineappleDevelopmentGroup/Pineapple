@@ -92,7 +92,9 @@ public class PolicySet<E> implements Set<E> {
     @Override
     public boolean containsAll(@NotNull final Collection<?> c) {
         for (final Object o : c) {
-            if (!this.policy.check(this.set.contains(o))) return false;
+            if (!this.policy.check(this.set.contains(o))){
+                return false;
+            }
         }
         return true;
     }

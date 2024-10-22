@@ -35,6 +35,11 @@ public final class TileKeys {
         return tileContainerKey;
     }
 
+    /**
+     * Gets the tile type key
+     *
+     * @return the tile type key
+     */
     public static NamespacedKey getTileTypeKey() {
         if (tileTypeKey == null) {
             tileTypeKey = Tiles.getInstance().makeKey("tile_type");

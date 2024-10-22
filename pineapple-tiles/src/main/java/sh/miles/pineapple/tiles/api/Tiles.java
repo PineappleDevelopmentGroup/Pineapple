@@ -8,7 +8,6 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -198,6 +197,7 @@ public final class Tiles {
      *
      * @param chunk  the chunk to delete
      * @param filter the filter that must be true for the tiles to be deleted
+     * @return the deleted tiles and their respective positions
      * @since 1.0.0-SNAPSHOT
      */
     @NotNull
@@ -215,7 +215,6 @@ public final class Tiles {
         }
 
         final Map<ChunkRelPos, Tile> deleted = new HashMap<>();
-        final PersistentDataContainer container = chunk.getPersistentDataContainer();
         for (final ChunkRelPos chunkRelPos : deathMark) {
             final Tile tile = chunkCache.evict(chunkRelPos);
             assert tile != null;
