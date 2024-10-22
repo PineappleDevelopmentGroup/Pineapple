@@ -1,14 +1,13 @@
-package sh.miles.pineapple.nms.impl.v1_20_R3.inventory.scene;
+package sh.miles.pineapple.nms.impl.v1_21_R2.inventory.scene;
 
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftInventoryView;
+import org.bukkit.craftbukkit.v1_21_R2.inventory.CraftInventoryView;
 import org.bukkit.inventory.InventoryView;
 import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.nms.api.menu.scene.MenuScene;
-import sh.miles.pineapple.nms.impl.v1_20_R3.internal.ComponentUtils;
+import sh.miles.pineapple.nms.impl.v1_21_R2.internal.ComponentUtils;
 
-@Deprecated(forRemoval = true)
 public class PineappleMenuScene<T extends AbstractContainerMenu> implements MenuScene {
 
     private final CraftInventoryView view;

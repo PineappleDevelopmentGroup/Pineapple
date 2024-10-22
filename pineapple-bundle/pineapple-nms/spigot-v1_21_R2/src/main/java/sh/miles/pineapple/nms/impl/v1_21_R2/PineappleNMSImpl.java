@@ -1,23 +1,34 @@
-package sh.miles.pineapple.nms.impl.v1_20_R3;
+package sh.miles.pineapple.nms.impl.v1_21_R2;
 
 import com.google.common.base.Preconditions;
+import com.google.common.primitives.Ints;
+import com.mojang.datafixers.DataFixer;
+import com.mojang.serialization.Dynamic;
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.minecraft.SharedConstants;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
-import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_20_R3.event.CraftEventFactory;
-import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftContainer;
-import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_20_R3.util.CraftMagicNumbers;
+import net.minecraft.world.item.component.ItemLore;
+import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_21_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_21_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_21_R2.event.CraftEventFactory;
+import org.bukkit.craftbukkit.v1_21_R2.inventory.CraftContainer;
+import org.bukkit.craftbukkit.v1_21_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_21_R2.util.CraftMagicNumbers;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
@@ -27,8 +38,8 @@ import org.jetbrains.annotations.Nullable;
 import sh.miles.pineapple.ReflectionUtils;
 import sh.miles.pineapple.nms.api.PineappleNMS;
 import sh.miles.pineapple.nms.api.PineappleUnsafe;
-import sh.miles.pineapple.nms.impl.v1_20_R3.internal.ComponentUtils;
-import sh.miles.pineapple.nms.impl.v1_20_R3.packet.PineapplePacketsImpl;
+import sh.miles.pineapple.nms.impl.v1_21_R2.internal.ComponentUtils;
+import sh.miles.pineapple.nms.impl.v1_21_R2.packet.PineapplePacketsImpl;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -41,7 +52,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Deprecated(forRemoval = true)
 public class PineappleNMSImpl implements PineappleNMS {
 
     private static final MethodHandle itemStackHandle;
@@ -89,7 +99,7 @@ public class PineappleNMSImpl implements PineappleNMS {
     public ItemStack setItemDisplayName(@NotNull final ItemStack item, final BaseComponent displayName) {
         final CraftItemStack craftItem = ensureCraftItemStack(item);
         final net.minecraft.world.item.ItemStack nmsItem = getItemStackHandle(craftItem);
-        nmsItem.setHoverName(ComponentUtils.toMinecraftChat(displayName));
+        nmsItem.set(DataComponents.CUSTOM_NAME, ComponentUtils.toMinecraftChat(displayName));
         return CraftItemStack.asBukkitCopy(nmsItem);
     }
 
@@ -98,19 +108,7 @@ public class PineappleNMSImpl implements PineappleNMS {
     public ItemStack setItemLore(@NotNull ItemStack item, @NotNull List<BaseComponent> lore) {
         final CraftItemStack craftItem = ensureCraftItemStack(item);
         final net.minecraft.world.item.ItemStack nmsItem = getItemStackHandle(craftItem);
-
-        final CompoundTag tag = nmsItem.getOrCreateTag();
-        if (!tag.contains(net.minecraft.world.item.ItemStack.TAG_DISPLAY)) {
-            tag.put(net.minecraft.world.item.ItemStack.TAG_DISPLAY, new CompoundTag());
-        }
-
-        final CompoundTag displayTag = tag.getCompound(net.minecraft.world.item.ItemStack.TAG_DISPLAY);
-        ListTag loreTag = new ListTag();
-        for (int i = 0; i < lore.size(); i++) {
-            loreTag.add(i, StringTag.valueOf(ComponentUtils.toJsonString(lore.get(i))));
-        }
-
-        displayTag.put(net.minecraft.world.item.ItemStack.TAG_LORE, loreTag);
+        nmsItem.set(DataComponents.LORE, new ItemLore(lore.stream().map(ComponentUtils::toMinecraftChat).collect(Collectors.toList())));
         return CraftItemStack.asBukkitCopy(nmsItem);
     }
 
@@ -119,42 +117,29 @@ public class PineappleNMSImpl implements PineappleNMS {
         final CraftItemStack craftItem = ensureCraftItemStack(item);
         final net.minecraft.world.item.ItemStack nmsItem = getItemStackHandle(craftItem);
         Preconditions.checkState(nmsItem != null, "Failed to acquire the handle for the Nms Item");
-
-        final CompoundTag itemCompound = nmsItem.getTag();
-        if (itemCompound == null || !itemCompound.contains(net.minecraft.world.item.ItemStack.TAG_DISPLAY, CraftMagicNumbers.NBT.TAG_COMPOUND)) {
+        ItemLore lore = nmsItem.get(DataComponents.LORE);
+        if (lore != null && lore != ItemLore.EMPTY) {
             return new ArrayList<>();
         }
 
-        final CompoundTag displayTag = itemCompound.getCompound(net.minecraft.world.item.ItemStack.TAG_DISPLAY);
-
-        if (!displayTag.contains(net.minecraft.world.item.ItemStack.TAG_LORE, CraftMagicNumbers.NBT.TAG_LIST)) {
-            return new ArrayList<>();
-        }
-
-        final ListTag listTag = displayTag.getList(net.minecraft.world.item.ItemStack.TAG_LORE, CraftMagicNumbers.NBT.TAG_STRING);
-        final List<BaseComponent> lore = new ArrayList<>();
-        for (final Tag tag : listTag) {
-            String contents = tag.getAsString();
-            lore.add(ComponentUtils.toBungeeChat(contents));
-        }
-        
-        return lore;
+        return lore.lines().stream().map(ComponentUtils::toBungeeChat).collect(Collectors.toList());
     }
 
     @Override
     public byte[] itemsToBytes(@NotNull final Collection<ItemStack> itemStack) {
-        NonNullList<net.minecraft.world.item.ItemStack> list = NonNullList.withSize(itemStack.size(), net.minecraft.world.item.ItemStack.EMPTY);
+        final var tag = new CompoundTag();
+        NbtUtils.addCurrentDataVersion(tag);
+
         int index = 0;
         for (final ItemStack stack : itemStack) {
-            list.set(index, CraftItemStack.asNMSCopy(stack));
-            index++;
+            final var nmsCopy = CraftItemStack.asNMSCopy(stack);
+            tag.put(index + "", nmsCopy.save(MinecraftServer.getServer().registryAccess()));
+            ++index;
         }
-        var tag = ContainerHelper.saveAllItems(new CompoundTag(), list);
 
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            try (DataOutputStream dos = new DataOutputStream(baos)) {
-                NbtIo.write(tag, dos);
-            }
+        try (final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            final DataOutputStream dataStream = new DataOutputStream(baos);
+            NbtIo.writeCompressed(tag, dataStream);
             return baos.toByteArray();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -163,44 +148,41 @@ public class PineappleNMSImpl implements PineappleNMS {
 
     @Override
     public Collection<ItemStack> itemsFromBytes(@NotNull final byte[] bytes, final int size) {
-        try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes)) {
-            try (DataInputStream dis = new DataInputStream(bais)) {
-                var items = NbtIo.read(dis);
+        final List<ItemStack> items = new ArrayList<>(size);
+        try (final ByteArrayInputStream bais = new ByteArrayInputStream(bytes)) {
+            final DataInputStream dataStream = new DataInputStream(bais);
+            final var tempTag  = NbtIo.readCompressed(dataStream, NbtAccounter.unlimitedHeap());
+            final int dataVersion = NbtUtils.getDataVersion(tempTag, -1);
 
-                NonNullList<net.minecraft.world.item.ItemStack> list = NonNullList.withSize(size, net.minecraft.world.item.ItemStack.EMPTY);
-                ContainerHelper.loadAllItems(items, list);
-                return list.stream().map(CraftItemStack::asCraftMirror).collect(Collectors.toList());
+            final DataFixer fixer = MinecraftServer.getServer().getFixerUpper();
+            final int currentVersion = SharedConstants.getCurrentVersion().getDataVersion().getVersion();
+            for (final String allKey : tempTag.getAllKeys()) {
+                Integer parsed = Ints.tryParse(allKey);
+                if (parsed == null) {
+                    continue;
+                }
+                final CompoundTag itemTag = tempTag.getCompound(allKey);
+                final Dynamic<Tag> result = fixer.update(References.ITEM_STACK, new Dynamic<>(NbtOps.INSTANCE, itemTag), dataVersion, currentVersion);
+                items.add(CraftItemStack.asCraftMirror(net.minecraft.world.item.ItemStack.parseOptional(MinecraftServer.getServer().registryAccess(), (CompoundTag) result.getValue())));
             }
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        return items;
     }
 
     @NotNull
     @Override
     public byte[] itemToBytes(@NotNull final ItemStack itemStack) {
-        CraftItemStack craft = ensureCraftItemStack(itemStack);
-        CompoundTag tag = getItemStackHandle(craft).getOrCreateTag();
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            try (DataOutputStream dos = new DataOutputStream(baos)) {
-                NbtIo.write(tag, dos);
-            }
-            return baos.toByteArray();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        throw new UnsupportedOperationException("The method PineappleNMS#itemToBytes is no longer supported in 1.20.5");
     }
 
     @NotNull
     @Override
     public ItemStack itemFromBytes(@NotNull final byte[] bytes) {
-        try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes)) {
-            try (DataInputStream dis = new DataInputStream(bais)) {
-                return CraftItemStack.asCraftMirror(net.minecraft.world.item.ItemStack.of(NbtIo.read(dis)));
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        throw new UnsupportedOperationException("The method PineappleNMS#itemFromBytes is no longer supported in 1.20.5");
     }
 
     @Override

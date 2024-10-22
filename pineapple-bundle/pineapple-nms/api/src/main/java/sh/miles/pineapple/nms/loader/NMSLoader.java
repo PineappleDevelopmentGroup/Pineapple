@@ -1,10 +1,13 @@
 package sh.miles.pineapple.nms.loader;
 
 import com.google.common.base.Preconditions;
+import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.ReflectionUtils;
 import sh.miles.pineapple.nms.annotations.NMS;
 import sh.miles.pineapple.nms.api.PineappleNMS;
 import sh.miles.pineapple.nms.loader.exception.VersionNotSupportedException;
+
+import java.util.logging.Logger;
 
 /**
  * Provides Management for NMS Classes
@@ -24,14 +27,19 @@ public final class NMSLoader {
     /**
      * Activates PineappleNMS and supplies a loader to the NMSLoader
      *
+     * @param logger the logger to log with
      * @throws IllegalStateException        if PineappleNMS is already active
      * @throws VersionNotSupportedException given the server is on is not supported
      * @since 1.0.0-SNAPSHOT
      */
     @NMS
-    public void activate() throws IllegalStateException, VersionNotSupportedException {
+    public void activate(@NotNull final Logger logger) throws IllegalStateException, VersionNotSupportedException {
         Preconditions.checkState(!this.active, "You can not active PineappleNMS while it is active");
         try {
+            if (MinecraftVersion.CURRENT_DEPRECATED) {
+                logger.warning("You are using Minecraft Version %s which PineappleLib is now deprecating and will be removing support for in 1.21.3.".formatted(MinecraftVersion.CURRENT.getName()));
+                logger.warning("We recommend you update your server's version as newer versions of the game contain bug and security fixes.");
+            }
             var clazz = Class.forName(PATH.formatted(MinecraftVersion.CURRENT.getProtocolVersion(), PineappleNMS.class.getSimpleName() + "Impl"));
             this.handler = (PineappleNMS) ReflectionUtils.safeInvoke(ReflectionUtils.getConstructor(clazz, new Class[0]));
         } catch (ClassNotFoundException e) {

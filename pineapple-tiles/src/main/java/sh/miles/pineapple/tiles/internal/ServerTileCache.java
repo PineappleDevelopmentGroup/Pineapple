@@ -4,7 +4,6 @@ import com.google.common.collect.Streams;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.ApiStatus;
@@ -15,7 +14,6 @@ import sh.miles.pineapple.tiles.api.pos.ChunkPos;
 import sh.miles.pineapple.tiles.api.pos.ChunkRelPos;
 import sh.miles.pineapple.tiles.internal.util.TileChunkIOUtils;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -117,6 +115,13 @@ public class ServerTileCache implements Iterable<Map.Entry<ChunkRelPos, Tile>> {
         return evict(location.getChunk(), ChunkRelPos.fromLocation(location));
     }
 
+    /**
+     * Evicts a tile from the given chunk and position
+     *
+     * @param chunk  the chunk to remove a  tile from
+     * @param relPos the relative position to remove the tile from
+     * @return the removed tile, otherwise null
+     */
     @Nullable
     public Tile evict(@NotNull final Chunk chunk, @NotNull final ChunkRelPos relPos) {
         final ChunkPos position = ChunkPos.fromChunk(chunk);

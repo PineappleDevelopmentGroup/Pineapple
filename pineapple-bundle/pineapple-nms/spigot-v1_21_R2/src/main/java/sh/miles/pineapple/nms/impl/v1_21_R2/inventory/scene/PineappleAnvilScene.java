@@ -1,12 +1,12 @@
-package sh.miles.pineapple.nms.impl.v1_20_R3.inventory.scene;
+package sh.miles.pineapple.nms.impl.v1_21_R2.inventory.scene;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.inventory.Slot;
-import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftInventoryView;
+import org.bukkit.craftbukkit.v1_21_R2.inventory.CraftInventoryView;
 import sh.miles.pineapple.nms.api.menu.scene.AnvilScene;
 
-@Deprecated(forRemoval = true)
 public class PineappleAnvilScene extends PineappleMenuScene<AnvilMenu> implements AnvilScene {
 
     public PineappleAnvilScene(final CraftInventoryView view) {
@@ -23,7 +23,7 @@ public class PineappleAnvilScene extends PineappleMenuScene<AnvilMenu> implement
         container.itemName = text;
         final Slot slot = container.getSlot(0);
         if (slot.hasItem()) {
-            slot.getItem().setHoverName(Component.literal(text));
+            slot.getItem().set(DataComponents.CUSTOM_NAME, Component.literal(text));
         }
     }
 

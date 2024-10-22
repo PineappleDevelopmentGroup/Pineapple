@@ -8,6 +8,7 @@ import sh.miles.pineapple.exception.AnomalyFactory;
 import sh.miles.pineapple.gui.manage.GuiManager;
 import sh.miles.pineapple.nms.annotations.NMS;
 import sh.miles.pineapple.nms.api.PineappleNMS;
+import sh.miles.pineapple.nms.loader.MinecraftVersion;
 import sh.miles.pineapple.nms.loader.NMSLoader;
 import sh.miles.pineapple.util.serialization.adapter.SerializedAdapterRegistry;
 import sh.miles.pineapple.util.serialization.bridges.yaml.YamlSerializedBridge;
@@ -46,7 +47,7 @@ public final class PineappleLib {
     private PineappleLib(final Plugin plugin, final boolean useNms) {
         this.plugin = plugin;
         if (useNms) {
-            NMSLoader.INSTANCE.activate();
+            NMSLoader.INSTANCE.activate(plugin.getLogger());
             this.nmsProvider = NMSLoader.INSTANCE.getPineapple();
         }
         this.commandRegistry = new CommandRegistry(plugin);

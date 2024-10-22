@@ -14,5 +14,6 @@ include(
     "pineapple-bundle:pineapple-nms:api",
     "pineapple-bundle:pineapple-nms:spigot-v1_20_R3",
     "pineapple-bundle:pineapple-nms:spigot-v1_20_R4",
-    "pineapple-bundle:pineapple-nms:spigot-v1_21_R1"
+    "pineapple-bundle:pineapple-nms:spigot-v1_21_R1",
+    "pineapple-bundle:pineapple-nms:spigot-v1_21_R2"
 )

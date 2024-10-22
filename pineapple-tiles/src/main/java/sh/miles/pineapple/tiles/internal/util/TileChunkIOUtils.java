@@ -8,7 +8,6 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import sh.miles.pineapple.PineappleLib;
 import sh.miles.pineapple.tiles.api.Tile;
 import sh.miles.pineapple.tiles.api.TileType;
 import sh.miles.pineapple.tiles.api.TileTypeRegistry;
@@ -100,8 +99,8 @@ public final class TileChunkIOUtils {
      */
     public static boolean deleteTile(@NotNull final ServerTileCache cache, @NotNull final Chunk chunk, @NotNull final ChunkRelPos pos, boolean hard) {
         final Tile tile = cache.evict(chunk, pos);
-        if (tile == null) {
-            if (!hard) return false;
+        if (tile == null && !hard) {
+            return false;
         }
 
         final PersistentDataContainer chunkContainer = chunk.getPersistentDataContainer();

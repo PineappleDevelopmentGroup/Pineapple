@@ -7,7 +7,7 @@ pineapplechat-version = "1.0.0-SNAPSHOT"
 spigot-api-version = "1.20.4-R0.1-SNAPSHOT"
 # Plugins
 kotlin-jvm-ver = "1.9.22"
-shadow-ver = "8.1.8"
+shadow-ver = "8.3.3"
 javadoc-ver = "8.6"
 # Plugins End
 
@@ -24,7 +24,6 @@ spigot-api = { module = "org.spigotmc:spigot-api", version.ref = "spigot-api-ver
 
 [plugins]
 jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-jvm-ver" }
-shadow = { id = "io.github.goooler.shadow", version.ref = "shadow-ver" }
-# TODO: We need to use the GradleUp version once they publish a stable version https://github.com/GradleUp/shadow
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow-ver" }
 javadoc = { id = "io.freefair.aggregate-javadoc-jar", version.ref = "javadoc-ver" }
 

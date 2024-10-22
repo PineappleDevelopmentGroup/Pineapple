@@ -1,18 +1,17 @@
-package sh.miles.pineapple.nms.impl.v1_20_R3.internal;
+package sh.miles.pineapple.nms.impl.v1_21_R2.internal;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.network.chat.Component;
-import org.bukkit.craftbukkit.v1_20_R3.util.CraftChatMessage;
+import org.bukkit.craftbukkit.v1_21_R2.util.CraftChatMessage;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 
-@Deprecated(forRemoval = true)
 public final class ComponentUtils {
 
     private static final Gson gson;

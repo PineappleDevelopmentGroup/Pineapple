@@ -1,7 +1,6 @@
 package sh.miles.pineapple.tiles.api;
 
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.event.block.BlockBreakEvent;

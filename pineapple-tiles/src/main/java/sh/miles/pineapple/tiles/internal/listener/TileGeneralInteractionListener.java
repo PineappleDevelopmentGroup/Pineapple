@@ -17,7 +17,6 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import sh.miles.pineapple.PineappleLib;
 import sh.miles.pineapple.collection.Pair;
 import sh.miles.pineapple.tiles.api.Tile;
 import sh.miles.pineapple.tiles.api.TileType;
@@ -28,7 +27,6 @@ import sh.miles.pineapple.tiles.internal.util.TileKeys;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * The listeners related to general tile interaction
@@ -161,6 +159,11 @@ public final class TileGeneralInteractionListener implements Listener {
         }
     }
 
+    /**
+     * _
+     *
+     * @param event _
+     */
     @EventHandler
     public void onEntityExplode(@NotNull final EntityExplodeEvent event) {
         final List<Pair<Tile, Block>> explodedTiles = event.blockList().stream()
