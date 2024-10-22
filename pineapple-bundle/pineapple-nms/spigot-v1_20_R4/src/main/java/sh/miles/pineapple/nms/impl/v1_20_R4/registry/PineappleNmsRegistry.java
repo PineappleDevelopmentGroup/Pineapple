@@ -17,7 +17,6 @@ import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
-@Deprecated(forRemoval = true)
 public final class PineappleNmsRegistry<P extends RegistryKey<NamespacedKey>, M> extends FrozenRegistry<P, NamespacedKey> {
 
     public PineappleNmsRegistry(Registry<M> minecraftRegistry, BiFunction<NamespacedKey, M, P> minecraftToBukkit) {

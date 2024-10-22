@@ -41,6 +41,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Deprecated(forRemoval = true)
 public class PineappleNMSImpl implements PineappleNMS {
 
     private static final MethodHandle itemStackHandle;

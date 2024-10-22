@@ -11,6 +11,7 @@ import sh.miles.pineapple.collection.registry.RegistryKey;
 import sh.miles.pineapple.nms.api.PineappleUnsafe;
 import sh.miles.pineapple.nms.impl.v1_20_R3.registry.PineappleNmsRegistry;
 
+@Deprecated(forRemoval = true)
 public class PineappleUnsafeImpl implements PineappleUnsafe {
 
     @SuppressWarnings("unchecked")

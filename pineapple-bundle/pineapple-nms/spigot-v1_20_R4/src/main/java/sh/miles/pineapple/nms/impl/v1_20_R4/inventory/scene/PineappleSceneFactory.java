@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-@Deprecated(forRemoval = true)
 public final class PineappleSceneFactory {
 
     private static final Map<MenuType<?>, Function<CraftInventoryView, MenuScene>> factory = new HashMap<>();

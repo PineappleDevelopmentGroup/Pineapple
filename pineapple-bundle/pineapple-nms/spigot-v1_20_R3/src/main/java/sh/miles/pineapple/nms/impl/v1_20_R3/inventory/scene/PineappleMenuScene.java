@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.nms.api.menu.scene.MenuScene;
 import sh.miles.pineapple.nms.impl.v1_20_R3.internal.ComponentUtils;
 
+@Deprecated(forRemoval = true)
 public class PineappleMenuScene<T extends AbstractContainerMenu> implements MenuScene {
 
     private final CraftInventoryView view;

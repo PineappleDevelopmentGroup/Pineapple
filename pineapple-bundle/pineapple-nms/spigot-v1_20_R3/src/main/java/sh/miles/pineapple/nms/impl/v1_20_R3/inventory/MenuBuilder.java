@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 
+@Deprecated(forRemoval = true)
 public class MenuBuilder {
 
     public static final MenuBuilder INSTANCE = new MenuBuilder();

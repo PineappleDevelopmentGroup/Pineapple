@@ -13,6 +13,7 @@ import sh.miles.pineapple.nms.api.menu.scene.MenuScene;
 import sh.miles.pineapple.nms.impl.v1_20_R3.internal.ComponentUtils;
 import sh.miles.pineapple.nms.impl.v1_20_R3.inventory.scene.PineappleSceneFactory;
 
+@Deprecated(forRemoval = true)
 public record PineappleMenuType<T extends MenuScene>(NamespacedKey key, net.minecraft.world.inventory.MenuType<?> handle) implements MenuType<T> {
 
     @Override

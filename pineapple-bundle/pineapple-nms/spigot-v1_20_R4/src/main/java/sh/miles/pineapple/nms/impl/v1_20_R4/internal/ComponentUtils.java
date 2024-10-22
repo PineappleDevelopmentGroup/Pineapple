@@ -12,7 +12,6 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 
-@Deprecated(forRemoval = true)
 public final class ComponentUtils {
 
     private static final Gson gson;

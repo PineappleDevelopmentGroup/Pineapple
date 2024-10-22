@@ -7,7 +7,6 @@ import net.minecraft.world.inventory.Slot;
 import org.bukkit.craftbukkit.v1_20_R4.inventory.CraftInventoryView;
 import sh.miles.pineapple.nms.api.menu.scene.AnvilScene;
 
-@Deprecated(forRemoval = true)
 public class PineappleAnvilScene extends PineappleMenuScene<AnvilMenu> implements AnvilScene {
 
     public PineappleAnvilScene(final CraftInventoryView view) {

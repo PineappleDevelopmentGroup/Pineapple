@@ -5,7 +5,6 @@ import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.nms.api.packet.PineapplePackets;
 
-@Deprecated(forRemoval = true)
 public class PineapplePacketsImpl implements PineapplePackets {
 
     @Override
