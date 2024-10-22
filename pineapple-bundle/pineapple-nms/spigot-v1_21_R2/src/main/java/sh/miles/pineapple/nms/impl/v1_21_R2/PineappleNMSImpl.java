@@ -1,4 +1,4 @@
-package sh.miles.pineapple.nms.impl.v1_20_R4;
+package sh.miles.pineapple.nms.impl.v1_21_R2;
 
 import com.google.common.base.Preconditions;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -13,21 +13,22 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.component.ItemLore;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_20_R4.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R4.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_20_R4.event.CraftEventFactory;
-import org.bukkit.craftbukkit.v1_20_R4.inventory.CraftContainer;
-import org.bukkit.craftbukkit.v1_20_R4.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_21_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_21_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_21_R2.event.CraftEventFactory;
+import org.bukkit.craftbukkit.v1_21_R2.inventory.CraftContainer;
+import org.bukkit.craftbukkit.v1_21_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import sh.miles.pineapple.ReflectionUtils;
 import sh.miles.pineapple.nms.api.PineappleNMS;
 import sh.miles.pineapple.nms.api.PineappleUnsafe;
-import sh.miles.pineapple.nms.impl.v1_20_R4.internal.ComponentUtils;
-import sh.miles.pineapple.nms.impl.v1_20_R4.packet.PineapplePacketsImpl;
+import sh.miles.pineapple.nms.impl.v1_21_R2.internal.ComponentUtils;
+import sh.miles.pineapple.nms.impl.v1_21_R2.packet.PineapplePacketsImpl;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -40,7 +41,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Deprecated(forRemoval = true)
 public class PineappleNMSImpl implements PineappleNMS {
 
     private static final MethodHandle itemStackHandle;
@@ -61,6 +61,7 @@ public class PineappleNMSImpl implements PineappleNMS {
         this.packets = new PineapplePacketsImpl();
     }
 
+    @Nullable
     @Override
     public InventoryView openInventory(@NotNull final Player player, @NotNull final Inventory inventory, @NotNull final BaseComponent title) {
         ServerPlayer nms = ((CraftPlayer) player).getHandle();

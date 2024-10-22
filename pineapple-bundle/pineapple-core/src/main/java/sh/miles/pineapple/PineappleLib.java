@@ -8,6 +8,7 @@ import sh.miles.pineapple.exception.AnomalyFactory;
 import sh.miles.pineapple.gui.manage.GuiManager;
 import sh.miles.pineapple.nms.annotations.NMS;
 import sh.miles.pineapple.nms.api.PineappleNMS;
+import sh.miles.pineapple.nms.loader.MinecraftVersion;
 import sh.miles.pineapple.nms.loader.NMSLoader;
 import sh.miles.pineapple.util.serialization.adapter.SerializedAdapterRegistry;
 import sh.miles.pineapple.util.serialization.bridges.yaml.YamlSerializedBridge;
@@ -48,6 +49,10 @@ public final class PineappleLib {
         if (useNms) {
             NMSLoader.INSTANCE.activate();
             this.nmsProvider = NMSLoader.INSTANCE.getPineapple();
+            if (MinecraftVersion.CURRENT.equals(MinecraftVersion.fromArray(new int[] {1, 20, 4}, "v1_20_R3"))) {
+                getLogger().warning("You are using Minecraft Version 1.20.4 which PineappleLib is now deprecating and will be removing support for in 1.21.3.");
+                getLogger().warning("We recommend you update your server's version as newer versions of the game contain bug and security fixes.");
+            }
         }
         this.commandRegistry = new CommandRegistry(plugin);
         this.configurationManager = new ConfigManager();

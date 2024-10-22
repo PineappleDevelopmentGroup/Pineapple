@@ -28,6 +28,7 @@ public class MinecraftVersion {
         temp.put("1.20.6", new MinecraftVersion("1.20.6", "v1_20_R4"));
         temp.put("1.21", new MinecraftVersion("1.21", "v1_21_R1"));
         temp.put("1.21.1", new MinecraftVersion("1.21.1", "v1_21_R1"));
+        temp.put("1.21.2", new MinecraftVersion("1.21.2", "v1_21_R2"));
         protocolMap = ImmutableMap.copyOf(temp);
 
         String[] split = Bukkit.getBukkitVersion().split("-")[0].split("\\.");

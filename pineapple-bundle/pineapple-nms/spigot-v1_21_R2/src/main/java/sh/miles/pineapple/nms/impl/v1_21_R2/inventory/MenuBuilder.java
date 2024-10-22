@@ -1,4 +1,4 @@
-package sh.miles.pineapple.nms.impl.v1_20_R4.inventory;
+package sh.miles.pineapple.nms.impl.v1_21_R2.inventory;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -19,13 +19,12 @@ import net.minecraft.world.level.block.entity.BlastFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.SmokerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.bukkit.craftbukkit.v1_20_R4.entity.CraftHumanEntity;
+import org.bukkit.craftbukkit.v1_21_R2.entity.CraftHumanEntity;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-@Deprecated(forRemoval = true)
 public class MenuBuilder {
 
     public static final MenuBuilder INSTANCE = new MenuBuilder();

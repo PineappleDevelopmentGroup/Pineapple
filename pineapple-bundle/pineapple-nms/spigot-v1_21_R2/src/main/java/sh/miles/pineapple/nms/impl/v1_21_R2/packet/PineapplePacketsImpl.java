@@ -1,11 +1,10 @@
-package sh.miles.pineapple.nms.impl.v1_20_R4.packet;
+package sh.miles.pineapple.nms.impl.v1_21_R2.packet;
 
-import org.bukkit.craftbukkit.v1_20_R4.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_21_R2.entity.CraftLivingEntity;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.nms.api.packet.PineapplePackets;
 
-@Deprecated(forRemoval = true)
 public class PineapplePacketsImpl implements PineapplePackets {
 
     @Override

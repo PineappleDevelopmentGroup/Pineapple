@@ -28,12 +28,14 @@ open class PineappleNMS : DefaultTask() {
         "1.20.4" to "v1_20_R3",
         "1.20.5" to "v1_20_R4",
         "1.20.6" to "v1_20_R4",
-        "1.21" to "v1_21_R1"
+        "1.21" to "v1_21_R1",
+        "1.21.1" to "v1_21_R1",
+        "1.21.2" to "v1_21_R2"
     )
 
     @get:Input
     @set:Option(option = "source", description = "sets the version to copy the NMS source from")
-    var source: String = "1.20.6"
+    var source: String = "1.21.1"
 
     @get:Input
     @set:Option(option = "target", description = "the version to copy the NMS implementation to")

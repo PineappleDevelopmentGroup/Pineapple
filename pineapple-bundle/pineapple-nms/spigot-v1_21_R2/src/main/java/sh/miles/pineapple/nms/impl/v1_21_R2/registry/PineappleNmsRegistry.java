@@ -1,4 +1,4 @@
-package sh.miles.pineapple.nms.impl.v1_20_R4.registry;
+package sh.miles.pineapple.nms.impl.v1_21_R2.registry;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -6,18 +6,17 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
-import org.bukkit.craftbukkit.v1_20_R4.CraftServer;
-import org.bukkit.craftbukkit.v1_20_R4.util.CraftNamespacedKey;
+import org.bukkit.craftbukkit.v1_21_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_21_R2.util.CraftNamespacedKey;
 import sh.miles.pineapple.collection.registry.FrozenRegistry;
 import sh.miles.pineapple.collection.registry.RegistryKey;
 import sh.miles.pineapple.nms.api.menu.MenuType;
-import sh.miles.pineapple.nms.impl.v1_20_R4.inventory.PineappleMenuType;
+import sh.miles.pineapple.nms.impl.v1_21_R2.inventory.PineappleMenuType;
 
 import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
-@Deprecated(forRemoval = true)
 public final class PineappleNmsRegistry<P extends RegistryKey<NamespacedKey>, M> extends FrozenRegistry<P, NamespacedKey> {
 
     public PineappleNmsRegistry(Registry<M> minecraftRegistry, BiFunction<NamespacedKey, M, P> minecraftToBukkit) {
@@ -26,7 +25,8 @@ public final class PineappleNmsRegistry<P extends RegistryKey<NamespacedKey>, M>
                             .stream()
                             .collect(Collectors.toMap(
                                     CraftNamespacedKey::fromMinecraft,
-                                    (ResourceLocation key) -> minecraftToBukkit.apply(CraftNamespacedKey.fromMinecraft(key), minecraftRegistry.get(key))
+                                    (ResourceLocation key) -> minecraftToBukkit.apply(CraftNamespacedKey.fromMinecraft(key), minecraftRegistry.get(key).orElseThrow()
+                                            .value())
                             ));
                 }
         );
@@ -44,7 +44,7 @@ public final class PineappleNmsRegistry<P extends RegistryKey<NamespacedKey>, M>
     public static <P extends RegistryKey<NamespacedKey>> FrozenRegistry<?, ?> makeRegistry(Class<? super P> interfaceClass) {
         final RegistryAccess access = ((CraftServer) Bukkit.getServer()).getHandle().getServer().registryAccess();
         if (interfaceClass == MenuType.class) {
-            return new PineappleNmsRegistry<>(access.registryOrThrow(Registries.MENU), PineappleMenuType::new);
+            return new PineappleNmsRegistry<>(access.lookupOrThrow(Registries.MENU), PineappleMenuType::new);
         }
 
         throw new IllegalStateException("No such registry %s found".formatted(interfaceClass.getName()));

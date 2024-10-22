@@ -1,19 +1,18 @@
-package sh.miles.pineapple.nms.impl.v1_20_R4.inventory;
+package sh.miles.pineapple.nms.impl.v1_21_R2.inventory;
 
 import com.google.common.base.Preconditions;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import org.bukkit.NamespacedKey;
-import org.bukkit.craftbukkit.v1_20_R4.entity.CraftHumanEntity;
-import org.bukkit.craftbukkit.v1_20_R4.inventory.CraftInventoryView;
+import org.bukkit.craftbukkit.v1_21_R2.entity.CraftHumanEntity;
+import org.bukkit.craftbukkit.v1_21_R2.inventory.CraftInventoryView;
 import org.bukkit.entity.HumanEntity;
 import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.nms.api.menu.MenuType;
 import sh.miles.pineapple.nms.api.menu.scene.MenuScene;
-import sh.miles.pineapple.nms.impl.v1_20_R4.internal.ComponentUtils;
-import sh.miles.pineapple.nms.impl.v1_20_R4.inventory.scene.PineappleSceneFactory;
+import sh.miles.pineapple.nms.impl.v1_21_R2.internal.ComponentUtils;
+import sh.miles.pineapple.nms.impl.v1_21_R2.inventory.scene.PineappleSceneFactory;
 
-@Deprecated(forRemoval = true)
 public record PineappleMenuType<T extends MenuScene>(NamespacedKey key, net.minecraft.world.inventory.MenuType<?> handle) implements MenuType<T> {
 
     @Override
