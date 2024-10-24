@@ -124,6 +124,8 @@ public class PineappleNMSImpl implements PineappleNMS {
         return lore.lines().stream().map(ComponentUtils::toBungeeChat).collect(Collectors.toList());
     }
 
+    private static final String EMPTY_TAG = "pineapple_empty_item_tag";
+
     @Override
     public byte[] itemsToBytes(@NotNull final Collection<ItemStack> itemStack) {
         final var tag = new CompoundTag();
@@ -132,6 +134,13 @@ public class PineappleNMSImpl implements PineappleNMS {
         int index = 0;
         for (final ItemStack stack : itemStack) {
             final var nmsCopy = CraftItemStack.asNMSCopy(stack);
+            if (nmsCopy.isEmpty()) {
+                final CompoundTag empty = new CompoundTag();
+                empty.putBoolean(EMPTY_TAG, true);
+                tag.put(index + "", empty);
+                ++index;
+                continue;
+            }
             tag.put(index + "", nmsCopy.save(MinecraftServer.getServer().registryAccess()));
             ++index;
         }
@@ -150,7 +159,7 @@ public class PineappleNMSImpl implements PineappleNMS {
         final List<ItemStack> items = new ArrayList<>(size);
         try (final ByteArrayInputStream bais = new ByteArrayInputStream(bytes)) {
             final DataInputStream dataStream = new DataInputStream(bais);
-            final var tempTag  = NbtIo.readCompressed(dataStream, NbtAccounter.unlimitedHeap());
+            final var tempTag = NbtIo.readCompressed(dataStream, NbtAccounter.unlimitedHeap());
             final int dataVersion = NbtUtils.getDataVersion(tempTag, -1);
 
             final DataFixer fixer = MinecraftServer.getServer().getFixerUpper();
@@ -161,6 +170,10 @@ public class PineappleNMSImpl implements PineappleNMS {
                     continue;
                 }
                 final CompoundTag itemTag = tempTag.getCompound(allKey);
+                if (itemTag.contains(EMPTY_TAG)) {
+                    items.add(CraftItemStack.asCraftMirror(net.minecraft.world.item.ItemStack.EMPTY));
+                    continue;
+                }
                 final Dynamic<Tag> result = fixer.update(References.ITEM_STACK, new Dynamic<>(NbtOps.INSTANCE, itemTag), dataVersion, currentVersion);
                 items.add(CraftItemStack.asCraftMirror(net.minecraft.world.item.ItemStack.parseOptional(MinecraftServer.getServer().registryAccess(), (CompoundTag) result.getValue())));
             }
