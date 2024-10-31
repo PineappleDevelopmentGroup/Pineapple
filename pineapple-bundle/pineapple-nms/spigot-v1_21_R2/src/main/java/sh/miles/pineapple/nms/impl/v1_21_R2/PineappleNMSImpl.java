@@ -49,7 +49,9 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandle;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class PineappleNMSImpl implements PineappleNMS {
@@ -157,7 +159,7 @@ public class PineappleNMSImpl implements PineappleNMS {
 
     @Override
     public Collection<ItemStack> itemsFromBytes(@NotNull final byte[] bytes, final int size) {
-        final List<ItemStack> items = new ArrayList<>(size);
+        final Map<Integer, ItemStack> items = new HashMap<>(size);
         try (final ByteArrayInputStream bais = new ByteArrayInputStream(bytes)) {
             final DataInputStream dataStream = new DataInputStream(bais);
             final var tempTag = NbtIo.readCompressed(dataStream, NbtAccounter.unlimitedHeap());
@@ -172,18 +174,18 @@ public class PineappleNMSImpl implements PineappleNMS {
                 }
                 final CompoundTag itemTag = tempTag.getCompound(allKey);
                 if (itemTag.contains(EMPTY_TAG)) {
-                    items.add(CraftItemStack.asCraftMirror(net.minecraft.world.item.ItemStack.EMPTY));
+                    items.put(parsed, CraftItemStack.asCraftMirror(net.minecraft.world.item.ItemStack.EMPTY));
                     continue;
                 }
                 final Dynamic<Tag> result = fixer.update(References.ITEM_STACK, new Dynamic<>(NbtOps.INSTANCE, itemTag), dataVersion, currentVersion);
-                items.add(CraftItemStack.asCraftMirror(net.minecraft.world.item.ItemStack.parseOptional(MinecraftServer.getServer().registryAccess(), (CompoundTag) result.getValue())));
+                items.put(parsed, CraftItemStack.asCraftMirror(net.minecraft.world.item.ItemStack.parseOptional(MinecraftServer.getServer().registryAccess(), (CompoundTag) result.getValue())));
             }
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        return items;
+        return items.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(Map.Entry::getValue).toList();
     }
 
     @NotNull
