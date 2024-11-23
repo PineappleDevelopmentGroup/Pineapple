@@ -77,15 +77,14 @@ tasks.build {
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            shadow {
-                artifact(tasks.aggregateJavadocJar)
-                afterEvaluate {
-                    artifact(tasks.named("aggregateSources"))
-                }
-
-                group = rootProject.group
-                version = project.version as String
+            shadow.component(this)
+            artifact(tasks.aggregateJavadocJar)
+            afterEvaluate {
+                artifact(tasks.named("aggregateSources"))
             }
+
+            group = rootProject.group
+            version = project.version as String
         }
     }
 }
