@@ -33,6 +33,7 @@ public class MinecraftVersion {
         temp.put("1.21", new MinecraftVersion("1.21", "v1_21_R1"));
         temp.put("1.21.1", new MinecraftVersion("1.21.1", "v1_21_R1"));
         temp.put("1.21.2", new MinecraftVersion("1.21.2", "v1_21_R2"));
+        temp.put("1.21.3", new MinecraftVersion("1.21.3", "v1_21_R2"));
         protocolMap = ImmutableMap.copyOf(temp);
         deprecated = ImmutableSet.<MinecraftVersion>builder().add(protocolMap.get("1.20.4")).build();
 
