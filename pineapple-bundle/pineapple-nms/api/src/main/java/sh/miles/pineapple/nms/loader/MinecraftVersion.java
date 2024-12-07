@@ -27,15 +27,13 @@ public class MinecraftVersion {
 
     static {
         final Map<String, MinecraftVersion> temp = new HashMap<>();
-        temp.put("1.20.4", new MinecraftVersion("1.20.4", "v1_20_R3"));
-        temp.put("1.20.5", new MinecraftVersion("1.20.5", "v1_20_R4"));
-        temp.put("1.20.6", new MinecraftVersion("1.20.6", "v1_20_R4"));
         temp.put("1.21", new MinecraftVersion("1.21", "v1_21_R1"));
         temp.put("1.21.1", new MinecraftVersion("1.21.1", "v1_21_R1"));
         temp.put("1.21.2", new MinecraftVersion("1.21.2", "v1_21_R2"));
         temp.put("1.21.3", new MinecraftVersion("1.21.3", "v1_21_R2"));
+        temp.put("1.21.4", new MinecraftVersion("1.21.4", "v1_21_R3"));
         protocolMap = ImmutableMap.copyOf(temp);
-        deprecated = ImmutableSet.<MinecraftVersion>builder().add(protocolMap.get("1.20.4")).build();
+        deprecated = ImmutableSet.<MinecraftVersion>builder().build(); // No deprecated versions currently, 1.21 starts deprecation upon 1.22 release
 
         String[] split = Bukkit.getBukkitVersion().split("-")[0].split("\\.");
         final int major = Integer.parseInt(split[0]);

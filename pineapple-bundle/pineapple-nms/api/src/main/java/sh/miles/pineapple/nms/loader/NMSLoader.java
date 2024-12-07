@@ -37,7 +37,7 @@ public final class NMSLoader {
         Preconditions.checkState(!this.active, "You can not active PineappleNMS while it is active");
         try {
             if (MinecraftVersion.CURRENT_DEPRECATED) {
-                logger.warning("You are using Minecraft Version %s which PineappleLib is now deprecating and will be removing support for in 1.21.3.".formatted(MinecraftVersion.CURRENT.getName()));
+                logger.warning("You are using Minecraft Version %s which PineappleLib is now deprecating and will be removing support for in 1.22.".formatted(MinecraftVersion.CURRENT.getName()));
                 logger.warning("We recommend you update your server's version as newer versions of the game contain bug and security fixes.");
             }
             var clazz = Class.forName(PATH.formatted(MinecraftVersion.CURRENT.getProtocolVersion(), PineappleNMS.class.getSimpleName() + "Impl"));
