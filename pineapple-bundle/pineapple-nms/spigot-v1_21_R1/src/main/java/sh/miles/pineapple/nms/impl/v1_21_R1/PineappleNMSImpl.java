@@ -187,18 +187,6 @@ public class PineappleNMSImpl implements PineappleNMS {
         return items.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(Map.Entry::getValue).toList();
     }
 
-    @NotNull
-    @Override
-    public byte[] itemToBytes(@NotNull final ItemStack itemStack) {
-        throw new UnsupportedOperationException("The method PineappleNMS#itemToBytes is no longer supported in 1.20.5");
-    }
-
-    @NotNull
-    @Override
-    public ItemStack itemFromBytes(@NotNull final byte[] bytes) {
-        throw new UnsupportedOperationException("The method PineappleNMS#itemFromBytes is no longer supported in 1.20.5");
-    }
-
     @Override
     public PineapplePacketsImpl getPackets() {
         return this.packets;

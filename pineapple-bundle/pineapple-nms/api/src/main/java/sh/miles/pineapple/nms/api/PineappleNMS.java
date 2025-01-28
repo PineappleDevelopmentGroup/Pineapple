@@ -71,28 +71,6 @@ public interface PineappleNMS {
     List<BaseComponent> getItemLore(@NotNull final ItemStack item);
 
     /**
-     * Converts the given ItemStack into bytes
-     *
-     * @param itemStack the item stack to convert to bytes
-     * @return the bytes
-     * @since 1.0.0-SNAPSHOT
-     * @deprecated use {@link #itemsToBytes(Collection)} instead
-     */
-    @Deprecated(forRemoval = true)
-    @NotNull byte[] itemToBytes(@NotNull final ItemStack itemStack);
-
-    /**
-     * Converts teh given bytes into an ItemStack
-     *
-     * @param bytes the bytes to convert into an ItemStack
-     * @return the ItemStack
-     * @since 1.0.0-SNAPSHOT
-     * @deprecated use {@link #itemsFromBytes(byte[], int)} instead
-     */
-    @Deprecated(forRemoval = true)
-    @NotNull ItemStack itemFromBytes(@NotNull final byte[] bytes);
-
-    /**
      * Converts the given ItemStack's into bytes
      *
      * @param itemStack the item stack to convert to bytes

@@ -30,7 +30,8 @@ open class PineappleNMS : DefaultTask() {
         "1.20.6" to "v1_20_R4",
         "1.21" to "v1_21_R1",
         "1.21.1" to "v1_21_R1",
-        "1.21.2" to "v1_21_R2"
+        "1.21.2" to "v1_21_R2",
+        "1.21.3" to "v1_21_R2"
     )
 
     @get:Input

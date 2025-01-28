@@ -76,11 +76,11 @@ tasks.build {
 
 publishing {
     publications {
-        create<MavenPublication>("Maven") {
+        create<MavenPublication>("maven") {
             shadow.component(this)
-            this.artifact(tasks.aggregateJavadocJar)
+            artifact(tasks.aggregateJavadocJar)
             afterEvaluate {
-                this@create.artifact(tasks.named("aggregateSources"))
+                artifact(tasks.named("aggregateSources"))
             }
 
             group = rootProject.group
