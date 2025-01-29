@@ -1,11 +1,15 @@
 plugins {
 //    id("pineapple-checkstyle")
     java
+    `pineapple-publishing-java`
 }
 
 java {
     withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
+
 
 dependencies {
     compileOnly("org.jetbrains:annotations-java5:24.0.1")
@@ -13,7 +17,13 @@ dependencies {
     compileOnly(project(":pineapple-common"))
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+publishing {
+    publications {
+        create<MavenPublication>("NMS-Api") {
+            from(components["java"])
+
+            group = rootProject.group
+            version = parent!!.version as String
+        }
+    }
 }

@@ -19,6 +19,13 @@ dependencyResolutionManagement {
 include(
     "pineapple-core",
     "pineapple-common",
+    "pineapple-kotlin",
     "pineapple-nms",
     "pineapple-nms:api"
 )
+
+file("pineapple-apis").listFiles()?.forEach { project ->
+    if (project.resolve("build.gradle.kts").exists()) run {
+        include("pineapple-apis:${project.name}")
+    }
+}

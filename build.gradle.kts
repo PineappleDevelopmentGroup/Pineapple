@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.shadow)
     kotlin("jvm")
-    id("maven-publish")
+    `maven-publish`
 }
 
 repositories {
@@ -13,6 +13,7 @@ repositories {
 dependencies {
     shadow(project(":pineapple-core"))
     shadow(project(":pineapple-common"))
+    shadow(project(":pineapple-nms:api"))
     
     // Deprecated
     shadow(libs.pineapplechat.core)
@@ -37,7 +38,7 @@ publishing {
     }
 
     publications {
-        create<MavenPublication>("Maven") {
+        create<MavenPublication>("Pineapple") {
             from(components["shadow"]) // or components["shadow"] in Kotlin DSL
 
 

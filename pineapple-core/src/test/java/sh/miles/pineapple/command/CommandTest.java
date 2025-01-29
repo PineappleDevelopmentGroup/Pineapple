@@ -1,7 +1,7 @@
 package sh.miles.pineapple.command;
 
-import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import org.junit.jupiter.api.Test;
+import org.mockbukkit.mockbukkit.entity.PlayerMock;
 import sh.miles.pineapple.BukkitTest;
 
 import java.util.List;

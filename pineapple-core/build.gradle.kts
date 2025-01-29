@@ -12,6 +12,7 @@ dependencies {
 
     testImplementation(libs.mockbukkit)
     testImplementation(project(":pineapple-common"))
+    testImplementation("com.google.code.gson:gson:2.11.0")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
 
@@ -19,6 +20,10 @@ dependencies {
     compileOnly(libs.pineapplechat.core)
     compileOnly(libs.pineapplechat.bungee)
     compileOnly(libs.pineapplechat.legacy)
+
+    testRuntimeOnly(libs.pineapplechat.core)
+    testRuntimeOnly(libs.pineapplechat.bungee)
+    testRuntimeOnly(libs.pineapplechat.legacy)
     // Deprecated End
 }
 
@@ -27,9 +32,13 @@ java {
     withSourcesJar()
 }
 
+tasks.test {
+    useJUnitPlatform()
+}
+
 publishing {
     publications {
-        create<MavenPublication>("PineappleCore") {
+        create<MavenPublication>("Core") {
             from(components["java"])
 
             group = rootProject.group

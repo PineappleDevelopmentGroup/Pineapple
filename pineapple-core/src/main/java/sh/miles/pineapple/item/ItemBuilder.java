@@ -18,7 +18,6 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.profile.PlayerProfile;
 import org.bukkit.profile.PlayerTextures;
@@ -416,22 +415,6 @@ public class ItemBuilder {
         }
 
         ((PotionMeta) this.meta).setColor(color);
-        return this;
-    }
-
-    /**
-     * Sets the PotionData on the given potion item
-     *
-     * @param data the PotionData
-     * @return the ItemBuilder
-     * @since 1.0.0-SNAPSHOT
-     */
-    public ItemBuilder potionData(PotionData data) {
-        if (!(this.meta instanceof PotionMeta)) {
-            return this;
-        }
-
-        ((PotionMeta) this.meta).setBasePotionData(data);
         return this;
     }
 
