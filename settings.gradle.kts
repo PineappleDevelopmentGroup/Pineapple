@@ -2,10 +2,23 @@ rootProject.name = "Pineapple"
 
 gradle.rootProject {
     group = "sh.miles"
+    version = "1.0.0"
+}
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+        maven("https://repo.papermc.io/repository/maven-public/")
+        maven("https://maven.miles.sh/pineapple")
+        maven("https://maven.miles.sh/libraries")
+
+    }
 }
 
 include(
-    "paper-bundle",
-    "paper-bundle:paper-core",
-    "paper-common"
+    "pineapple-core",
+    "pineapple-common",
+    "pineapple-nms",
+    "pineapple-nms:api"
 )
