@@ -1,5 +1,6 @@
 plugins {
     `pineapple-api`
+    `pineapple-checkstyle`
 }
 
 group = "sh.miles"

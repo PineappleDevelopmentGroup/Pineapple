@@ -1,7 +1,7 @@
 plugins {
-//    id("pineapple-checkstyle")
     java
     `pineapple-publishing-java`
+    `pineapple-checkstyle`
 }
 
 java {

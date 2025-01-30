@@ -5,7 +5,6 @@ paper-api-version = "1.21.4-R0.1-SNAPSHOT"
 # Plugins
 kotlin-jvm-ver = "2.0.21"
 shadow-ver = "9.0.0-beta6"
-javadoc-ver = "8.12"
 dokka-ver = "2.0.0"
 spotless-ver = "7.0.2"
 # Plugins End
@@ -15,13 +14,10 @@ mockbukkit = { module = "org.mockbukkit.mockbukkit:mockbukkit-v1.21", version.re
 kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-jvm-ver" }
 spigot-api = { module = "org.spigotmc:spigot-api", version.ref = "spigot-api-version" }
 paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper-api-version" }
-
 dokka = { module = "org.jetbrains.dokka:org.jetbrains.dokka.gradle.plugin", version.ref = "dokka-ver" }
 dokka-base = { module = "org.jetbrains.dokka:dokka-base", version.ref = "dokka-ver" }
-
-#spotless = { module = "com.diffplug.spotless:com.diffplug.spotless.gradle.plugin", version.ref = "spotless-ver"}
+spotless = { module = "com.diffplug.spotless:com.diffplug.spotless.gradle.plugin", version.ref = "spotless-ver"}
 
 [plugins]
 jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-jvm-ver" }
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow-ver" }
-javadoc = { id = "io.freefair.aggregate-javadoc-jar", version.ref = "javadoc-ver" }

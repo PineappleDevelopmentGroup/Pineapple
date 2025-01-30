@@ -1,6 +1,7 @@
 plugins {
     java
     `pineapple-publishing-java`
+    `pineapple-checkstyle`
 }
 
 version = "1.0.0"

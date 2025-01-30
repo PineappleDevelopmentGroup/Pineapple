@@ -135,7 +135,6 @@ public final class PineappleLib {
      * @param plugin the plugin
      * @since 1.0.0-SNAPSHOT
      */
-    @NMS
     public static void initialize(@NotNull final Plugin plugin) {
         instance = new PineappleLib(plugin, false);
     }

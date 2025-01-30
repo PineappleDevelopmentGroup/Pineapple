@@ -12,4 +12,5 @@ dependencies {
     implementation(libs.kotlin)
     implementation(libs.dokka)
     implementation(libs.dokka.base)
+    implementation(libs.spotless)
 }

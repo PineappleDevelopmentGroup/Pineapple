@@ -14,7 +14,15 @@ dependencies {
     shadow(project(":pineapple-core"))
     shadow(project(":pineapple-common"))
     shadow(project(":pineapple-nms:api"))
-    
+
+}
+
+tasks.publish {
+    dependsOn(subprojects.flatMap { it.getTasksByName("check", false) })
+}
+
+tasks.publishToMavenLocal {
+    dependsOn(subprojects.flatMap { it.getTasksByName("check", false) })
 }
 
 tasks.shadowJar {
