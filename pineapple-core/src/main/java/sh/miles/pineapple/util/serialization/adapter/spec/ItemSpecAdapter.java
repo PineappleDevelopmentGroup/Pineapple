@@ -443,7 +443,7 @@ class ItemSpecAdapter implements SerializedAdapter<ItemSpec> {
         if (object.getObject(STORED_ENCHANTMENTS) instanceof Some<SerializedObject> someEnchantments) {
             final var enchantmentObject = someEnchantments.some();
             for (final Map.Entry<String, SerializedElement> entry : enchantmentObject.entrySet()) {
-                storedEnchantments.put(Registry.ENCHANTMENT.get(NamespacedKey.fromString(entry.getKey())), entry.getValue().getAsPrimitive().getAsInt());
+                storedEnchantments.put(RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).getOrThrow(NamespacedKey.fromString(entry.getKey())), entry.getValue().getAsPrimitive().getAsInt());
             }
         }
 
