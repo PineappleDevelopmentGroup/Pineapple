@@ -15,16 +15,6 @@ public class ConfigManager {
         this.typeAdapterHandler = new TypeAdapterHandler();
     }
 
-    @Deprecated(forRemoval = true)
-    public ConfigWrapper create(File file, Class<?> clazz) {
-        return new ConfigWrapper(file, clazz);
-    }
-
-    @Deprecated(forRemoval = true)
-    public ConfigWrapper createDefault(File file, Class<?> clazz) {
-        return create(file, clazz).save(false).load();
-    }
-
     public void registerTypeAdapter(TypeAdapter<?, ?> adapter) {
         this.typeAdapterHandler.register(adapter);
     }
