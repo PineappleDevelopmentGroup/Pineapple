@@ -4,6 +4,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
+import net.kyori.adventure.key.Key;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
@@ -179,7 +180,7 @@ class ItemSpecAdapter implements SerializedAdapter<ItemSpec> {
                 for (final AttributeModifier attributeModifier : attributes.get(attribute)) {
                     modifiersArray.add(context.serialize(attributeModifier, AttributeModifier.class));
                 }
-                attributeObject.add(attribute.name(), modifiersArray);
+                attributeObject.add(attribute.key().asMinimalString(), modifiersArray);
             }
             item.add(ATTRIBUTES, attributeObject);
         }
@@ -365,7 +366,7 @@ class ItemSpecAdapter implements SerializedAdapter<ItemSpec> {
                 for (final SerializedElement modifierElement : modifiersArray) {
                     modifiers.add(context.deserialize(modifierElement, AttributeModifier.class));
                 }
-                attributes.putAll(Attribute.valueOf(entry.getKey().toUpperCase()), modifiers);
+                attributes.putAll(Registry.ATTRIBUTE.getOrThrow(Key.key(entry.getKey())), modifiers);
             }
         }
 
