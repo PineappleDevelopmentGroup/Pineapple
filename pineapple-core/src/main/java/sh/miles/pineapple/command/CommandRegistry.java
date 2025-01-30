@@ -29,7 +29,7 @@ public final class CommandRegistry {
      */
     public CommandRegistry(@NotNull final Plugin plugin) {
         this.plugin = plugin;
-        this.commandMap = ReflectionUtils.getField(Bukkit.getPluginManager(), "commandMap", CommandMap.class);
+        this.commandMap = Bukkit.getCommandMap();
         this.constructor = ReflectionUtils.getConstructor(PluginCommand.class, new Class[]{String.class, Plugin.class});
     }
 
