@@ -23,6 +23,7 @@ publishing {
             from(components["java"])
 
             group = rootProject.group
+            artifactId = "pineapple-nms-api"
             version = parent!!.version as String
         }
     }

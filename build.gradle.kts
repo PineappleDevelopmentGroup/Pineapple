@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.shadow)
-    kotlin("jvm")
+    java
     `maven-publish`
 }
 

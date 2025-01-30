@@ -23,6 +23,11 @@ tasks.build {
     }
 }
 
+tasks.shadowJar {
+    archiveClassifier = ""
+    archiveVersion = ""
+}
+
 publishing {
     publications {
         create<MavenPublication>("NMS") {

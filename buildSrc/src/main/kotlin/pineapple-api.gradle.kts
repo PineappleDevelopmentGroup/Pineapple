@@ -53,7 +53,6 @@ publishing {
             artifact(javadocJar)
 
             group = rootProject.group
-            version = project.version as String
         }
     }
 }
