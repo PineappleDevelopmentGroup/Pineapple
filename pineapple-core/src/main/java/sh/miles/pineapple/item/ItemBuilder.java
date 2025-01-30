@@ -43,7 +43,10 @@ public class ItemBuilder {
     private ItemStack stack;
     private ItemMeta meta;
 
-    private ItemBuilder() {
+    /**
+     * Constructs an empty ItemBuilder
+     */
+    public ItemBuilder() {
     }
 
     /**
@@ -64,7 +67,7 @@ public class ItemBuilder {
      * @since 1.0.0-SNAPSHOT
      */
     private ItemBuilder(Material material, int amount) {
-        this.stack = new ItemStack(material, amount);
+        this.stack = ItemStack.of(material, amount);
         this.meta = stack.getItemMeta();
     }
 
@@ -131,6 +134,19 @@ public class ItemBuilder {
         }
 
         action.accept(metaType.cast(meta));
+        return this;
+    }
+
+    /**
+     * Sets the material of the item stack, overrides any previous data or modification
+     *
+     * @param type The Material
+     * @return the Builder
+     */
+    public ItemBuilder material(Material type) {
+        this.stack = ItemStack.of(type);
+        this.meta = this.stack.getItemMeta();
+
         return this;
     }
 
