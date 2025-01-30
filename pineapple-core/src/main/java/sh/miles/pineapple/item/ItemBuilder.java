@@ -408,6 +408,18 @@ public class ItemBuilder {
         return this;
     }
 
+    /**
+     * Disables rendering the tooltip of an item
+     *
+     * @return the ItemBuilder
+     * @since 1.0.0-SNAPSHOT
+     */
+    public ItemBuilder hideTooltip() {
+        this.meta.setHideTooltip(true);
+
+        return this;
+    }
+
     private List<Component> getLore() {
         return this.meta.hasLore() ? this.meta.lore() : new ArrayList<>();
     }
