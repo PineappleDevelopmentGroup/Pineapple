@@ -16,15 +16,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
 
-    // Deprecated
-    compileOnly(libs.pineapplechat.core)
-    compileOnly(libs.pineapplechat.bungee)
-    compileOnly(libs.pineapplechat.legacy)
-
-    testRuntimeOnly(libs.pineapplechat.core)
-    testRuntimeOnly(libs.pineapplechat.bungee)
-    testRuntimeOnly(libs.pineapplechat.legacy)
-    // Deprecated End
 }
 
 java {

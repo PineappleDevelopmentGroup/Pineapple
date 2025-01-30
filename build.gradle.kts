@@ -15,11 +15,6 @@ dependencies {
     shadow(project(":pineapple-common"))
     shadow(project(":pineapple-nms:api"))
     
-    // Deprecated
-    shadow(libs.pineapplechat.core)
-    shadow(libs.pineapplechat.bungee)
-    shadow(libs.pineapplechat.legacy)
-    // Deprecated End
 }
 
 tasks.shadowJar {
