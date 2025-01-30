@@ -1,10 +1,12 @@
 package sh.miles.pineapple.chat;
 
-import net.md_5.bungee.api.chat.BaseComponent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.NotNull;
-import sh.miles.pineapple.chat.bungee.parse.BungeePineappleParserContext;
-import sh.miles.pineapple.chat.minecraft.legacy.parse.LegacyPineappleParserContext;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,58 +16,40 @@ import java.util.Map;
  */
 public final class PineappleChat {
 
-    private static final BungeePineappleParserContext bungeeContext = new BungeePineappleParserContext();
-    private static final LegacyPineappleParserContext legacyContext = new LegacyPineappleParserContext(true);
+    private static final MiniMessage miniMessage = MiniMessage.builder().build();
+
 
     private PineappleChat() {
         throw new UnsupportedOperationException("can't instantiate utility class");
     }
 
     /**
-     * Parses the given string into a BaseComponent
+     * Parses the given string into a Component
      *
      * @param string the string to parse
-     * @return the BaseComponent
+     * @return the Component
      * @since 1.0.0-SNAPSHOT
      */
-    public static BaseComponent parse(@NotNull final String string) {
-        return bungeeContext.parse(string);
+    public static Component parse(@NotNull final String string) {
+        return miniMessage.deserialize(string);
     }
 
     /**
-     * Parses the given string into a legacy formatted string
-     *
-     * @param string the string to parse
-     * @return the legacy formatted string
-     * @since 1.0.0-SNAPSHOT
-     */
-    public static String parseLegacy(@NotNull final String string) {
-        return legacyContext.parse(string);
-    }
-
-    /**
-     * Parses the given string into a BaseComponent
+     * Parses the given string into a Component
      *
      * @param string       the string to parse
      * @param replacements the replacements to put into the string
-     * @return the BaseComponent
+     * @return the Component
      * @since 1.0.0-SNAPSHOT
      */
-    public static BaseComponent parse(@NotNull final String string, @NotNull final Map<String, Object> replacements) {
-        return bungeeContext.parse(string, replacements);
+    public static Component parse(@NotNull final String string, @NotNull final Map<String, Object> replacements) {
+        List<TagResolver.Single> placeholders = replacements.entrySet().stream()
+                .map(entry -> Placeholder.parsed(entry.getKey(), String.valueOf(entry.getValue())))
+                .toList();
+        return miniMessage.deserialize(string, TagResolver.resolver(placeholders));
     }
 
-    /**
-     * Parses the given string into a legacy formatted string
-     *
-     * @param string       the string to parse
-     * @param replacements the replacements
-     * @return the legacy formatted string
-     * @since 1.0.0-SNAPSHOT
-     */
-    public static String parseLegacy(@NotNull final String string, @NotNull final Map<String, Object> replacements) {
-        return legacyContext.parse(string, replacements);
-    }
+
 
     /**
      * Creates a PineappleComponent from a source string

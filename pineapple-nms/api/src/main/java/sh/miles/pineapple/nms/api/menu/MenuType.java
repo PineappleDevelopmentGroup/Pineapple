@@ -1,7 +1,7 @@
 package sh.miles.pineapple.nms.api.menu;
 
 import com.google.common.base.Preconditions;
-import net.md_5.bungee.api.chat.BaseComponent;
+import net.kyori.adventure.text.Component;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.HumanEntity;
 import org.checkerframework.common.value.qual.IntRange;
@@ -52,7 +52,7 @@ public interface MenuType<T extends MenuScene> extends RegistryKey<NamespacedKey
      * @return a container scene
      * @since 1.0.0-SNAPSHOT
      */
-    T create(@NotNull final HumanEntity player, @NotNull final BaseComponent title);
+    T create(@NotNull final HumanEntity player, @NotNull final Component title);
 
     @SuppressWarnings("unchecked")
     private static <T extends MenuScene> MenuType<T> get(String id) {

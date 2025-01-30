@@ -310,7 +310,7 @@ public class ItemSpec {
      * Sets the default text mutator to be used if no {@link #setNameMutator(Function)} or
      * {@link #setLoreMutator(Function)} have not been given a non null value
      *
-     * @param defaultTextMutator the mutation to apply to transition a string to a BaseComponent
+     * @param defaultTextMutator the mutation to apply to transition a string to a Component
      * @since 1.0.0-SNAPSHOT
      */
     public void setDefaultTextMutator(@NotNull final Function<String, Component> defaultTextMutator) {

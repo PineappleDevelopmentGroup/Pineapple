@@ -2,6 +2,8 @@ package sh.miles.pineapple.util.serialization.adapter.spec;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
@@ -378,7 +380,7 @@ class ItemSpecAdapter implements SerializedAdapter<ItemSpec> {
         if (enchantmentObjectOption instanceof Some<SerializedObject> serializedObject) {
             final var enchantmentObject = serializedObject.some();
             for (final Map.Entry<String, SerializedElement> entry : enchantmentObject.entrySet()) {
-                enchantments.put(Registry.ENCHANTMENT.get(NamespacedKey.fromString(entry.getKey())), entry.getValue().getAsPrimitive().getAsInt());
+                enchantments.put(RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).get(NamespacedKey.fromString(entry.getKey())), entry.getValue().getAsPrimitive().getAsInt());
             }
         }
 

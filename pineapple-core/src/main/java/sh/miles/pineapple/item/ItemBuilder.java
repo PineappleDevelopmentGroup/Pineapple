@@ -1,6 +1,7 @@
 package sh.miles.pineapple.item;
 
-import net.md_5.bungee.api.chat.BaseComponent;
+import com.destroystokyo.paper.profile.PlayerProfile;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -19,16 +20,10 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.profile.PlayerProfile;
 import org.bukkit.profile.PlayerTextures;
 import org.jetbrains.annotations.NotNull;
-import sh.miles.pineapple.nms.annotations.NMS;
-import sh.miles.pineapple.nms.api.PineappleNMS;
-import sh.miles.pineapple.nms.loader.NMSLoader;
-import sh.miles.pineapple.PineappleLib;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,8 +42,6 @@ public class ItemBuilder {
 
     private ItemStack stack;
     private ItemMeta meta;
-    private BaseComponent name = null;
-    private List<BaseComponent> lore = null;
 
     private ItemBuilder() {
     }
@@ -109,7 +102,6 @@ public class ItemBuilder {
         ItemBuilder builder = new ItemBuilder();
         builder.stack = stack;
         builder.meta = stack.getItemMeta();
-        builder.lore = PineappleLib.getNmsProvider().getItemLore(stack);
         return builder;
     }
 
@@ -142,16 +134,6 @@ public class ItemBuilder {
         return this;
     }
 
-    /**
-     * Changes the name of the ItemStack
-     *
-     * @param name the name to set on the item
-     * @return the ItemBuilder
-     */
-    public ItemBuilder nameLegacy(@NotNull final String name) {
-        meta.setDisplayName(name);
-        return this;
-    }
 
     /**
      * Changes the name of the ItemStack
@@ -160,9 +142,9 @@ public class ItemBuilder {
      * @return the ItemBuilder
      * @since 1.0.0-SNAPSHOT
      */
-    @NMS
-    public ItemBuilder name(@NotNull final BaseComponent name) {
-        this.name = name;
+    public ItemBuilder name(@NotNull final Component name) {
+        this.meta.displayName(name);
+
         return this;
     }
 
@@ -173,38 +155,11 @@ public class ItemBuilder {
      * @return the ItemBuilder
      * @since 1.0.0-SNAPSHOT
      */
-    public ItemBuilder loreLegacy(@NotNull final List<String> lore) {
-        List<String> itemLore = getLoreLegacy();
+    public ItemBuilder lore(@NotNull final List<Component> lore) {
+        List<Component> itemLore = getLore();
         itemLore.addAll(lore);
 
-        meta.setLore(itemLore);
-        return this;
-    }
-
-    /**
-     * Changes the lore of the ItemStack
-     *
-     * @param lore the lore to set on the item
-     * @return the ItemBuilder
-     * @since 1.0.0-SNAPSHOT
-     */
-    public ItemBuilder loreLegacy(String... lore) {
-        return loreLegacy(Arrays.asList(lore));
-    }
-
-    /**
-     * Changes the lore of the ItemStack
-     *
-     * @param lore the lore to set on the item
-     * @return the ItemBuilder
-     * @since 1.0.0-SNAPSHOT
-     */
-    @NMS
-    public ItemBuilder lore(@NotNull final List<BaseComponent> lore) {
-        List<BaseComponent> itemLore = getLore();
-        itemLore.addAll(lore);
-
-        this.lore = itemLore;
+        this.meta.lore(itemLore);
         return this;
     }
 
@@ -215,8 +170,7 @@ public class ItemBuilder {
      * @return the ItemBuilder
      * @since 1.0.0-SNAPSHOT
      */
-    @NMS
-    public ItemBuilder lore(BaseComponent... lore) {
+    public ItemBuilder lore(Component... lore) {
         return lore(Arrays.asList(lore));
     }
 
@@ -358,17 +312,18 @@ public class ItemBuilder {
      */
     public ItemBuilder skullTexture(String texture) {
         return modify(SkullMeta.class, meta -> {
-            PlayerProfile profile = Bukkit.createPlayerProfile(UUID.nameUUIDFromBytes(texture.getBytes()));
-            PlayerTextures textures = profile.getTextures();
-            try {
-                textures.setSkin(new URL(TEXTURE_URL + texture));
-            } catch (MalformedURLException ignored) {
-                return;
-            }
+                    PlayerProfile profile = Bukkit.createProfile(UUID.nameUUIDFromBytes(texture.getBytes()));
+                    PlayerTextures textures = profile.getTextures();
+                    try {
+                        textures.setSkin((new URI(TEXTURE_URL + texture)).toURL());
+                    } catch (Exception ignored) {
+                        return;
+                    }
 
-            profile.setTextures(textures);
-            ((SkullMeta) this.meta).setOwnerProfile(profile);
-        });
+                    profile.setTextures(textures);
+                    ((SkullMeta) this.meta).setPlayerProfile(profile);
+                }
+        );
     }
 
     /**
@@ -453,13 +408,8 @@ public class ItemBuilder {
         return this;
     }
 
-    private List<String> getLoreLegacy() {
-        return meta.hasLore() ? meta.getLore() : new ArrayList<>();
-    }
-
-    @NMS
-    private List<BaseComponent> getLore() {
-        return new ArrayList<>(PineappleLib.getNmsProvider().getItemLore(this.stack));
+    private List<Component> getLore() {
+        return this.meta.hasLore() ? this.meta.lore() : new ArrayList<>();
     }
 
     /**
@@ -470,16 +420,7 @@ public class ItemBuilder {
      */
     public ItemStack build() {
         stack.setItemMeta(meta);
-        if (NMSLoader.INSTANCE.isActive()) {
-            PineappleNMS nms = PineappleLib.getNmsProvider();
-            if (this.name != null) {
-                stack = nms.setItemDisplayName(this.stack, this.name);
-            }
 
-            if (this.lore != null) {
-                stack = nms.setItemLore(this.stack, this.lore);
-            }
-        }
 
         return stack;
     }

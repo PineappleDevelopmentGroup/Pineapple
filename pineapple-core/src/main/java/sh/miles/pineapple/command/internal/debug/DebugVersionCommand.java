@@ -33,7 +33,7 @@ class DebugVersionCommand extends Command {
         replacements.put("plugin_version", this.plugin.getDescription().getVersion());
         replacements.put("plugin_name", this.plugin.getName());
 
-        sender.spigot().sendMessage(PineappleChat.parse("""
+        sender.sendMessage(PineappleChat.parse("""
                 <color:#d6aa1a>Pineapple Versions
                 <color:#d6aa1a>Server Info:
                 <color:#f7ff19>- Java Version: <gray><$runtime_version>

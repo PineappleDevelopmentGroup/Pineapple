@@ -44,7 +44,7 @@ public record HologramSpec(@NotNull PineappleComponent hologramText, @NotNull Ve
     @NotNull
     public TextDisplay spawn(@NotNull final Location location, @NotNull final Map<String, Object> replacements, @NotNull final Consumer<TextDisplay> configuration) {
         return location.getWorld().spawn(this.offset.modify(location), TextDisplay.class, (display) -> {
-            display.setText(PineappleChat.parseLegacy(hologramText.getSource(), replacements));
+            display.text(PineappleChat.parse(hologramText.getSource(), replacements));
             configuration.accept(display);
         });
     }

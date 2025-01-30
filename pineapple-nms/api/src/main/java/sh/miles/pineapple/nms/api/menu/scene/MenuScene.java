@@ -1,6 +1,6 @@
 package sh.miles.pineapple.nms.api.menu.scene;
 
-import net.md_5.bungee.api.chat.BaseComponent;
+import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.InventoryView;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +16,7 @@ public interface MenuScene {
      * @return the base component title of the scene
      * @since 1.0.0-SNAPSHOT
      */
-    BaseComponent getTitle();
+    Component getTitle();
 
     /**
      * Note: Using this will cause de-sync with Bukkit's getTitle method
@@ -24,7 +24,7 @@ public interface MenuScene {
      * @param title sets the component title of the scene
      * @since 1.0.0-SNAPSHOT
      */
-    void setTitle(BaseComponent title);
+    void setTitle(Component title);
 
     /**
      * Gets the bukkit view this ContainerScene is based upon

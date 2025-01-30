@@ -3,8 +3,8 @@ package sh.miles.pineapple.item;
 import com.google.common.base.Function;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
@@ -52,13 +52,13 @@ public class ItemSpec {
     private int amount = 1;
 
     // Display Data
-    private String name;
-    private Function<String, BaseComponent> nameMutator = null;
-    private final List<String> lore = new ArrayList<>(0);
-    private Function<String, BaseComponent> loreMutator = null;
+    private String  name;
+    private Function<String, Component> nameMutator = null;
+    private final List<String > lore = new ArrayList<>(0);
+    private Function<String, Component> loreMutator = null;
     private final List<ItemFlag> hideToolTips = new ArrayList<>(0);
     private int customModelData = INT_DATA_UNSET;
-    private Function<String, BaseComponent> defaultTextMutator = TextComponent::new;
+    private Function<String, Component> defaultTextMutator = Component::text;
     // Display Data end
 
     // Attributes
@@ -249,7 +249,7 @@ public class ItemSpec {
      * @param lore the lore to set
      * @since 1.0.0-SNAPSHOT
      */
-    public void setLore(@NotNull final List<String> lore) {
+    public void setLore(@NotNull final List<String > lore) {
         checkArgument(lore != null, "The given lore must not be null");
         this.lore.clear();
         this.lore.addAll(lore);
@@ -283,7 +283,7 @@ public class ItemSpec {
      * @param nameMutator the name mutator
      * @since 1.0.0-SNAPSHOT
      */
-    public void setNameMutator(@NotNull final Function<String, BaseComponent> nameMutator) {
+    public void setNameMutator(@NotNull final Function<String, Component> nameMutator) {
         checkArgument(nameMutator != null, "The name mutator must not be null");
         this.nameMutator = nameMutator;
     }
@@ -305,7 +305,7 @@ public class ItemSpec {
      * @param loreMutator the lore mutator
      * @since 1.0.0-SNAPSHOT
      */
-    public void setLoreMutator(@NotNull final Function<String, BaseComponent> loreMutator) {
+    public void setLoreMutator(@NotNull final Function<String, Component> loreMutator) {
         checkArgument(loreMutator != null, "The lore mutator must not be null");
         this.loreMutator = loreMutator;
     }
@@ -314,10 +314,10 @@ public class ItemSpec {
      * Sets the default text mutator to be used if no {@link #setNameMutator(Function)} or
      * {@link #setLoreMutator(Function)} have not been given a non null value
      *
-     * @param defaultTextMutator the mutation to apply to transition a string to a BaseComponent
+     * @param defaultTextMutator the mutation to apply to transition a string to a Component
      * @since 1.0.0-SNAPSHOT
      */
-    public void setDefaultTextMutator(@NotNull final Function<String, BaseComponent> defaultTextMutator) {
+    public void setDefaultTextMutator(@NotNull final Function<String, Component> defaultTextMutator) {
         checkArgument(defaultTextMutator != null, "The default text mutator must not be null");
         this.defaultTextMutator = defaultTextMutator;
     }
@@ -757,20 +757,15 @@ public class ItemSpec {
     @NotNull
     public ItemStack buildSpec() {
         ItemStack item = new ItemStack(this.itemType, this.amount);
-        final ItemMeta meta; // defined after NMS
+        final ItemMeta meta = item.getItemMeta();
         final PineappleNMS nms = PineappleLib.getNmsProvider();
 
         // Display Data
-        if (name != null) { // must be done first
-            item = nms.setItemDisplayName(item, this.nameMutator != null ? this.nameMutator.apply(name) : this.defaultTextMutator.apply(name));
-        }
+        meta.displayName(this.nameMutator != null ? this.nameMutator.apply(name) : this.defaultTextMutator.apply(name));
 
-        if (!lore.isEmpty()) { // must be done second
-            item = nms.setItemLore(item, lore.stream().map(this.loreMutator != null ? this.loreMutator : this.defaultTextMutator).toList());
-        }
+        meta.lore(lore.stream().map(this.loreMutator != null ? this.loreMutator : this.defaultTextMutator).toList());
 
-        // must be set here due to NMS
-        meta = item.getItemMeta();
+
 
         meta.addItemFlags(this.hideToolTips.toArray(ItemFlag[]::new));
         if (this.customModelData != INT_DATA_UNSET) {
@@ -913,8 +908,8 @@ public class ItemSpec {
         final ItemMeta meta = item.getItemMeta();
 
         // Display Data
-        spec.name = meta.hasDisplayName() ? meta.getDisplayName() : null;
-        spec.lore.addAll(meta.hasLore() ? meta.getLore() : new ArrayList<>());
+        spec.name = meta.hasDisplayName() ? MiniMessage.miniMessage().serialize(meta.displayName()) : null;
+        spec.lore.addAll(meta.hasLore() ? meta.lore().stream().map((component) -> MiniMessage.miniMessage().serialize(component)).toList() : new ArrayList<>());
         spec.hideToolTips.addAll(meta.getItemFlags());
         spec.customModelData = meta.hasCustomModelData() ? meta.getCustomModelData() : INT_DATA_UNSET;
         // Display Data end

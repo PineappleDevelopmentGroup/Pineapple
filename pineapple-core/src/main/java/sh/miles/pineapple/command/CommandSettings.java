@@ -1,7 +1,6 @@
 package sh.miles.pineapple.command;
 
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -12,12 +11,14 @@ import org.jetbrains.annotations.ApiStatus;
  */
 public class CommandSettings {
 
-    private static final BaseComponent DEFAULT_PERMISSION_MESSAGE = new TextComponent("You do not have permission for this");
-    private static final BaseComponent DEFAULT_INVALID_SENDER_MESSAGE = new TextComponent("You are not a valid sender for this command");
-    public static final Settings DEFAULT_COMMAND_SETTINGS = new Settings(DEFAULT_PERMISSION_MESSAGE, DEFAULT_INVALID_SENDER_MESSAGE);
+    private static final Component DEFAULT_PERMISSION_MESSAGE = Component.text("You do not have permission for this");
+    private static final Component DEFAULT_INVALID_SENDER_MESSAGE = Component.text("You are not a valid sender for this command");
+    public static final Settings DEFAULT_COMMAND_SETTINGS = new Settings(DEFAULT_PERMISSION_MESSAGE,
+            DEFAULT_INVALID_SENDER_MESSAGE
+    );
 
-    private BaseComponent permissionMessage;
-    private BaseComponent invalidSenderMessage;
+    private Component permissionMessage;
+    private Component invalidSenderMessage;
 
     /**
      * Sets the permission message
@@ -25,8 +26,8 @@ public class CommandSettings {
      * @param permissionMessage the message to set
      * @since 1.0.0-SNAPSHOT
      */
-    public void setPermissionMessage(BaseComponent permissionMessage) {
-        this.permissionMessage = permissionMessage.duplicate();
+    public void setPermissionMessage(Component permissionMessage) {
+        this.permissionMessage = permissionMessage;
     }
 
     /**
@@ -35,8 +36,8 @@ public class CommandSettings {
      * @param invalidSenderMessage the invalid sender message to set
      * @since 1.0.0-SNAPSHOT
      */
-    public void setInvalidSenderMessage(BaseComponent invalidSenderMessage) {
-        this.invalidSenderMessage = invalidSenderMessage.duplicate();
+    public void setInvalidSenderMessage(Component invalidSenderMessage) {
+        this.invalidSenderMessage = invalidSenderMessage;
     }
 
     /**
@@ -55,8 +56,8 @@ public class CommandSettings {
      * @return the component
      * @since 1.0.0-SNAPSHOT
      */
-    public static BaseComponent getDefaultPermissionMessage() {
-        return DEFAULT_PERMISSION_MESSAGE.duplicate();
+    public static Component getDefaultPermissionMessage() {
+        return DEFAULT_PERMISSION_MESSAGE;
     }
 
     /**
@@ -65,8 +66,8 @@ public class CommandSettings {
      * @return the base component
      * @since 1.0.0-SNAPSHOT
      */
-    public static BaseComponent getDefaultInvalidSenderMessage() {
-        return DEFAULT_INVALID_SENDER_MESSAGE.duplicate();
+    public static Component getDefaultInvalidSenderMessage() {
+        return DEFAULT_INVALID_SENDER_MESSAGE;
     }
 
     /**
@@ -76,7 +77,7 @@ public class CommandSettings {
      * @param invalidSenderMessage the invalid sender message
      * @since 1.0.0-SNAPSHOT
      */
-    public record Settings(BaseComponent permissionMessage, BaseComponent invalidSenderMessage) {
+    public record Settings(Component permissionMessage, Component invalidSenderMessage) {
 
         /**
          * Sends the permission message
@@ -86,7 +87,7 @@ public class CommandSettings {
          */
         public void sendPermissionMessage(CommandSender sender) {
             if (permissionMessage != null) {
-                sender.spigot().sendMessage(permissionMessage);
+                sender.sendMessage(permissionMessage);
             }
         }
 
@@ -99,7 +100,7 @@ public class CommandSettings {
         @ApiStatus.Obsolete
         public void sendInvalidSenderMessage(CommandSender sender) {
             if (invalidSenderMessage != null) {
-                sender.spigot().sendMessage(invalidSenderMessage);
+                sender.sendMessage(invalidSenderMessage);
             }
         }
     }
