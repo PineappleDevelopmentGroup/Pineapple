@@ -1,7 +1,9 @@
 package sh.miles.pineapple.util.serialization.adapter.bukkit;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.EquipmentSlotGroup;
 import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.util.serialization.SerializedDeserializeContext;
 import sh.miles.pineapple.util.serialization.SerializedElement;
@@ -14,21 +16,21 @@ import static sh.miles.pineapple.util.serialization.SerializedElement.object;
 
 class AttributeModifierAdapter implements SerializedAdapter<AttributeModifier> {
 
-    static final String UUID = "uuid";
+    static final String KEY = "key";
     static final String NAME = "name";
     static final String AMOUNT = "amount";
     static final String OPERATION = "operation";
-    static final String EQUIPMENT_SLOT = "equipment_slot";
+    static final String EQUIPMENT_SLOT_GROUP = "equipment_slot_goup";
 
     @NotNull
     @Override
     public SerializedElement serialize(@NotNull final AttributeModifier attributeModifier, @NotNull final SerializedSerializeContext context) throws SerializedAdaptationException {
         final SerializedObject parent = object();
-        parent.add(UUID, attributeModifier.getUniqueId().toString());
+        parent.add(KEY, context.serialize(attributeModifier.getKey()));
         parent.add(NAME, attributeModifier.getName());
         parent.add(AMOUNT, attributeModifier.getAmount());
         parent.add(OPERATION, attributeModifier.getOperation().name());
-        parent.add(EQUIPMENT_SLOT, attributeModifier.getSlot().name());
+        parent.add(EQUIPMENT_SLOT_GROUP, attributeModifier.getSlotGroup().toString());
         return parent;
     }
 
@@ -39,12 +41,12 @@ class AttributeModifierAdapter implements SerializedAdapter<AttributeModifier> {
             throw new SerializedAdaptationException("The given element for AttributeModifier's must be an object");
         }
         final SerializedObject object = element.getAsObject();
-        final java.util.UUID uuid = java.util.UUID.fromString(object.getPrimitive(UUID).orThrow().getAsString());
+        final NamespacedKey key = context.deserialize(object.getPrimitive(KEY).orThrow(), NamespacedKey.class);
         final String name = object.getPrimitive(NAME).orThrow().getAsString();
         final double amount = object.getPrimitive(AMOUNT).orThrow().getAsDouble();
         final AttributeModifier.Operation operation = AttributeModifier.Operation.valueOf(object.getPrimitive(OPERATION).orThrow().getAsString());
-        final EquipmentSlot slot = EquipmentSlot.valueOf(object.getPrimitive(EQUIPMENT_SLOT).orThrow().getAsString());
-        return new AttributeModifier(uuid, name, amount, operation, slot);
+        final EquipmentSlotGroup slotGroup = EquipmentSlotGroup.getByName(object.getPrimitive(EQUIPMENT_SLOT_GROUP).orThrow().getAsString());
+        return new AttributeModifier(key, amount, operation, slotGroup);
     }
 
     @Override
