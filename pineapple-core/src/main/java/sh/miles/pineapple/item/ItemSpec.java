@@ -29,6 +29,7 @@ import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import sh.miles.pineapple.PineappleLib;
+import sh.miles.pineapple.chat.PineappleChat;
 import sh.miles.pineapple.nms.annotations.NMS;
 import sh.miles.pineapple.nms.api.PineappleNMS;
 
@@ -52,13 +53,13 @@ public class ItemSpec {
     private int amount = 1;
 
     // Display Data
-    private String  name;
+    private String name;
     private Function<String, Component> nameMutator = null;
     private final List<String > lore = new ArrayList<>(0);
     private Function<String, Component> loreMutator = null;
     private final List<ItemFlag> hideToolTips = new ArrayList<>(0);
     private int customModelData = INT_DATA_UNSET;
-    private Function<String, Component> defaultTextMutator = Component::text;
+    private Function<String, Component> defaultTextMutator = PineappleChat::parse;
     // Display Data end
 
     // Attributes
@@ -753,12 +754,10 @@ public class ItemSpec {
      *
      * @return the ItemStack result
      */
-    @NMS
     @NotNull
     public ItemStack buildSpec() {
         ItemStack item = new ItemStack(this.itemType, this.amount);
         final ItemMeta meta = item.getItemMeta();
-        final PineappleNMS nms = PineappleLib.getNmsProvider();
 
         // Display Data
         meta.displayName(this.nameMutator != null ? this.nameMutator.apply(name) : this.defaultTextMutator.apply(name));

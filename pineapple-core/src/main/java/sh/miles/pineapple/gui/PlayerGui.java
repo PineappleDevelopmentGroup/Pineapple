@@ -7,13 +7,13 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.PineappleLib;
 import sh.miles.pineapple.gui.slot.DummyGuiSlot;
 import sh.miles.pineapple.gui.slot.GuiSlot;
 import sh.miles.pineapple.nms.annotations.NMS;
-import sh.miles.pineapple.nms.api.menu.scene.MenuScene;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +25,7 @@ import java.util.function.Function;
  * @param <T> the type of MenuScene
  * @since 1.0.0-SNAPSHOT
  */
-@NMS
-public abstract class PlayerGui<T extends MenuScene> {
+public abstract class PlayerGui<T extends InventoryView> {
 
     protected final T scene;
     protected final Player viewer;
@@ -39,7 +38,7 @@ public abstract class PlayerGui<T extends MenuScene> {
         this.scene = scene.apply(viewer);
         Preconditions.checkState(this.scene != null, "The given scene function must return a non null value");
         this.viewer = viewer;
-        this.topInventory = this.scene.getBukkitView().getTopInventory();
+        this.topInventory = this.scene.getTopInventory();
         Preconditions.checkState(this.topInventory != null, "The top inventory must not be null! This is a spigot bug!");
         this.slots = new ArrayList<>(this.topInventory.getSize());
 
@@ -52,13 +51,13 @@ public abstract class PlayerGui<T extends MenuScene> {
      * @since 1.0.0-SNAPSHOT
      */
     public void open() throws IllegalStateException {
-        if (this.scene.getBukkitView() == viewer.getOpenInventory()) {
+        if (this.scene == viewer.getOpenInventory()) {
             throw new IllegalStateException("Can not re-open same menu twice");
         }
 
         decorate();
         PineappleLib.getGuiManager().register(this);
-        this.viewer.openInventory(this.scene.getBukkitView());
+        this.viewer.openInventory(this.scene);
     }
 
     /**
@@ -68,7 +67,7 @@ public abstract class PlayerGui<T extends MenuScene> {
      * @since 1.0.0-SNAPSHOT
      */
     public void close() throws IllegalStateException {
-        if (this.scene.getBukkitView() == viewer.getOpenInventory()) {
+        if (this.scene == viewer.getOpenInventory()) {
             viewer.closeInventory();
             PineappleLib.getGuiManager().unregister(this.topInventory);
             return;

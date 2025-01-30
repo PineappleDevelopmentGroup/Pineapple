@@ -4,7 +4,6 @@ import org.bukkit.NamespacedKey;
 import sh.miles.pineapple.collection.registry.Registry;
 import sh.miles.pineapple.collection.registry.RegistryKey;
 import sh.miles.pineapple.nms.loader.NMSLoader;
-import sh.miles.pineapple.nms.api.menu.MenuType;
 
 /**
  * A class full of different types of Registries that can used
@@ -12,8 +11,6 @@ import sh.miles.pineapple.nms.api.menu.MenuType;
  * @since 1.0.0-SNAPSHOT
  */
 public final class PineappleRegistry {
-
-    public static final Registry<MenuType<?>, NamespacedKey> MENU = make(MenuType.class);
 
     private PineappleRegistry() {
         throw new UnsupportedOperationException("You can not instantiate a utility class");

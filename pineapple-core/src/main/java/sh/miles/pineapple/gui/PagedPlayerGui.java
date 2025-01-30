@@ -2,13 +2,13 @@ package sh.miles.pineapple.gui;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.collection.NonNullArray;
 import sh.miles.pineapple.gui.slot.Deployable;
 import sh.miles.pineapple.gui.slot.DummyGuiSlot;
 import sh.miles.pineapple.gui.slot.GuiSlot;
 import sh.miles.pineapple.nms.annotations.NMS;
-import sh.miles.pineapple.nms.api.menu.scene.MenuScene;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,8 +20,7 @@ import java.util.function.Function;
  * @param <T> the type of MenuScene
  * @since 1.0.0-SNAPSHOT
  */
-@NMS
-public abstract class PagedPlayerGui<T extends MenuScene> extends PlayerGui<T> {
+public abstract class PagedPlayerGui<T extends InventoryView> extends PlayerGui<T> {
 
     private final Map<Integer, NonNullArray<GuiSlot>> pages;
     private final Inventory topInventory;

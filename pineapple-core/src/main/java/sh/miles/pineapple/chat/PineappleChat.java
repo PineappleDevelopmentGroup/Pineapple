@@ -31,7 +31,7 @@ public final class PineappleChat {
      * @since 1.0.0-SNAPSHOT
      */
     public static Component parse(@NotNull final String string) {
-        return miniMessage.deserialize(string);
+        return string == null || string.isEmpty()  ? Component.empty() : miniMessage.deserialize(string);
     }
 
     /**
