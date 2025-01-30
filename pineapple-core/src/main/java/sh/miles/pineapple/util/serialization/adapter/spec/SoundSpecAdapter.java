@@ -25,7 +25,7 @@ public class SoundSpecAdapter implements SerializedAdapter<SoundSpec> {
     @Override
     public SoundSpec deserialize(@NotNull final SerializedElement element, @NotNull final SerializedDeserializeContext context) throws SerializedAdaptationException {
         final SerializedObject parent = element.getAsObject();
-        final Sound sound = Registry.SOUNDS.get(NamespacedKey.minecraft(parent.getPrimitive(SOUND).map(SerializedPrimitive::getAsString).orThrow("Missing required field %s".formatted(SOUND))));
+        final Sound sound = Registry.SOUNDS.getOrThrow(context.deserialize(parent.getObject(SOUND).orThrow("Missing required field %s".formatted(SOUND)), NamespacedKey.class));
         final SoundCategory category = SoundCategory.valueOf(parent.getPrimitive(CATEGORY).map(SerializedPrimitive::getAsString).map(String::toUpperCase).orThrow("Missing required field %s".formatted(CATEGORY)));
         final double pitch = parent.getPrimitive(PITCH).map(SerializedPrimitive::getAsDouble).orElse(1.0);
         final double volume = parent.getPrimitive(VOLUME).map(SerializedPrimitive::getAsDouble).orElse(1.0);
@@ -36,7 +36,7 @@ public class SoundSpecAdapter implements SerializedAdapter<SoundSpec> {
     @Override
     public SerializedElement serialize(@NotNull final SoundSpec spec, @NotNull final SerializedSerializeContext context) throws SerializedAdaptationException {
         final SerializedObject parent = SerializedElement.object();
-        parent.add(SOUND, spec.sound().getKey().toString());
+        parent.add(SOUND, context.serialize(Registry.SOUND_EVENT.getKeyOrThrow(spec.sound())));
         parent.add(CATEGORY, spec.category().name());
         parent.add(PITCH, spec.pitch());
         parent.add(VOLUME, spec.volume());
