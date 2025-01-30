@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.shadow)
 }
 
-version = parent!!.version
+version = "1.0.0-SNAPSHOT"
 
 repositories {
     mavenLocal()

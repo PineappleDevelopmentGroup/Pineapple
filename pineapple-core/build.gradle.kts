@@ -4,7 +4,7 @@ plugins {
     `pineapple-checkstyle`
 }
 
-version = "1.0.0"
+version = "1.0.0-SNAPSHOT"
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")

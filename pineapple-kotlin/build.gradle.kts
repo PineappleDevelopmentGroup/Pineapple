@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "sh.miles"
-version = "1.0.0"
+version = "1.0.0-SNAPSHOT"
 
 dependencies {
     compileOnly(libs.paper.api)
