@@ -11,7 +11,6 @@ dependencyResolutionManagement {
         gradlePluginPortal()
         maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://maven.miles.sh/pineapple")
-        maven("https://maven.miles.sh/libraries")
 
     }
 }

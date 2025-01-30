@@ -6,7 +6,6 @@ plugins {
 
 repositories {
     mavenCentral()
-    maven("https://maven.miles.sh/libraries")
     maven("https://maven.miles.sh/pineapple")
 }
 
