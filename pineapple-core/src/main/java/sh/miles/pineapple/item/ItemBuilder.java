@@ -21,6 +21,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.profile.PlayerTextures;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URI;
@@ -44,8 +45,9 @@ public class ItemBuilder {
     private ItemMeta meta;
 
     /**
-     * Constructs an empty ItemBuilder
+     * Constructs an empty ItemBuilder. Designed for internal use only.
      */
+    @ApiStatus.Internal
     public ItemBuilder() {
     }
 
