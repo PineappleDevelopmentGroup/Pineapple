@@ -55,7 +55,7 @@ public class ItemSpec {
     // Display Data
     private String name;
     private Function<String, Component> nameMutator = null;
-    private final List<String > lore = new ArrayList<>(0);
+    private final List<String> lore = new ArrayList<>(0);
     private Function<String, Component> loreMutator = null;
     private final List<ItemFlag> hideToolTips = new ArrayList<>(0);
     private int customModelData = INT_DATA_UNSET;
