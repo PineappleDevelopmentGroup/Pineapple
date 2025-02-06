@@ -2,17 +2,29 @@ rootProject.name = "Pineapple"
 
 gradle.rootProject {
     group = "sh.miles"
+    version = "1.0.0-SNAPSHOT"
+}
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+        maven("https://repo.papermc.io/repository/maven-public/")
+        maven("https://maven.miles.sh/pineapple")
+
+    }
 }
 
 include(
+    "pineapple-core",
     "pineapple-common",
-    "pineapple-bundle",
-    "pineapple-infstack",
-    "pineapple-tiles",
-    "pineapple-bundle:pineapple-core",
-    "pineapple-bundle:pineapple-nms",
-    "pineapple-bundle:pineapple-nms:api",
-    "pineapple-bundle:pineapple-nms:spigot-v1_21_R1",
-    "pineapple-bundle:pineapple-nms:spigot-v1_21_R2",
-    "pineapple-bundle:pineapple-nms:spigot-v1_21_R3"
+    "pineapple-kotlin",
+    "pineapple-nms",
+    "pineapple-nms:api"
 )
+
+file("pineapple-apis").listFiles()?.forEach { project ->
+    if (project.resolve("build.gradle.kts").exists()) run {
+        include("pineapple-apis:${project.name}")
+    }
+}

@@ -1,14 +1,11 @@
 plugins {
-    java
-    checkstyle
+    id("com.diffplug.spotless")
 }
 
-tasks.checkstyleMain {
-    source = project.sourceSets.main.get().allJava.asFileTree
-}
-
-checkstyle {
-    toolVersion = "10.12.5"
-    configFile = file(rootDir.resolve("config/checkstyle/checkstyle.xml"))
-    sourceSets = mutableListOf(project.sourceSets.main.get())
+spotless {
+    kotlin {
+        ktlint("1.5.0").setEditorConfigPath(rootProject.projectDir.resolve(".editorconfig"))
+    }
+    java {
+    }
 }

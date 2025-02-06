@@ -10,5 +10,7 @@ repositories {
 
 dependencies {
     implementation(libs.kotlin)
-    implementation(libs.patrick.remapper)
+    implementation(libs.dokka)
+    implementation(libs.dokka.base)
+    implementation(libs.spotless)
 }
