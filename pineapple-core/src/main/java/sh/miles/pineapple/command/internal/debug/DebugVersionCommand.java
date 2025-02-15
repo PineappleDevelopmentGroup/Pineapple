@@ -1,5 +1,6 @@
 package sh.miles.pineapple.command.internal.debug;
 
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
@@ -22,15 +23,16 @@ class DebugVersionCommand extends Command {
     }
 
     @Override
-    public boolean execute(@NotNull CommandSender sender, @NotNull String[] args) {
+    public void execute(@NotNull CommandSourceStack sourceStack, @NotNull String[] args) {
+        CommandSender sender = sourceStack.getSender();
         Map<String, Object> replacements = new HashMap<>();
 
-        replacements.put("runtime_version", Runtime.version().version().get(0));
+        replacements.put("runtime_version", Runtime.version().version().getFirst());
         replacements.put("minecraft_version", Bukkit.getBukkitVersion());
         replacements.put("server_brand", Bukkit.getName());
         replacements.put("server_git_hash", Bukkit.getVersion());
         replacements.put("pineapple_version", PineappleLib.getVersion());
-        replacements.put("plugin_version", this.plugin.getDescription().getVersion());
+        replacements.put("plugin_version", this.plugin.getPluginMeta().getVersion());
         replacements.put("plugin_name", this.plugin.getName());
 
         sender.sendMessage(PineappleChat.parse("""
@@ -45,6 +47,5 @@ class DebugVersionCommand extends Command {
                 <color:#f7ff19>- Plugin Version: <gray><$plugin_version>
                 <color:#f7ff19>- Plugin Name: <gray><$plugin_name>
                 """, replacements));
-        return true;
     }
 }
