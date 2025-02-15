@@ -20,7 +20,8 @@ include(
     "pineapple-common",
     "pineapple-kotlin",
     "pineapple-nms",
-    "pineapple-nms:api"
+    "pineapple-nms:api",
+    "pineapple-dependency-loader"
 )
 
 file("pineapple-apis").listFiles()?.forEach { project ->
