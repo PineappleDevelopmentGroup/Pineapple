@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 
 /**
  * Common class for pineapple plugins to load dependencies from maven repositories.
+ * @since 1.0.0-SNAPSHOT
  */
 public class PineappleJsonDependencyLoader implements PluginLoader {
     @Override
