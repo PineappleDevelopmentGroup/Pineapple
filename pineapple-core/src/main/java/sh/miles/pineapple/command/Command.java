@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 /**
  * Command class that wraps the normal {@link BasicCommand} and provides extra functionality without exposing necessary
@@ -22,6 +23,11 @@ public class Command implements BasicCommand {
     private final CommandLabel label;
     private final CommandSettings.Settings settings;
     private final Map<String, Command> subcommands;
+
+    /**
+     * Default NoArgs Executor
+     */
+    protected BiConsumer<CommandSender, String[]> noArgExecutor = (s, a) -> {};
 
     /**
      * Creates SCommand
@@ -52,15 +58,14 @@ public class Command implements BasicCommand {
 
     @Override
     public void execute(CommandSourceStack sourceStack, String[] args) {
-        CommandSender executor = sourceStack.getExecutor() != null
-            ? sourceStack.getExecutor()
-            : sourceStack.getSender();
-        if (!executor.hasPermission(label.getPermission())) {
+        CommandSender executor = sourceStack.getExecutor();
+        if (!canUse(executor)) {
             settings.sendPermissionMessage(executor);
             return;
         }
 
         if (args.length == 0) {
+            noArgExecutor.accept(executor, args);
             return;
         }
 
@@ -76,10 +81,8 @@ public class Command implements BasicCommand {
 
     @Override
     public Collection<String> suggest(CommandSourceStack sourceStack, String[] args) {
-        CommandSender executor = sourceStack.getExecutor() != null
-            ? sourceStack.getExecutor()
-            : sourceStack.getSender();
-        if (!executor.hasPermission(label.getPermission())) {
+        CommandSender executor = sourceStack.getExecutor();
+        if (!canUse(executor)) {
             return List.of();
         }
 
