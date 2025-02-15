@@ -16,7 +16,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public class PaperDependencyLoader implements PluginLoader {
+/**
+ * Common class for pineapple plugins to load dependencies from maven repositories.
+ */
+public class PineappleJsonDependencyLoader implements PluginLoader {
     @Override
     public void classloader(@NotNull PluginClasspathBuilder classpathBuilder) {
         MavenLibraryResolver resolver = new MavenLibraryResolver();
