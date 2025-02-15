@@ -1,31 +1,27 @@
 package sh.miles.pineapple.command;
 
 import com.google.common.base.Preconditions;
+import io.papermc.paper.command.brigadier.BasicCommand;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.defaults.BukkitCommand;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
 
 /**
- * Command class that wraps the normal {@link BukkitCommand} and provides extra functionality without exposing necessary
+ * Command class that wraps the normal {@link BasicCommand} and provides extra functionality without exposing necessary
  * access to command features
  *
  * @since 1.0.0-SNAPSHOT
  */
-public class Command implements CommandExecutor, CommandCompleter {
+public class Command implements BasicCommand {
 
     private final CommandLabel label;
     private final CommandSettings.Settings settings;
     private final Map<String, Command> subcommands;
-
-    /**
-     * Default NoArgs Executor
-     */
-    protected BiFunction<CommandSender, String[], Boolean> noArgExecutor = (s, a) -> true;
 
     /**
      * Creates SCommand
@@ -53,35 +49,42 @@ public class Command implements CommandExecutor, CommandCompleter {
         this(label, CommandSettings.DEFAULT_COMMAND_SETTINGS);
     }
 
+
     @Override
-    public boolean execute(@NotNull CommandSender sender, @NotNull String[] args) {
-        if (!sender.hasPermission(label.getPermission())) {
-            settings.sendPermissionMessage(sender);
-            return true;
+    public void execute(CommandSourceStack sourceStack, String[] args) {
+        CommandSender executor = sourceStack.getExecutor() != null
+            ? sourceStack.getExecutor()
+            : sourceStack.getSender();
+        if (!executor.hasPermission(label.getPermission())) {
+            settings.sendPermissionMessage(executor);
+            return;
         }
 
         if (args.length == 0) {
-            return noArgExecutor.apply(sender, args);
+            return;
         }
 
         final Command subCommand = subcommands.get(args[0]);
         if (subCommand == null) {
-            return true;
+            return;
         }
 
         final String[] subArgs = new String[args.length - 1];
         System.arraycopy(args, 1, subArgs, 0, subArgs.length);
-        return subCommand.execute(sender, subArgs);
+        subCommand.execute(sourceStack, subArgs);
     }
 
     @Override
-    public List<String> complete(@NotNull CommandSender sender, @NotNull String[] args) {
-        if (!sender.hasPermission(label.getPermission())) {
+    public Collection<String> suggest(CommandSourceStack sourceStack, String[] args) {
+        CommandSender executor = sourceStack.getExecutor() != null
+            ? sourceStack.getExecutor()
+            : sourceStack.getSender();
+        if (!executor.hasPermission(label.getPermission())) {
             return List.of();
         }
 
         if (args.length == 1) {
-            return this.subcommands.keySet().stream().filter((String s) -> sender.hasPermission(subcommands.get(s).label.getPermission())).toList();
+            return this.subcommands.keySet().stream().filter((String s) -> executor.hasPermission(subcommands.get(s).label.getPermission())).toList();
         }
 
         final Command subcommand = subcommands.getOrDefault(args[0], null);
@@ -89,13 +92,13 @@ public class Command implements CommandExecutor, CommandCompleter {
             return List.of();
         }
 
-        if (!sender.hasPermission(subcommand.label.getPermission())) {
+        if (!executor.hasPermission(subcommand.label.getPermission())) {
             return List.of();
         }
 
         final String[] subArgs = new String[args.length - 1];
         System.arraycopy(args, 1, subArgs, 0, subArgs.length);
-        return subcommand.complete(sender, subArgs);
+        return subcommand.suggest(sourceStack, subArgs);
     }
 
     /**
@@ -128,5 +131,10 @@ public class Command implements CommandExecutor, CommandCompleter {
     @NotNull
     public CommandSettings.Settings getSettings() {
         return settings;
+    }
+
+    @Override
+    public boolean canUse(CommandSender sender) {
+        return sender.hasPermission(label.getPermission());
     }
 }

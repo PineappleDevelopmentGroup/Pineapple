@@ -1,14 +1,10 @@
 package sh.miles.pineapple.command;
 
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandMap;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
-import sh.miles.pineapple.ReflectionUtils;
 import sh.miles.pineapple.command.internal.PineappleCommandManager;
-
-import java.lang.invoke.MethodHandle;
 
 /**
  * A Command Registry for registering all commands to. This clas plays an important middle man role in-between, the
@@ -19,8 +15,6 @@ import java.lang.invoke.MethodHandle;
 public final class CommandRegistry {
 
     private final Plugin plugin;
-    private final CommandMap commandMap;
-    private final MethodHandle constructor;
 
     /**
      * Creates a new CommandRegistry
@@ -29,8 +23,6 @@ public final class CommandRegistry {
      */
     public CommandRegistry(@NotNull final Plugin plugin) {
         this.plugin = plugin;
-        this.commandMap = Bukkit.getCommandMap();
-        this.constructor = ReflectionUtils.getConstructor(PluginCommand.class, new Class[]{String.class, Plugin.class});
     }
 
     /**
@@ -41,20 +33,10 @@ public final class CommandRegistry {
      */
     public void register(@NotNull final Command command) {
         final CommandLabel label = command.getCommandLabel();
-        final PluginCommand pluginCommand = (PluginCommand) ReflectionUtils.safeInvoke(this.constructor, label.getName(), plugin);
-        if (pluginCommand == null) {
-            throw new IllegalStateException("Creation of PluginCommand failed");
-        }
-        pluginCommand.setName(label.getName());
-        pluginCommand.setAliases(label.getAliases());
-        pluginCommand.setPermission(label.getPermission());
-        pluginCommand.setUsage("/" + label.getName());
-        pluginCommand.setExecutor((s, c, l, a) -> command.execute(s, a));
-        pluginCommand.setTabCompleter((s, c, l, a) -> command.complete(s, a));
 
-        if (!commandMap.register(plugin.getName(), pluginCommand)) {
-            throw new IllegalStateException("Command with the name " + pluginCommand.getName() + " already exists");
-        }
+        plugin.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> commands.registrar()
+            .register(label.getName(), label.getDescription(), label.getAliases(), command)
+        );
     }
 
     /**
