@@ -49,7 +49,17 @@ public final class PineappleChat {
         return miniMessage.deserialize(string, TagResolver.resolver(placeholders));
     }
 
-
+    /**
+     * Parses the given string into a Component
+     *
+     * @param string       the string to parse
+     * @param resolvers the resolvers to use to fill in placeholders
+     * @return the Component
+     * @since 1.0.0-SNAPSHOT
+     */
+    public static Component parse(@NotNull final String string, @NotNull final TagResolver... resolvers) {
+        return miniMessage.deserialize(string, TagResolver.resolver(resolvers));
+    }
 
     /**
      * Creates a PineappleComponent from a source string
