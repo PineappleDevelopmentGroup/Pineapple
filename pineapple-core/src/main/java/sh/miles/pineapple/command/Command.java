@@ -30,7 +30,7 @@ public class Command implements BasicCommand {
     protected BiConsumer<CommandSender, String[]> noArgExecutor = (s, a) -> {};
 
     /**
-     * Creates SCommand
+     * Creates Command
      *
      * @param label    label
      * @param settings settings
@@ -46,7 +46,7 @@ public class Command implements BasicCommand {
     }
 
     /**
-     * Creates SCommand
+     * Creates Command
      *
      * @param label label
      * @since 1.0.0-SNAPSHOT
