@@ -32,6 +32,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -182,7 +183,7 @@ public final class PineappleLib {
     private static LiteralArgumentBuilder<CommandSourceStack> convert(AdvancedCommand advancedCommand) {
         var command = Commands.literal(advancedCommand.getCommandLabel().getName());
 
-        List<Map.Entry<String, ArgumentType<?>>> reversedEntries = new ArrayList<>(advancedCommand.getArguments().entrySet());
+        List<Map.Entry<String, ArgumentType<?>>> reversedEntries = new LinkedList<>(advancedCommand.getArguments().entrySet());
         Collections.reverse(reversedEntries);
 
         RequiredArgumentBuilder<CommandSourceStack, ?> chainedArgument = null;

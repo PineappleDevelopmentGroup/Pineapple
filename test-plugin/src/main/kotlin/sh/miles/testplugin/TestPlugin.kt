@@ -30,7 +30,7 @@ class TestPlugin: JavaPlugin() {
                 argument.requires { source -> source.sender.isOp }.executes { ctx ->
                         val first = StringArgumentType.getString(ctx, "first")
                         val second = StringArgumentType.getString(ctx, "second")
-                        ctx.source.executor.sendRichMessage(
+                        ctx.source.sender.sendRichMessage(
                             "<gold>Test $first $second"
                         )
                         return@executes 1
@@ -78,6 +78,7 @@ object TestCommand: AdvancedCommand(CommandLabel("testcommand", "test-plugin.com
         init {
             registerArgument("third", StringArgumentType.word())
             registerArgument("fourth", StringArgumentType.word())
+            registerArgument("fifth", StringArgumentType.word())
         }
 
         override fun execute(context: CommandContext<CommandSourceStack>) {

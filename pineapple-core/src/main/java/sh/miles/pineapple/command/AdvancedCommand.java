@@ -9,7 +9,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +34,7 @@ public class AdvancedCommand {
         this.label = label;
         this.settings = settings;
         this.subcommands = new ArrayList<>();
-        this.arguments = new HashMap<>();
+        this.arguments = new LinkedHashMap<>();
     }
 
     /**
@@ -103,6 +103,6 @@ public class AdvancedCommand {
      */
     @ApiStatus.Internal
     public Map<String, ArgumentType<?>> getArguments() {
-        return new HashMap<>(arguments);
+        return new LinkedHashMap<>(arguments);
     }
 }
