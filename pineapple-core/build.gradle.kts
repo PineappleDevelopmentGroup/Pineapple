@@ -12,20 +12,22 @@ dependencies {
     compileOnly(projects.pineappleNms.api)
 
     testImplementation(libs.mockbukkit)
+    testImplementation(libs.paper.api)
     testImplementation(projects.pineappleCommon)
-    testImplementation("com.google.code.gson:gson:2.11.0")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
 
+    testImplementation("com.google.code.gson:gson:2.11.0")
+    testImplementation(platform("org.junit:junit-bom:6.0.1"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 java {
     withJavadocJar()
     withSourcesJar()
-}
-
-tasks.test {
-    useJUnitPlatform()
 }
 
 publishing {
