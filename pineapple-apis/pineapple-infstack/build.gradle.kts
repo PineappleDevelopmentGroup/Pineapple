@@ -10,15 +10,15 @@ repositories {
 }
 
 dependencies {
-    compileOnly(libs.spigot.api)
+    compileOnly(libs.paper.api)
 
-    compileOnly(project(":pineapple-core"))
-    compileOnly(project(":pineapple-common"))
+    compileOnly(projects.pineappleCore)
+    compileOnly(projects.pineappleCommon)
 
-    testCompileOnly(project(":pineapple-core"))
-    testCompileOnly(project(":pineapple-common"))
+    testCompileOnly(projects.pineappleCore)
+    testCompileOnly(projects.pineappleCommon)
     testImplementation("com.github.seeseemelk:MockBukkit-v1.20:3.78.0")
-    testCompileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+    testCompileOnly(libs.paper.api)
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
 }

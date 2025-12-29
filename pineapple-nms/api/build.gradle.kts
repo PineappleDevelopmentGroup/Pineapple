@@ -14,7 +14,7 @@ java {
 dependencies {
     compileOnly("org.jetbrains:annotations-java5:24.0.1")
     compileOnly(libs.paper.api)
-    compileOnly(project(":pineapple-common"))
+    compileOnly(projects.pineappleCommon)
 }
 
 publishing {

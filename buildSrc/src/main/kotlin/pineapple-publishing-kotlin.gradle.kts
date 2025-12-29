@@ -1,4 +1,4 @@
-import gradle.kotlin.dsl.accessors._97fddd71138b33e4dd1c6e1c7bd55d33.publishing
+import gradle.kotlin.dsl.accessors._4030ec6ddab2b564fb77e4054b09ecb0.publishing
 
 plugins {
     kotlin("jvm")

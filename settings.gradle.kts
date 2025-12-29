@@ -29,3 +29,6 @@ file("pineapple-apis").listFiles()?.forEach { project ->
         include("pineapple-apis:${project.name}")
     }
 }
+
+// Features
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

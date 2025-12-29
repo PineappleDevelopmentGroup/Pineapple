@@ -9,6 +9,6 @@ version = "1.0.0-SNAPSHOT"
 dependencies {
     compileOnly(libs.paper.api)
 
-    compileOnly(project(":pineapple-core"))
-    compileOnly(project(":pineapple-common"))
+    compileOnly(projects.pineappleCore)
+    compileOnly(projects.pineappleCommon)
 }
