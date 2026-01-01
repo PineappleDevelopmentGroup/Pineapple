@@ -42,8 +42,5 @@ bin/
 .DS_Store
 .idea/
 
-scripts/impl/__pycache__/
-
-scripts/ui/__pycache__/
-
-scripts/utils/__pycache__/
+run/
+test-plugin.settings.gradle.kts
