@@ -1,2 +1,2 @@
 // Uncomment to enable
-include(":test-plugin")
+//include(":test-plugin")
