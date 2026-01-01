@@ -7,25 +7,27 @@ plugins {
 version = "1.0.0-SNAPSHOT"
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
-    compileOnly(project(":pineapple-common"))
-    compileOnly(project(":pineapple-nms:api"))
+    compileOnly(libs.paper.api)
+    compileOnly(projects.pineappleCommon)
+    compileOnly(projects.pineappleNms.api)
 
     testImplementation(libs.mockbukkit)
-    testImplementation(project(":pineapple-common"))
-    testImplementation("com.google.code.gson:gson:2.11.0")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
+    testImplementation(libs.paper.api)
+    testImplementation(projects.pineappleCommon)
 
+    testImplementation("com.google.code.gson:gson:2.11.0")
+    testImplementation(platform("org.junit:junit-bom:6.0.1"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 java {
     withJavadocJar()
     withSourcesJar()
-}
-
-tasks.test {
-    useJUnitPlatform()
 }
 
 publishing {

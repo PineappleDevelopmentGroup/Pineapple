@@ -10,8 +10,8 @@ repositories {
 }
 
 dependencies {
-    shadow(project(":pineapple-core"))
-    shadow(project(":pineapple-common"))
+    shadow(projects.pineappleCore)
+    shadow(projects.pineappleCommon)
     shadow(project(":pineapple-nms:api"))
 
 }

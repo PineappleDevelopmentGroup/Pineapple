@@ -1,14 +1,14 @@
 package sh.miles.pineapple.api.infstacks;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.MockPlugin;
-import be.seeseemelk.mockbukkit.ServerMock;
 import org.junit.jupiter.api.BeforeEach;
+import org.mockbukkit.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.ServerMock;
+import org.mockbukkit.mockbukkit.plugin.PluginMock;
 
 public abstract class AbstractPluginTest {
 
     protected ServerMock server;
-    protected MockPlugin plugin;
+    protected PluginMock plugin;
 
     @BeforeEach
     public void setup() {

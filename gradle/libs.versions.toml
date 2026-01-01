@@ -1,22 +1,22 @@
 [versions]
-mockbukkit-version = "4.28.4"
-spigot-api-version = "1.20.4-R0.1-SNAPSHOT"
-paper-api-version = "1.21.4-R0.1-SNAPSHOT"
+mockbukkit-version = "4.98.0"
+paper-api-version = "1.21.10-R0.1-SNAPSHOT" # Stuck on base 1.21.10 for mockbukkit
+jetbrains-annotations = "26.0.0"
 # Plugins
-kotlin-jvm-ver = "2.0.21"
-shadow-ver = "9.0.0-beta6"
+kotlin-jvm-ver = "2.3.0"
+shadow-ver = "9.3.0"
 dokka-ver = "2.0.0"
-spotless-ver = "7.0.2"
+spotless-ver = "8.1.0"
 # Plugins End
 
 [libraries]
 mockbukkit = { module = "org.mockbukkit.mockbukkit:mockbukkit-v1.21", version.ref = "mockbukkit-version" }
 kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-jvm-ver" }
-spigot-api = { module = "org.spigotmc:spigot-api", version.ref = "spigot-api-version" }
 paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper-api-version" }
 dokka = { module = "org.jetbrains.dokka:org.jetbrains.dokka.gradle.plugin", version.ref = "dokka-ver" }
 dokka-base = { module = "org.jetbrains.dokka:dokka-base", version.ref = "dokka-ver" }
 spotless = { module = "com.diffplug.spotless:com.diffplug.spotless.gradle.plugin", version.ref = "spotless-ver"}
+jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains-annotations" }
 
 [plugins]
 jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-jvm-ver" }

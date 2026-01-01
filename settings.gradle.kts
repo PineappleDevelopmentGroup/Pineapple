@@ -11,6 +11,7 @@ dependencyResolutionManagement {
         gradlePluginPortal()
         maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://maven.miles.sh/pineapple")
+
     }
 }
 
@@ -32,3 +33,6 @@ file("pineapple-apis").listFiles()?.forEach { project ->
 // Inspired from PaperMC
 apply(from = "test-plugin.settings.gradle.kts")
 findProject(":test-plugin")?.projectDir = file("test-plugin")
+
+// Features
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

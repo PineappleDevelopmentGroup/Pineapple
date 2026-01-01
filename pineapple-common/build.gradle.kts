@@ -11,10 +11,14 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.jetbrains:annotations:26.0.0")
+    compileOnly(libs.jetbrains.annotations)
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.12.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 java {
@@ -23,15 +27,6 @@ java {
 }
 
 publishing {
-    repositories {
-        maven("https://maven.miles.sh/pineapple") {
-            credentials {
-                this.username = System.getenv("PINEAPPLE_REPOSILITE_USERNAME")
-                this.password = System.getenv("PINEAPPLE_REPOSILITE_PASSWORD")
-            }
-        }
-    }
-
     publications {
         create<MavenPublication>("Common") {
             from(components["java"])

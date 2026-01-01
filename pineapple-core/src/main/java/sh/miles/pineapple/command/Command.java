@@ -86,7 +86,7 @@ public class Command implements BasicCommand {
             return List.of();
         }
 
-        if (args.length == 1) {
+        if (args.length == 0 || args.length == 1) {
             return this.subcommands.keySet().stream().filter((String s) -> executor.hasPermission(subcommands.get(s).label.getPermission())).toList();
         }
 
