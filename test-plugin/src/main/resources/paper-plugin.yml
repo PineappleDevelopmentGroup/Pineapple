@@ -1,0 +1,7 @@
+name: Test-Plugin
+version: "1.0.0"
+main: sh.miles.testplugin.TestPlugin
+description: Test Plugin
+author: Pineapple
+api-version: 1.21.10
+defaultPerm: OP

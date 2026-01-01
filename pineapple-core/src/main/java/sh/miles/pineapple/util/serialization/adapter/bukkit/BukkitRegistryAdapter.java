@@ -14,6 +14,7 @@ import sh.miles.pineapple.util.serialization.exception.SerializedAdaptationExcep
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 class BukkitRegistryAdapter<R extends Keyed> implements SerializedAdapter<R> {
@@ -56,7 +57,8 @@ class BukkitRegistryAdapter<R extends Keyed> implements SerializedAdapter<R> {
 
         try {
             for (final Field field : Registry.class.getDeclaredFields()) {
-                list.add(new BukkitRegistryAdapter(ReflectionUtils.getParameterizedTypes(field).get(0)));
+                if (field.getName().equals("MEMORY_MODULE_TYPE")) continue; // TODO handle generics here instead of skipping
+                list.add(new BukkitRegistryAdapter(ReflectionUtils.getParameterizedTypes(field).getFirst()));
             }
         } catch (Exception ignored) { // while not usually advised we need to catch an exception here for Unit Test
             ignored.printStackTrace();

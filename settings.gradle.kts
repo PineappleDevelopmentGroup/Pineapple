@@ -30,5 +30,9 @@ file("pineapple-apis").listFiles()?.forEach { project ->
     }
 }
 
+// Inspired from PaperMC
+apply(from = "test-plugin.settings.gradle.kts")
+findProject(":test-plugin")?.projectDir = file("test-plugin")
+
 // Features
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
