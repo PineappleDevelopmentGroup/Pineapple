@@ -1,6 +1,7 @@
 package sh.miles.pineapple.collection.trie;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import java.util.Map;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public class Trie {
 
     private static final char END = '$';
@@ -116,11 +118,12 @@ public class Trie {
     private static class TrieNode {
         public final Map<Character, TrieNode> nodes = new HashMap<>();
 
-        public TrieNode insertEdge(char character, @NotNull final TrieNode child) {
+        public TrieNode insertEdge(char character, final TrieNode child) {
             nodes.put(character, child);
             return child;
         }
 
+        @Nullable
         public TrieNode getChild(char character) {
             return nodes.get(character);
         }

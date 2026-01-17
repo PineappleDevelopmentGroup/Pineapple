@@ -2,6 +2,7 @@ package sh.miles.pineapple.api.tiles.api.pos;
 
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Represents a relative position within a chunk.
@@ -11,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * @param data the combined relative position data
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public record ChunkRelPos(long data) {
     /**
      * An easier to use constructor for creating a ChunkRelPos object
@@ -41,7 +43,6 @@ public record ChunkRelPos(long data) {
      *
      * @return the string
      */
-    @NotNull
     public String asLongString() {
         return "" + this.data;
     }
@@ -51,8 +52,7 @@ public record ChunkRelPos(long data) {
         return "ChunkRelPos[relx=%d,y=%d,relz=%d]".formatted((data >> 56) & 0xFF, (int) data, (data >> 48) & 0xFF);
     }
 
-    @NotNull
-    public static ChunkRelPos fromLocation(@NotNull final Location location) {
+    public static ChunkRelPos fromLocation(final Location location) {
         return new ChunkRelPos(location.getBlockX() & 0xF, location.getBlockY(), location.getBlockZ() & 0xF);
     }
 }

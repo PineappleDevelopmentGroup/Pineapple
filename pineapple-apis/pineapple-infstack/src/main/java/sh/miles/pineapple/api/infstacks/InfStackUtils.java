@@ -5,6 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.collection.Pair;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 /**
  * A Utility classes for InfStacks
  */
+@NullMarked
 public final class InfStackUtils {
 
     /**
@@ -29,7 +31,7 @@ public final class InfStackUtils {
      * @param itemStack the ItemStack
      * @return true if it is an InfStack otherwise false
      */
-    public static boolean isInfStack(@NotNull final ItemStack itemStack) {
+    public static boolean isInfStack(final ItemStack itemStack) {
         if (itemStack.getType().isAir()) {
             return false;
         }
@@ -46,7 +48,7 @@ public final class InfStackUtils {
      * @param settings   the InfStackSettings
      * @return a pair of an ItemStack and its accompanying size
      */
-    public static Pair<ItemStack, Long> setupDisplay(@NotNull final ItemStack item, @NotNull final ItemStack comparator, @NotNull final InfStackSettings settings) {
+    public static Pair<ItemStack, Long> setupDisplay(final ItemStack item, final ItemStack comparator, final InfStackSettings settings) {
         if (item.getType().isAir()) {
             throw new IllegalStateException("can not create air as comparator");
         }
@@ -77,7 +79,7 @@ public final class InfStackUtils {
      * @param settings the InfStackSettings
      * @return the item as a Comparator
      */
-    public static ItemStack setupComparator(@NotNull ItemStack item, @NotNull final InfStackSettings settings) {
+    public static ItemStack setupComparator(ItemStack item, final InfStackSettings settings) {
         if (item.getType().isAir()) {
             throw new IllegalStateException("can not create air as comparator");
         }

@@ -1,6 +1,6 @@
 package sh.miles.pineapple.collection.set;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -13,6 +13,7 @@ import java.util.Set;
  * @param <E> The element
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public class PolicySet<E> implements Set<E> {
 
     private final Set<E> set;
@@ -23,7 +24,7 @@ public class PolicySet<E> implements Set<E> {
      *
      * @param policy the set policy
      */
-    public PolicySet(@NotNull final SetPolicy policy) {
+    public PolicySet(final SetPolicy policy) {
         this(new HashSet<>(), policy);
     }
 
@@ -33,7 +34,7 @@ public class PolicySet<E> implements Set<E> {
      * @param set    the set policy
      * @param policy the policy
      */
-    public PolicySet(@NotNull final Set<E> set, @NotNull final SetPolicy policy) {
+    public PolicySet(final Set<E> set, final SetPolicy policy) {
         if (set == null) {
             throw new IllegalArgumentException("The provided set must not be null");
         }
@@ -61,21 +62,21 @@ public class PolicySet<E> implements Set<E> {
         return policy.check(this.set.contains(o));
     }
 
-    @NotNull
+
     @Override
     public Iterator<E> iterator() {
         return this.set.iterator();
     }
 
-    @NotNull
+
     @Override
     public Object[] toArray() {
         return this.set.toArray();
     }
 
-    @NotNull
+
     @Override
-    public <T> T[] toArray(@NotNull final T[] a) {
+    public <T> T[] toArray(final T[] a) {
         return this.set.toArray(a);
     }
 
@@ -90,9 +91,9 @@ public class PolicySet<E> implements Set<E> {
     }
 
     @Override
-    public boolean containsAll(@NotNull final Collection<?> c) {
+    public boolean containsAll(final Collection<?> c) {
         for (final Object o : c) {
-            if (!this.policy.check(this.set.contains(o))){
+            if (!this.policy.check(this.set.contains(o))) {
                 return false;
             }
         }
@@ -100,17 +101,17 @@ public class PolicySet<E> implements Set<E> {
     }
 
     @Override
-    public boolean addAll(@NotNull final Collection<? extends E> c) {
+    public boolean addAll(final Collection<? extends E> c) {
         return this.set.addAll(c);
     }
 
     @Override
-    public boolean retainAll(@NotNull final Collection<?> c) {
+    public boolean retainAll(final Collection<?> c) {
         return this.set.retainAll(c);
     }
 
     @Override
-    public boolean removeAll(@NotNull final Collection<?> c) {
+    public boolean removeAll(final Collection<?> c) {
         return this.set.removeAll(c);
     }
 

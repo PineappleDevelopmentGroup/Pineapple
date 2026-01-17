@@ -9,9 +9,8 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import sh.miles.pineapple.collection.Pair;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import sh.miles.pineapple.api.tiles.api.pos.ChunkRelPos;
 import sh.miles.pineapple.api.tiles.internal.ChunkTileCache;
 import sh.miles.pineapple.api.tiles.internal.ServerTileCache;
@@ -19,6 +18,7 @@ import sh.miles.pineapple.api.tiles.internal.listener.TileChunkIOListener;
 import sh.miles.pineapple.api.tiles.internal.listener.TileGeneralInteractionListener;
 import sh.miles.pineapple.api.tiles.internal.util.TileChunkIOUtils;
 import sh.miles.pineapple.api.tiles.internal.util.TileKeys;
+import sh.miles.pineapple.collection.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,15 +31,17 @@ import java.util.stream.Collectors;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public final class Tiles {
 
+    @Nullable
     private static Tiles instance;
 
     private final Plugin plugin;
     private final ServerTileCache cache;
     private final TileTypeRegistry registry;
 
-    private Tiles(@NotNull final Plugin plugin) {
+    private Tiles(final Plugin plugin) {
         this.plugin = plugin;
         this.cache = new ServerTileCache(plugin);
         this.registry = new TileTypeRegistry();
@@ -53,7 +55,7 @@ public final class Tiles {
      * @param tileType the {@link TileType} to register
      * @throws IllegalArgumentException thrown if the given {@link TileType} is null
      */
-    public void registerTileType(@NotNull final TileType<?> tileType) throws IllegalArgumentException {
+    public void registerTileType(final TileType<?> tileType) throws IllegalArgumentException {
         Preconditions.checkArgument(tileType != null, "The given tile must not be null");
         registry.register(tileType);
     }
@@ -67,7 +69,7 @@ public final class Tiles {
      * @since 1.0.0-SNAPSHOT
      */
     @Nullable
-    public Tile getTile(@NotNull final Location location) {
+    public Tile getTile(final Location location) {
         return getTile(location, (__) -> true);
     }
 
@@ -76,7 +78,6 @@ public final class Tiles {
      *
      * @return a list of all loaded tiles
      */
-    @NotNull
     public List<Pair<ChunkRelPos, Tile>> getAllLoadedTiles() {
         return getAllLoadedTiles((tile) -> true);
     }
@@ -88,7 +89,6 @@ public final class Tiles {
      * @return the list of all loaded tiles
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public List<Pair<ChunkRelPos, Tile>> getAllLoadedTiles(Predicate<Tile> filter) {
         return Streams.stream(this.cache.iterator()).filter((entry) -> filter.apply(entry.getValue())).map((entry) -> Pair.of(entry.getKey(), entry.getValue())).toList();
     }
@@ -100,8 +100,7 @@ public final class Tiles {
      * @return the tiles found
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
-    public Map<ChunkRelPos, Tile> getTiles(@NotNull final Chunk chunk) {
+    public Map<ChunkRelPos, Tile> getTiles(final Chunk chunk) {
         return getTiles(chunk, (__) -> true);
     }
 
@@ -115,7 +114,7 @@ public final class Tiles {
      * @since 1.0.0-SNAPSHOT
      */
     @Nullable
-    public Tile getTile(@NotNull final Location location, @NotNull final Predicate<Tile> filter) {
+    public Tile getTile(final Location location, final Predicate<Tile> filter) {
         final Tile tile = cache.get(location);
         if (tile == null || !filter.apply(tile)) {
             return null;
@@ -132,8 +131,7 @@ public final class Tiles {
      * @return the tiles found
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
-    public Map<ChunkRelPos, Tile> getTiles(@NotNull final Chunk chunk, @NotNull final Predicate<Tile> filter) {
+    public Map<ChunkRelPos, Tile> getTiles(final Chunk chunk, final Predicate<Tile> filter) {
         final ChunkTileCache chunkCache = cache.getChunkCache(chunk);
         if (chunkCache == null) {
             return Map.of();
@@ -149,7 +147,7 @@ public final class Tiles {
      * @param tile     the tile to place
      * @since 1.0.0-SNAPSHOT
      */
-    public void placeTile(@NotNull final Location location, @NotNull final Tile tile) {
+    public void placeTile(final Location location, final Tile tile) {
         this.cache.cache(location, tile);
     }
 
@@ -163,7 +161,7 @@ public final class Tiles {
      * @since 1.0.0-SNAPSHOT
      */
     @Nullable
-    public Tile deleteTile(@NotNull final Location location, @NotNull final Predicate<Tile> filter) {
+    public Tile deleteTile(final Location location, final Predicate<Tile> filter) {
         final Tile tile = cache.evict(location);
         if (tile == null || !filter.apply(tile)) {
             return null;
@@ -182,7 +180,7 @@ public final class Tiles {
      * @throws IllegalArgumentException thrown if the location is null
      * @since 1.0.0-SNAPSHOT
      */
-    public Tile deleteTile(@NotNull final Location location, boolean hard) {
+    public Tile deleteTile(final Location location, boolean hard) {
         final Tile tile = cache.evict(location);
         if (tile == null && !hard) {
             return null;
@@ -200,8 +198,7 @@ public final class Tiles {
      * @return the deleted tiles and their respective positions
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
-    public Map<ChunkRelPos, Tile> deleteTiles(@NotNull final Chunk chunk, @NotNull final Predicate<Tile> filter) {
+    public Map<ChunkRelPos, Tile> deleteTiles(final Chunk chunk, final Predicate<Tile> filter) {
         final ChunkTileCache chunkCache = cache.getChunkCache(chunk);
         if (chunkCache == null) {
             return Map.of();
@@ -247,7 +244,6 @@ public final class Tiles {
      * @param name the key name
      * @return the created namespaced key
      */
-    @NotNull
     public NamespacedKey makeKey(String name) {
         return new NamespacedKey(plugin, name);
     }
@@ -260,7 +256,7 @@ public final class Tiles {
      * @throws IllegalStateException    if there is already an active instance of Tiles
      * @since 1.0.0-SNAPSHOT
      */
-    public static void setup(@NotNull final Plugin plugin) throws IllegalArgumentException, IllegalStateException {
+    public static void setup(final Plugin plugin) throws IllegalArgumentException, IllegalStateException {
         Preconditions.checkArgument(plugin != null, "The given plugin must not be null!");
         Preconditions.checkState(instance == null, "There is already an instance of Tiles, Tiles can not be set up again");
         instance = new Tiles(plugin);

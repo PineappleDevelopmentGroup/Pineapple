@@ -2,7 +2,8 @@ package sh.miles.pineapple.api.tiles.internal.util;
 
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import sh.miles.pineapple.api.tiles.api.Tiles;
 import sh.miles.pineapple.api.tiles.api.pos.ChunkRelPos;
 
@@ -11,10 +12,13 @@ import sh.miles.pineapple.api.tiles.api.pos.ChunkRelPos;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 @ApiStatus.Internal
 public final class TileKeys {
 
+    @Nullable
     private static NamespacedKey tileContainerKey = null;
+    @Nullable
     private static NamespacedKey tileTypeKey = null;
 
     private TileKeys() {
@@ -26,7 +30,6 @@ public final class TileKeys {
      *
      * @return the tile container key
      */
-    @NotNull
     public static NamespacedKey getTileContainerKey() {
         if (tileContainerKey == null) {
             tileContainerKey = Tiles.getInstance().makeKey("tile_container");
@@ -55,8 +58,7 @@ public final class TileKeys {
      * @return the key
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
-    public static NamespacedKey buildChunkRelPosKey(@NotNull final ChunkRelPos pos) {
+    public static NamespacedKey buildChunkRelPosKey(final ChunkRelPos pos) {
         return NamespacedKey.fromString("pineapple_tiles:" + pos.asLongString());
     }
 }

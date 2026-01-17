@@ -7,8 +7,8 @@ import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import sh.miles.pineapple.api.tiles.api.Tile;
 import sh.miles.pineapple.api.tiles.api.pos.ChunkPos;
 import sh.miles.pineapple.api.tiles.api.pos.ChunkRelPos;
@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 @ApiStatus.Internal
 public class ServerTileCache implements Iterable<Map.Entry<ChunkRelPos, Tile>> {
     private final Map<ChunkPos, ChunkTileCache> cache = new ConcurrentHashMap<>();
@@ -35,7 +36,7 @@ public class ServerTileCache implements Iterable<Map.Entry<ChunkRelPos, Tile>> {
      * @param plugin the plugin to be used for task creation
      * @since 1.0.0-SNAPSHOT
      */
-    public ServerTileCache(@NotNull final Plugin plugin) {
+    public ServerTileCache(final Plugin plugin) {
         task = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             for (final var serverEntry : cache.entrySet()) {
                 for (final Map.Entry<ChunkRelPos, Tile> chunkRelPosTileEntry : serverEntry.getValue()) {
@@ -57,7 +58,7 @@ public class ServerTileCache implements Iterable<Map.Entry<ChunkRelPos, Tile>> {
      * @throws IllegalStateException thrown if a tile is already cached at the given location
      * @since 1.0.0-SNAPSHOT
      */
-    public void cache(@NotNull final Location location, @NotNull final Tile tile) throws IllegalStateException {
+    public void cache(final Location location, final Tile tile) throws IllegalStateException {
         final ChunkPos position = ChunkPos.fromChunk(location.getChunk());
         final ChunkTileCache chunkCache = cache.computeIfAbsent(position, (k) -> new ChunkTileCache());
         chunkCache.cache(ChunkRelPos.fromLocation(location), tile);
@@ -70,7 +71,7 @@ public class ServerTileCache implements Iterable<Map.Entry<ChunkRelPos, Tile>> {
      * @return the tile at that location, or null
      */
     @Nullable
-    public Tile get(@NotNull final Location location) {
+    public Tile get(final Location location) {
         final ChunkPos position = ChunkPos.fromChunk(location.getChunk());
         final ChunkTileCache chunkCache = cache.get(position);
         return chunkCache != null ? chunkCache.get(ChunkRelPos.fromLocation(location)) : null;
@@ -87,9 +88,9 @@ public class ServerTileCache implements Iterable<Map.Entry<ChunkRelPos, Tile>> {
      * @since 1.0.0-SNAPSHOT
      * @deprecated DO NOT USE THIS METHOD
      */
-    @NotNull
+    
     @Deprecated
-    public ChunkTileCache getChunkCacheNaive(@NotNull final ChunkPos chunkPos) {
+    public ChunkTileCache getChunkCacheNaive(final ChunkPos chunkPos) {
         return cache.computeIfAbsent(chunkPos, (k) -> new ChunkTileCache());
     }
 
@@ -100,7 +101,7 @@ public class ServerTileCache implements Iterable<Map.Entry<ChunkRelPos, Tile>> {
      * @return the chunk tile cache or null
      */
     @Nullable
-    public ChunkTileCache getChunkCache(@NotNull final Chunk chunk) {
+    public ChunkTileCache getChunkCache(final Chunk chunk) {
         return cache.get(ChunkPos.fromChunk(chunk));
     }
 
@@ -111,7 +112,7 @@ public class ServerTileCache implements Iterable<Map.Entry<ChunkRelPos, Tile>> {
      * @return the tile at the location or null
      */
     @Nullable
-    public Tile evict(@NotNull final Location location) {
+    public Tile evict(final Location location) {
         return evict(location.getChunk(), ChunkRelPos.fromLocation(location));
     }
 
@@ -123,7 +124,7 @@ public class ServerTileCache implements Iterable<Map.Entry<ChunkRelPos, Tile>> {
      * @return the removed tile, otherwise null
      */
     @Nullable
-    public Tile evict(@NotNull final Chunk chunk, @NotNull final ChunkRelPos relPos) {
+    public Tile evict(final Chunk chunk, final ChunkRelPos relPos) {
         final ChunkPos position = ChunkPos.fromChunk(chunk);
         final ChunkTileCache chunkCache = cache.get(position);
         if (chunkCache == null) {
@@ -143,8 +144,8 @@ public class ServerTileCache implements Iterable<Map.Entry<ChunkRelPos, Tile>> {
      * @return all entries in the cache
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
-    public List<Map.Entry<ChunkRelPos, Tile>> evict(@NotNull final Chunk chunk) {
+    
+    public List<Map.Entry<ChunkRelPos, Tile>> evict(final Chunk chunk) {
         final ChunkTileCache chunkCache = cache.remove(ChunkPos.fromChunk(chunk));
         return chunkCache != null ? Streams.stream(chunkCache.iterator()).toList() : List.of();
     }
@@ -170,7 +171,6 @@ public class ServerTileCache implements Iterable<Map.Entry<ChunkRelPos, Tile>> {
         return this.cache.isEmpty();
     }
 
-    @NotNull
     @Override
     public Iterator<Map.Entry<ChunkRelPos, Tile>> iterator() {
         return cache.entrySet().stream().flatMap((it) -> it.getValue().stream()).iterator();

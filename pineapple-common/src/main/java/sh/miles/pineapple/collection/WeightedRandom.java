@@ -1,5 +1,7 @@
 package sh.miles.pineapple.collection;
 
+import org.jspecify.annotations.NullMarked;
+
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -14,6 +16,7 @@ import java.util.TreeMap;
  * @param <T> the type
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public class WeightedRandom<T> {
     private final NavigableMap<Double, T> map = new TreeMap<>();
     private final Random random;

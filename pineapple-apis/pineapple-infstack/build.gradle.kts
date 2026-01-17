@@ -19,8 +19,10 @@ dependencies {
     testImplementation(projects.pineappleCommon)
     testImplementation(libs.mockbukkit)
     testImplementation(libs.paper.api)
-    testImplementation("org.junit.jupiter:junit-jupiter:5.12.2")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter)
+    testRuntimeOnly(libs.junit.launcher)
 }
 
 tasks.test {

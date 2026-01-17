@@ -1,7 +1,7 @@
 package sh.miles.pineapple.collection.registry;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.function.Option;
 
 import java.util.Map;
@@ -13,6 +13,7 @@ import java.util.function.Supplier;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public interface Registry<T extends RegistryKey<K>, K> {
 
     /**
@@ -22,7 +23,7 @@ public interface Registry<T extends RegistryKey<K>, K> {
      * @return an optional wrapping the nullable result
      * @since 1.0.0-SNAPSHOT
      */
-    Option<T> get(@NotNull final K key);
+    Option<T> get(final K key);
 
     /**
      * Fetches an entry from the registry
@@ -32,7 +33,7 @@ public interface Registry<T extends RegistryKey<K>, K> {
      * @since 1.0.0-SNAPSHOT
      */
     @Nullable
-    T getOrNull(@NotNull final K key);
+    T getOrNull(final K key);
 
     /**
      * Fetches the value at the given key or a provided default key
@@ -41,8 +42,7 @@ public interface Registry<T extends RegistryKey<K>, K> {
      * @param defaultValue the default value given the key has no value
      * @return a non null value from either the key or default
      */
-    @NotNull
-    T getOrDefault(@NotNull final K key, @NotNull final T defaultValue);
+    T getOrDefault(final K key, final T defaultValue);
 
     /**
      * Fetches the value at the given key or a provided default key
@@ -51,8 +51,7 @@ public interface Registry<T extends RegistryKey<K>, K> {
      * @param defaultValue the default value function triggered if the key has no value
      * @return a non null value from either the key or default
      */
-    @NotNull
-    T getOrDefault(@NotNull final K key, @NotNull final Supplier<T> defaultValue);
+    T getOrDefault(final K key, final Supplier<T> defaultValue);
 
     /**
      * Retrieves a set of all keys from the registry

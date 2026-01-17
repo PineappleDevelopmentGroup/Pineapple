@@ -3,6 +3,7 @@ package sh.miles.pineapple.api.tiles.api;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Set;
 
@@ -14,6 +15,7 @@ import java.util.Set;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public interface Tile {
 
     /**
@@ -23,7 +25,7 @@ public interface Tile {
      * @param excludeFields the excluded fields set, or null if no excluded fields
      * @since 1.0.0-SNAPSHOT
      */
-    void save(@NotNull PersistentDataContainer container, @Nullable final Set<String> excludeFields);
+    void save(PersistentDataContainer container, @Nullable final Set<String> excludeFields);
 
     /**
      * Saves this tile to the given persistent data container
@@ -31,7 +33,7 @@ public interface Tile {
      * @param container the container to save to
      * @since 1.0.0-SNAPSHOT
      */
-    default void save(@NotNull final PersistentDataContainer container) {
+    default void save(final PersistentDataContainer container) {
         save(container, null);
     }
 
@@ -41,7 +43,7 @@ public interface Tile {
      * @param container the container to load this tile with
      * @since 1.0.0-SNAPSHOT
      */
-    void load(@NotNull final PersistentDataContainer container);
+    void load(final PersistentDataContainer container);
 
     /**
      * Gets the TileType associated with this Tile
@@ -49,6 +51,5 @@ public interface Tile {
      * @return the tile type
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     TileType<?> getTileType();
 }

@@ -3,8 +3,10 @@ package sh.miles.pineapple.api.infstacks;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.collection.Pair;
 
+@NullMarked
 public class InfStackFactory {
 
     private static final ItemStack AIR = new ItemStack(Material.AIR);
@@ -16,7 +18,7 @@ public class InfStackFactory {
      *
      * @param settings the settings
      */
-    public InfStackFactory(@NotNull final InfStackSettings settings) {
+    public InfStackFactory(final InfStackSettings settings) {
         this.settings = settings;
     }
 
@@ -26,7 +28,7 @@ public class InfStackFactory {
      * @param item the item
      * @return the InfStack
      */
-    public InfStack create(@NotNull final ItemStack item) {
+    public InfStack create(final ItemStack item) {
         if (item.getType().isAir()) {
             return air();
         }
