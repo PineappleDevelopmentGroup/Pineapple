@@ -1,7 +1,7 @@
 package sh.miles.pineapple.collection.registry;
 
-import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import sh.miles.pineapple.function.Option;
 
 import java.util.Map;

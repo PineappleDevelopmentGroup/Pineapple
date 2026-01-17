@@ -3,7 +3,7 @@ package sh.miles.pineapple.task.work;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.PineappleLib;
 import sh.miles.pineapple.collection.Pair;
 
@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public class ServerThreadTicker implements Runnable {
 
     /**
@@ -29,7 +30,7 @@ public class ServerThreadTicker implements Runnable {
 
     private final Deque<Pair<ServerThreadWorker, ServerThreadCallback<Object>>> workers = new ConcurrentLinkedDeque<>();
 
-    public ServerThreadTicker(@NotNull final Plugin plugin) {
+    public ServerThreadTicker(final Plugin plugin) {
         Bukkit.getScheduler().runTaskTimer(plugin, this, 1L, 1L);
     }
 
@@ -43,7 +44,7 @@ public class ServerThreadTicker implements Runnable {
      * @param worker the worker to queue
      * @since 1.0.0-SNAPSHOT
      */
-    public void queue(@NotNull final ServerThreadWorker worker) {
+    public void queue(final ServerThreadWorker worker) {
         this.workers.add(Pair.of(worker, null));
     }
 
@@ -54,7 +55,7 @@ public class ServerThreadTicker implements Runnable {
      * @param callback the callback to execute when the worker finished
      * @since 1.0.0-SNAPSHOT
      */
-    public void queue(@NotNull final ServerThreadWorker worker, @NotNull final ServerThreadCallback<Object> callback) {
+    public void queue(final ServerThreadWorker worker, final ServerThreadCallback<Object> callback) {
         this.workers.add(Pair.of(worker, callback));
     }
 
@@ -66,8 +67,7 @@ public class ServerThreadTicker implements Runnable {
      * @param <E>      The type of worker
      * @since 1.0.0-SNAPSHOT
      */
-
-    public <E> void queueSupplier(@NotNull final ServerThreadSupplier<E> worker, @NotNull final ServerThreadCallback<E> callback) {
+    public <E> void queueSupplier(final ServerThreadSupplier<E> worker, final ServerThreadCallback<E> callback) {
         this.workers.add(Pair.of(worker, (ServerThreadCallback<Object>) callback));
     }
 

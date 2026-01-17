@@ -4,6 +4,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializer;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Function;
 
@@ -13,6 +14,7 @@ import java.util.function.Function;
  * @param <T> the type
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public interface JsonAdapter<T> extends JsonSerializer<T>, JsonDeserializer<T> {
 
     /**

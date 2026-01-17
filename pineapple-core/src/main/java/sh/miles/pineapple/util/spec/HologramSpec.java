@@ -2,7 +2,7 @@ package sh.miles.pineapple.util.spec;
 
 import org.bukkit.Location;
 import org.bukkit.entity.TextDisplay;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.chat.PineappleChat;
 import sh.miles.pineapple.chat.PineappleComponent;
 
@@ -17,7 +17,8 @@ import java.util.function.Consumer;
  * @param offset       the offset of the hologram
  * @since 1.0.0-SNAPSHOT
  */
-public record HologramSpec(@NotNull PineappleComponent hologramText, @NotNull VectorSpec offset) {
+@NullMarked
+public record HologramSpec(PineappleComponent hologramText, VectorSpec offset) {
 
     /**
      * Spawns a {@link TextDisplay} given the basic Hologram Specifications.
@@ -27,8 +28,7 @@ public record HologramSpec(@NotNull PineappleComponent hologramText, @NotNull Ve
      * @return the spawned text display
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
-    public TextDisplay spawn(@NotNull final Location location, @NotNull final Consumer<TextDisplay> configuration) {
+    public TextDisplay spawn(final Location location, final Consumer<TextDisplay> configuration) {
         return spawn(location, new HashMap<>(), configuration);
     }
 
@@ -41,12 +41,12 @@ public record HologramSpec(@NotNull PineappleComponent hologramText, @NotNull Ve
      * @return the spawned text display
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
-    public TextDisplay spawn(@NotNull final Location location, @NotNull final Map<String, Object> replacements, @NotNull final Consumer<TextDisplay> configuration) {
+    public TextDisplay spawn(final Location location, final Map<String, Object> replacements, final Consumer<TextDisplay> configuration) {
         return location.getWorld().spawn(this.offset.modify(location), TextDisplay.class, (display) -> {
-            display.text(PineappleChat.parse(hologramText.getSource(), replacements));
-            configuration.accept(display);
-        });
+                display.text(PineappleChat.parse(hologramText.getSource(), replacements));
+                configuration.accept(display);
+            }
+        );
     }
 
 }

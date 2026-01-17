@@ -2,6 +2,7 @@ package sh.miles.pineapple.command;
 
 import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public final class CommandLabel {
 
     /**
@@ -32,7 +34,7 @@ public final class CommandLabel {
      * @param aliases     the aliases of the command
      * @since 1.0.0-SNAPSHOT
      */
-    public CommandLabel(@NotNull final String name, @NotNull final String permission, @NotNull final String description, List<String> aliases) {
+    public CommandLabel( final String name,  final String permission,  final String description, List<String> aliases) {
         Preconditions.checkNotNull(name);
         Preconditions.checkNotNull(permission);
         Preconditions.checkNotNull(description);
@@ -52,7 +54,7 @@ public final class CommandLabel {
      * @param description description
      * @since 1.0.0-SNAPSHOT
      */
-    public CommandLabel(@NotNull final String name, @NotNull final String permission, @NotNull final String description) {
+    public CommandLabel( final String name,  final String permission,  final String description) {
         this(name, permission, description, new ArrayList<>());
     }
 
@@ -63,7 +65,7 @@ public final class CommandLabel {
      * @param permission permission
      * @since 1.0.0-SNAPSHOT
      */
-    public CommandLabel(@NotNull final String name, @NotNull final String permission) {
+    public CommandLabel( final String name,  final String permission) {
         this(name, permission, DEFAULT_DESCRIPTION);
     }
 
@@ -73,7 +75,6 @@ public final class CommandLabel {
      * @return a string name
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public String getName() {
         return this.name;
     }
@@ -84,7 +85,6 @@ public final class CommandLabel {
      * @return a string permission
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public String getPermission() {
         return this.permission;
     }
@@ -95,7 +95,6 @@ public final class CommandLabel {
      * @return a string description
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public String getDescription() {
         return this.description;
     }
@@ -106,7 +105,6 @@ public final class CommandLabel {
      * @return a list of aliases
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public List<String> getAliases() {
         return new ArrayList<>(this.aliases);
     }

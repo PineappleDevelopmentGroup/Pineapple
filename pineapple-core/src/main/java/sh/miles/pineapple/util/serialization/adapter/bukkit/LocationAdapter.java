@@ -22,9 +22,8 @@ class LocationAdapter implements SerializedAdapter<Location> {
     static final String YAW = "yaw";
     static final String WORLD = "world";
 
-    @NotNull
     @Override
-    public SerializedElement serialize(@NotNull final Location location, @NotNull final SerializedSerializeContext context) throws SerializedAdaptationException {
+    public SerializedElement serialize( final Location location,  final SerializedSerializeContext context) throws SerializedAdaptationException {
         final SerializedObject object = SerializedElement.object();
         object.add(WORLD, location.getWorld().getName());
         object.add(X, location.getX());
@@ -39,9 +38,8 @@ class LocationAdapter implements SerializedAdapter<Location> {
         return object;
     }
 
-    @NotNull
     @Override
-    public Location deserialize(@NotNull final SerializedElement element, @NotNull final SerializedDeserializeContext context) throws SerializedAdaptationException {
+    public Location deserialize( final SerializedElement element,  final SerializedDeserializeContext context) throws SerializedAdaptationException {
         final SerializedObject object = element.getAsObject();
         final World world = Bukkit.getWorld(object.getPrimitive(WORLD).orThrow().getAsString());
         final double x = object.getPrimitive(X).orThrow().getAsDouble();

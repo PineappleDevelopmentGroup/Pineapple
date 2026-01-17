@@ -1,12 +1,13 @@
 package sh.miles.pineapple.config;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.config.adapter.TypeAdapterHandler;
 import sh.miles.pineapple.config.adapter.base.TypeAdapter;
 import sh.miles.pineapple.config.type.Configuration;
 
 import java.io.File;
 
+@NullMarked
 public class ConfigManager {
 
     private final TypeAdapterHandler typeAdapterHandler;
@@ -30,33 +31,34 @@ public class ConfigManager {
     @SuppressWarnings("unchecked")
     public <S, R> TypeAdapter<S, R> getTypeAdapter(ConfigType<R> type) {
         TypeAdapter<?, ?> adapter = this.typeAdapterHandler.getOrDefault(type, () -> {
-            final var temp = this.typeAdapterHandler.create(type);
-            this.typeAdapterHandler.register(temp);
-            return temp;
-        });
+                final var temp = this.typeAdapterHandler.create(type);
+                this.typeAdapterHandler.register(temp);
+                return temp;
+            }
+        );
         return (TypeAdapter<S, R>) adapter;
     }
 
     /**
      * Create a static based configuration
      *
-     * @param file The file for data to be saved to
+     * @param file  The file for data to be saved to
      * @param clazz The Class to retrieve values from
      * @return Configuration data wrapper
      */
-    public Configuration createConfiguration(@NotNull File file, @NotNull Class<?> clazz) {
+    public Configuration createConfiguration(File file, Class<?> clazz) {
         return new Configuration(file, clazz, null);
     }
 
     /**
      * Create an instanced based configuration
      *
-     * @param file The file for data to be saved to
-     * @param clazz The Class to retrieve values from
+     * @param file     The file for data to be saved to
+     * @param clazz    The Class to retrieve values from
      * @param instance The instance to use to access the values
      * @return Configuration data wrapper
      */
-    public Configuration createConfiguration(@NotNull File file, @NotNull Class<?> clazz, @NotNull Object instance) {
+    public Configuration createConfiguration(File file, Class<?> clazz, Object instance) {
         return new Configuration(file, clazz, instance);
     }
 

@@ -1,6 +1,5 @@
 package sh.miles.pineapple.util.serialization.adapter.bukkit;
 
-import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.util.serialization.adapter.SerializedAdapter;
 import sh.miles.pineapple.util.serialization.adapter.SerializedAdapterPack;
 
@@ -19,7 +18,7 @@ public final class BukkitAdapterPack implements SerializedAdapterPack {
     }
 
     @Override
-    public void bootstrap(@NotNull final Consumer<SerializedAdapter<?>> registrar) {
+    public void bootstrap(final Consumer<SerializedAdapter<?>> registrar) {
         registrar.accept(new ArmorTrimAdapter());
         registrar.accept(new AttributeModifierAdapter());
         registrar.accept(new BoundingBoxAdapter());

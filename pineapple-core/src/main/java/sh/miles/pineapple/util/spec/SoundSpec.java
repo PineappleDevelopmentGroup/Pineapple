@@ -4,7 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Represents the basic sound Specification
@@ -15,7 +15,8 @@ import org.jetbrains.annotations.NotNull;
  * @param pitch    the pitch of the sound
  * @since 1.0.0-SNAPSHOT
  */
-public record SoundSpec(@NotNull Sound sound, @NotNull SoundCategory category, float volume, float pitch) {
+@NullMarked
+public record SoundSpec(Sound sound, SoundCategory category, float volume, float pitch) {
     /**
      * Creates a SoundSpec
      *
@@ -24,7 +25,7 @@ public record SoundSpec(@NotNull Sound sound, @NotNull SoundCategory category, f
      * @param pitch  the pitch of the sound
      * @since 1.0.0-SNAPSHOT
      */
-    public SoundSpec(@NotNull Sound sound, float volume, float pitch) {
+    public SoundSpec(Sound sound, float volume, float pitch) {
         this(sound, SoundCategory.MASTER, volume, pitch);
     }
 
@@ -34,7 +35,7 @@ public record SoundSpec(@NotNull Sound sound, @NotNull SoundCategory category, f
      * @param location the location to play the sound at
      * @since 1.0.0-SNAPSHOT
      */
-    public void play(@NotNull final Location location) {
+    public void play(final Location location) {
         location.getWorld().playSound(location, sound, category, volume, pitch);
     }
 
@@ -44,7 +45,7 @@ public record SoundSpec(@NotNull Sound sound, @NotNull SoundCategory category, f
      * @param player the player to play the sound for
      * @since 1.0.0-SNAPSHOT
      */
-    public void play(@NotNull final Player player) {
+    public void play(final Player player) {
         player.playSound(player, sound, category, volume, pitch);
     }
 }

@@ -1,6 +1,6 @@
 package sh.miles.pineapple.util.serialization.adapter;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Consumer;
 
@@ -9,6 +9,7 @@ import java.util.function.Consumer;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public interface SerializedAdapterPack {
 
     /**
@@ -17,5 +18,5 @@ public interface SerializedAdapterPack {
      * @param registrar the registrar to handle the bootstrap
      * @since 1.0.0-SNAPSHOT
      */
-    void bootstrap(@NotNull final Consumer<SerializedAdapter<?>> registrar);
+    void bootstrap(final Consumer<SerializedAdapter<?>> registrar);
 }

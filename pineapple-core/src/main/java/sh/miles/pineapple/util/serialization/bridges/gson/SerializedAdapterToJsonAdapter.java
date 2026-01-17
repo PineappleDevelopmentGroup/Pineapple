@@ -10,7 +10,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.internal.LazilyParsedNumber;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.ReflectionUtils;
 import sh.miles.pineapple.util.serialization.Serialized;
 import sh.miles.pineapple.util.serialization.SerializedArray;
@@ -23,9 +23,12 @@ import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Type;
 import java.util.Map;
 
+@NullMarked
 class SerializedAdapterToJsonAdapter<T> implements JsonSerializer<T>, JsonDeserializer<T> {
 
-    private static final MethodHandle JSON_PRIMITIVE_VALUE_FIELD = ReflectionUtils.getFieldAsGetter(JsonPrimitive.class, "value");
+    private static final MethodHandle JSON_PRIMITIVE_VALUE_FIELD = ReflectionUtils.getFieldAsGetter(JsonPrimitive.class,
+        "value"
+    );
 
     private final Class<T> clazz;
 
@@ -45,7 +48,7 @@ class SerializedAdapterToJsonAdapter<T> implements JsonSerializer<T>, JsonDeseri
         return fromSerialized(element);
     }
 
-    private JsonElement fromSerialized(@NotNull final SerializedElement element) {
+    private JsonElement fromSerialized(final SerializedElement element) {
         if (element.isPrimitive()) {
             return fromSerializedPrimitive(element.getAsPrimitive());
         } else if (element.isArray()) {
@@ -53,11 +56,12 @@ class SerializedAdapterToJsonAdapter<T> implements JsonSerializer<T>, JsonDeseri
         } else if (element.isObject()) {
             return fromSerializedObject(element.getAsObject());
         } else {
-            throw new SerializedException("Unable to convert SerializedElement to JsonElement this should never occur and is a serious bug!");
+            throw new SerializedException(
+                "Unable to convert SerializedElement to JsonElement this should never occur and is a serious bug!");
         }
     }
 
-    private JsonObject fromSerializedObject(@NotNull final SerializedObject serializedObject) {
+    private JsonObject fromSerializedObject(final SerializedObject serializedObject) {
         final JsonObject object = new JsonObject();
         for (final Map.Entry<String, SerializedElement> entry : serializedObject.entrySet()) {
             object.add(entry.getKey(), fromSerialized(entry.getValue()));
@@ -65,7 +69,7 @@ class SerializedAdapterToJsonAdapter<T> implements JsonSerializer<T>, JsonDeseri
         return object;
     }
 
-    private JsonArray fromSerializedArray(@NotNull final SerializedArray serializedArray) {
+    private JsonArray fromSerializedArray(final SerializedArray serializedArray) {
         final JsonArray array = new JsonArray();
         for (final SerializedElement element : serializedArray) {
             array.add(fromSerialized(element));
@@ -73,7 +77,7 @@ class SerializedAdapterToJsonAdapter<T> implements JsonSerializer<T>, JsonDeseri
         return array;
     }
 
-    private JsonPrimitive fromSerializedPrimitive(@NotNull final SerializedPrimitive serializedPrimitive) {
+    private JsonPrimitive fromSerializedPrimitive(final SerializedPrimitive serializedPrimitive) {
         if (serializedPrimitive.isInt()) {
             return new JsonPrimitive(serializedPrimitive.getAsInt());
         } else if (serializedPrimitive.isLong()) {
@@ -86,10 +90,12 @@ class SerializedAdapterToJsonAdapter<T> implements JsonSerializer<T>, JsonDeseri
             return new JsonPrimitive(serializedPrimitive.getAsString());
         }
 
-        throw new SerializedException("The type of the primitive value %s can not be expressed. THIS IS A BUG!".formatted(serializedPrimitive.getTypeOfPrimitive()));
+        throw new SerializedException(
+            "The type of the primitive value %s can not be expressed. THIS IS A BUG!".formatted(
+                serializedPrimitive.getTypeOfPrimitive()));
     }
 
-    private SerializedElement fromJson(@NotNull final JsonElement jsonElement) {
+    private SerializedElement fromJson(final JsonElement jsonElement) {
         if (jsonElement.isJsonPrimitive()) {
             return fromJsonPrimitive(jsonElement.getAsJsonPrimitive());
         } else if (jsonElement.isJsonArray()) {
@@ -97,11 +103,12 @@ class SerializedAdapterToJsonAdapter<T> implements JsonSerializer<T>, JsonDeseri
         } else if (jsonElement.isJsonObject()) {
             return fromJsonObject(jsonElement.getAsJsonObject());
         } else {
-            throw new SerializedException("Unable to convert JsonElement to SerializedElement because this element is likely null");
+            throw new SerializedException(
+                "Unable to convert JsonElement to SerializedElement because this element is likely null");
         }
     }
 
-    private SerializedObject fromJsonObject(@NotNull final JsonObject jsonObject) {
+    private SerializedObject fromJsonObject(final JsonObject jsonObject) {
         final SerializedObject object = SerializedElement.object();
         for (final Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
             object.add(entry.getKey(), fromJson(entry.getValue()));
@@ -109,7 +116,7 @@ class SerializedAdapterToJsonAdapter<T> implements JsonSerializer<T>, JsonDeseri
         return object;
     }
 
-    private SerializedArray fromJsonArray(@NotNull final JsonArray jsonArray) {
+    private SerializedArray fromJsonArray(final JsonArray jsonArray) {
         final SerializedArray array = SerializedElement.array(jsonArray.size());
         for (final JsonElement jsonElement : jsonArray) {
             array.add(fromJson(jsonElement));
@@ -117,7 +124,7 @@ class SerializedAdapterToJsonAdapter<T> implements JsonSerializer<T>, JsonDeseri
         return array;
     }
 
-    private SerializedPrimitive fromJsonPrimitive(@NotNull final JsonPrimitive primitive) {
+    private SerializedPrimitive fromJsonPrimitive(final JsonPrimitive primitive) {
         try {
             final Object value = JSON_PRIMITIVE_VALUE_FIELD.invoke(primitive);
             if (value instanceof LazilyParsedNumber number) {

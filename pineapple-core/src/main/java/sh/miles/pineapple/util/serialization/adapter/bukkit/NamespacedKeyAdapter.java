@@ -10,15 +10,13 @@ import sh.miles.pineapple.util.serialization.exception.SerializedAdaptationExcep
 
 class NamespacedKeyAdapter implements SerializedAdapter<NamespacedKey> {
 
-    @NotNull
     @Override
-    public SerializedElement serialize(@NotNull final NamespacedKey obj, @NotNull final SerializedSerializeContext context) throws SerializedAdaptationException {
+    public SerializedElement serialize( final NamespacedKey obj,  final SerializedSerializeContext context) throws SerializedAdaptationException {
         return SerializedElement.primitive(obj.toString());
     }
 
-    @NotNull
     @Override
-    public NamespacedKey deserialize(@NotNull final SerializedElement element, @NotNull final SerializedDeserializeContext context) throws SerializedAdaptationException {
+    public NamespacedKey deserialize( final SerializedElement element,  final SerializedDeserializeContext context) throws SerializedAdaptationException {
         if (element.isPrimitive()) {
             return NamespacedKey.fromString(element.getAsPrimitive().getAsString());
         }

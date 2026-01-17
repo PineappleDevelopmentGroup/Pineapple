@@ -2,11 +2,9 @@ package sh.miles.pineapple.util.serialization.adapter.bukkit;
 
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
-import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
-import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.ReflectionUtils;
 import sh.miles.pineapple.util.serialization.SerializedDeserializeContext;
 import sh.miles.pineapple.util.serialization.SerializedElement;
@@ -16,7 +14,6 @@ import sh.miles.pineapple.util.serialization.exception.SerializedAdaptationExcep
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 class BukkitRegistryAdapter<R extends Keyed> implements SerializedAdapter<R> {
@@ -29,24 +26,25 @@ class BukkitRegistryAdapter<R extends Keyed> implements SerializedAdapter<R> {
         this.registry = RegistryAccess.registryAccess().getRegistry(key);
     }
 
-    @NotNull
     @Override
-    public SerializedElement serialize(@NotNull final R obj, @NotNull final SerializedSerializeContext context) throws SerializedAdaptationException {
+    public SerializedElement serialize(final R obj, final SerializedSerializeContext context) throws SerializedAdaptationException {
         return SerializedElement.primitive(obj.getKey().toString());
     }
 
-    @NotNull
     @Override
-    public R deserialize(@NotNull final SerializedElement element, @NotNull final SerializedDeserializeContext context) throws SerializedAdaptationException {
+    public R deserialize(final SerializedElement element, final SerializedDeserializeContext context) throws SerializedAdaptationException {
         if (element.isPrimitive()) {
             final NamespacedKey key = context.deserialize(element, NamespacedKey.class);
             final R result = this.registry.get(key);
             if (result == null) {
-                throw new SerializedAdaptationException("The registry for the type %s does not have an entry with the name %s".formatted(this.registryClass.getSimpleName(), key));
+                throw new SerializedAdaptationException(
+                    "The registry for the type %s does not have an entry with the name %s".formatted(
+                        this.registryClass.getSimpleName(), key));
             }
             return result;
         }
-        throw new SerializedAdaptationException("%s's must be adapted from primitive strings".formatted(this.registryClass.getSimpleName()));
+        throw new SerializedAdaptationException(
+            "%s's must be adapted from primitive strings".formatted(this.registryClass.getSimpleName()));
     }
 
     @Override

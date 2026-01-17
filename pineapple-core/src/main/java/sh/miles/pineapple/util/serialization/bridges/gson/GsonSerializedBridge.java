@@ -1,7 +1,7 @@
 package sh.miles.pineapple.util.serialization.bridges.gson;
 
 import com.google.gson.GsonBuilder;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.util.serialization.adapter.SerializedAdapter;
 import sh.miles.pineapple.util.serialization.bridges.SerializedBridge;
 
@@ -10,6 +10,7 @@ import sh.miles.pineapple.util.serialization.bridges.SerializedBridge;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public class GsonSerializedBridge implements SerializedBridge {
 
     private final GsonBuilder builder;
@@ -19,7 +20,7 @@ public class GsonSerializedBridge implements SerializedBridge {
      *
      * @param builder the builder to use with the bridge
      */
-    public GsonSerializedBridge(@NotNull final GsonBuilder builder) {
+    public GsonSerializedBridge(final GsonBuilder builder) {
         this.builder = builder;
     }
 

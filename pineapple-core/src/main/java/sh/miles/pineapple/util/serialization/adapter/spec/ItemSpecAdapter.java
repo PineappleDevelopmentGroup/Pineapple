@@ -19,7 +19,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.potion.PotionEffect;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.chat.PineappleChat;
 import sh.miles.pineapple.function.Option;
 import sh.miles.pineapple.function.Option.Some;
@@ -41,6 +41,7 @@ import java.util.Map;
 import static sh.miles.pineapple.util.serialization.SerializedElement.array;
 import static sh.miles.pineapple.util.serialization.SerializedElement.object;
 
+@NullMarked
 class ItemSpecAdapter implements SerializedAdapter<ItemSpec> {
 
     // Required
@@ -136,9 +137,8 @@ class ItemSpecAdapter implements SerializedAdapter<ItemSpec> {
     // SKIPPED
     // Suspicious Stew end
 
-    @NotNull
     @Override
-    public SerializedElement serialize(@NotNull final ItemSpec spec, @NotNull final SerializedSerializeContext context) throws SerializedAdaptationException {
+    public SerializedElement serialize(final ItemSpec spec, final SerializedSerializeContext context) throws SerializedAdaptationException {
         final SerializedObject item = object();
 
         item.add(ITEM_TYPE, spec.getItemType().toString().toLowerCase());
@@ -308,20 +308,22 @@ class ItemSpecAdapter implements SerializedAdapter<ItemSpec> {
         return item;
     }
 
-    @NotNull
+
     @Override
-    public ItemSpec deserialize(@NotNull final SerializedElement element, @NotNull final SerializedDeserializeContext context) throws SerializedAdaptationException {
+    public ItemSpec deserialize(final SerializedElement element, final SerializedDeserializeContext context) throws SerializedAdaptationException {
         final SerializedObject object = element.getAsObject();
 
         // Required
         final Material itemType = Material.matchMaterial(object.getPrimitive(ITEM_TYPE).orThrow().getAsString());
-        final int amount = (object.getPrimitive(AMOUNT) instanceof Some<SerializedPrimitive> primitive) ? primitive.some().getAsInt() : 1;
+        final int amount = (object.getPrimitive(AMOUNT) instanceof Some<SerializedPrimitive> primitive) ? primitive
+            .some().getAsInt() : 1;
         final ItemSpec spec = new ItemSpec(itemType);
         spec.setDefaultTextMutator(PineappleChat::parse);
         spec.setAmount(amount);
 
         // Display Data
-        final String name = object.getPrimitive(NAME) instanceof Some<SerializedPrimitive> primitive ? primitive.some().getAsString() : null;
+        final String name = object.getPrimitive(NAME) instanceof Some<SerializedPrimitive> primitive ? primitive.some()
+            .getAsString() : null;
 
         if (name != null) {
             spec.setName(name);
@@ -349,7 +351,9 @@ class ItemSpecAdapter implements SerializedAdapter<ItemSpec> {
             }
         }
 
-        final int customModelData = object.getPrimitive(CUSTOM_MODEL_DATA) instanceof Some<SerializedPrimitive> primitive ? primitive.some().getAsInt() : ItemSpec.INT_DATA_UNSET;
+        final int customModelData = object.getPrimitive(
+            CUSTOM_MODEL_DATA) instanceof Some<SerializedPrimitive> primitive ? primitive.some()
+            .getAsInt() : ItemSpec.INT_DATA_UNSET;
         if (customModelData != ItemSpec.INT_DATA_UNSET) {
             spec.setCustomModelData(customModelData);
         }
@@ -381,7 +385,9 @@ class ItemSpecAdapter implements SerializedAdapter<ItemSpec> {
         if (enchantmentObjectOption instanceof Some<SerializedObject> serializedObject) {
             final var enchantmentObject = serializedObject.some();
             for (final Map.Entry<String, SerializedElement> entry : enchantmentObject.entrySet()) {
-                enchantments.put(RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).get(NamespacedKey.fromString(entry.getKey())), entry.getValue().getAsPrimitive().getAsInt());
+                enchantments.put(RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT)
+                    .get(NamespacedKey.fromString(entry.getKey())), entry.getValue().getAsPrimitive().getAsInt()
+                );
             }
         }
 
@@ -391,12 +397,15 @@ class ItemSpecAdapter implements SerializedAdapter<ItemSpec> {
         // Enchantments end
 
         // Durability
-        final int durability = object.getPrimitive(DURABILITY) instanceof Some<SerializedPrimitive> primitive ? primitive.some().getAsInt() : ItemSpec.INT_DATA_UNSET;
+        final int durability = object.getPrimitive(
+            DURABILITY) instanceof Some<SerializedPrimitive> primitive ? primitive.some()
+            .getAsInt() : ItemSpec.INT_DATA_UNSET;
         if (durability != ItemSpec.INT_DATA_UNSET) {
             spec.setDurability(durability);
         }
 
-        final boolean unbreakable = object.getPrimitive(UNBREAKABLE) instanceof Some<SerializedPrimitive> primitive && primitive.some().getAsBoolean();
+        final boolean unbreakable = object.getPrimitive(
+            UNBREAKABLE) instanceof Some<SerializedPrimitive> primitive && primitive.some().getAsBoolean();
         if (unbreakable) {
             spec.setUnbreakable(true);
         }
@@ -443,7 +452,9 @@ class ItemSpecAdapter implements SerializedAdapter<ItemSpec> {
         if (object.getObject(STORED_ENCHANTMENTS) instanceof Some<SerializedObject> someEnchantments) {
             final var enchantmentObject = someEnchantments.some();
             for (final Map.Entry<String, SerializedElement> entry : enchantmentObject.entrySet()) {
-                storedEnchantments.put(RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).getOrThrow(NamespacedKey.fromString(entry.getKey())), entry.getValue().getAsPrimitive().getAsInt());
+                storedEnchantments.put(RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT)
+                    .getOrThrow(NamespacedKey.fromString(entry.getKey())), entry.getValue().getAsPrimitive().getAsInt()
+                );
             }
         }
 
@@ -471,7 +482,9 @@ class ItemSpecAdapter implements SerializedAdapter<ItemSpec> {
         // Bundle end
 
         // Compasses
-        final boolean lodestoneTracked = object.getPrimitive(LODESTONE_TRACKED) instanceof Some<SerializedPrimitive> someLodestoneTracked && someLodestoneTracked.some().getAsBoolean();
+        final boolean lodestoneTracked = object.getPrimitive(
+            LODESTONE_TRACKED) instanceof Some<SerializedPrimitive> someLodestoneTracked && someLodestoneTracked.some()
+            .getAsBoolean();
         if (lodestoneTracked) {
             spec.setLodestoneTracked(true);
         }

@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -18,6 +18,7 @@ import java.util.function.BiConsumer;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public class Command implements BasicCommand {
 
     private final CommandLabel label;
@@ -27,7 +28,8 @@ public class Command implements BasicCommand {
     /**
      * Default NoArgs Executor
      */
-    protected BiConsumer<CommandSender, String[]> noArgExecutor = (s, a) -> {};
+    protected BiConsumer<CommandSender, String[]> noArgExecutor = (s, a) -> {
+    };
 
     /**
      * Creates SCommand
@@ -36,7 +38,7 @@ public class Command implements BasicCommand {
      * @param settings settings
      * @since 1.0.0-SNAPSHOT
      */
-    public Command(@NotNull final CommandLabel label, @NotNull final CommandSettings.Settings settings) {
+    public Command(final CommandLabel label, final CommandSettings.Settings settings) {
         Preconditions.checkNotNull(label);
         Preconditions.checkNotNull(settings);
 
@@ -51,7 +53,7 @@ public class Command implements BasicCommand {
      * @param label label
      * @since 1.0.0-SNAPSHOT
      */
-    public Command(@NotNull final CommandLabel label) {
+    public Command(final CommandLabel label) {
         this(label, CommandSettings.DEFAULT_COMMAND_SETTINGS);
     }
 
@@ -87,7 +89,8 @@ public class Command implements BasicCommand {
         }
 
         if (args.length == 0 || args.length == 1) {
-            return this.subcommands.keySet().stream().filter((String s) -> executor.hasPermission(subcommands.get(s).label.getPermission())).toList();
+            return this.subcommands.keySet().stream()
+                .filter((String s) -> executor.hasPermission(subcommands.get(s).label.getPermission())).toList();
         }
 
         final Command subcommand = subcommands.getOrDefault(args[0], null);
@@ -110,7 +113,7 @@ public class Command implements BasicCommand {
      * @param command the command to register
      * @since 1.0.0-SNAPSHOT
      */
-    public void registerSubcommand(@NotNull Command command) {
+    public void registerSubcommand(Command command) {
         this.subcommands.put(command.getCommandLabel().getName(), command);
     }
 
@@ -120,7 +123,7 @@ public class Command implements BasicCommand {
      * @return command label
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
+
     public CommandLabel getCommandLabel() {
         return this.label;
     }
@@ -131,7 +134,7 @@ public class Command implements BasicCommand {
      * @return command settings
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
+
     public CommandSettings.Settings getSettings() {
         return settings;
     }

@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.json.adapter.JsonAdapters;
 
 import java.io.File;
@@ -19,6 +19,7 @@ import java.util.function.Consumer;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public class JsonHelper {
 
     private final Gson gson;
@@ -29,7 +30,7 @@ public class JsonHelper {
      * @param build the builder function
      * @since 1.0.0-SNAPSHOT
      */
-    public JsonHelper(@NotNull final Consumer<GsonBuilder> build) {
+    public JsonHelper(final Consumer<GsonBuilder> build) {
         final GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
         JsonAdapters.registerAll(builder);
@@ -43,7 +44,7 @@ public class JsonHelper {
      * @param adapters the adapters to register with this JsonHelper
      * @since 1.0.0-SNAPSHOT
      */
-    public JsonHelper(@NotNull final List<JsonAdapter<?>> adapters) {
+    public JsonHelper(final List<JsonAdapter<?>> adapters) {
         final GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
         JsonAdapters.registerAll(builder);
@@ -63,7 +64,7 @@ public class JsonHelper {
      * @param adapters the adapters to register with this JsonHelper
      * @since 1.0.0-SNAPSHOT
      */
-    public JsonHelper(@NotNull final JsonAdapter<?>... adapters) {
+    public JsonHelper(final JsonAdapter<?>... adapters) {
         this(Arrays.asList(adapters));
     }
 
@@ -81,8 +82,7 @@ public class JsonHelper {
      * @throws IllegalStateException thrown under the exception where no file is found
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
-    public <T> T[] asArray(@NotNull final Plugin plugin, @NotNull String file, Class<T[]> arrayClazz) throws IllegalStateException {
+    public <T> T[] asArray(final Plugin plugin, String file, Class<T[]> arrayClazz) throws IllegalStateException {
         Preconditions.checkArgument(arrayClazz.isArray(), "An array class must be passed");
         try {
             return gson.fromJson(new FileReader(new File(plugin.getDataFolder(), file)), arrayClazz);
@@ -98,7 +98,6 @@ public class JsonHelper {
      * @return the gson
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public Gson getGson() {
         return gson;
     }

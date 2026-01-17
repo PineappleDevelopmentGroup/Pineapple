@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.Map;
@@ -14,6 +14,7 @@ import java.util.Map;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public final class PineappleChat {
 
     private static final MiniMessage miniMessage = MiniMessage.builder().build();
@@ -30,8 +31,8 @@ public final class PineappleChat {
      * @return the Component
      * @since 1.0.0-SNAPSHOT
      */
-    public static Component parse(@NotNull final String string) {
-        return string == null || string.isEmpty()  ? Component.empty() : miniMessage.deserialize(string);
+    public static Component parse(final String string) {
+        return string == null || string.isEmpty() ? Component.empty() : miniMessage.deserialize(string);
     }
 
     /**
@@ -42,22 +43,22 @@ public final class PineappleChat {
      * @return the Component
      * @since 1.0.0-SNAPSHOT
      */
-    public static Component parse(@NotNull final String string, @NotNull final Map<String, Object> replacements) {
+    public static Component parse(final String string, final Map<String, Object> replacements) {
         List<TagResolver.Single> placeholders = replacements.entrySet().stream()
-                .map(entry -> Placeholder.parsed(entry.getKey(), String.valueOf(entry.getValue())))
-                .toList();
+            .map(entry -> Placeholder.parsed(entry.getKey(), String.valueOf(entry.getValue())))
+            .toList();
         return miniMessage.deserialize(string, TagResolver.resolver(placeholders));
     }
 
     /**
      * Parses the given string into a Component
      *
-     * @param string       the string to parse
+     * @param string    the string to parse
      * @param resolvers the resolvers to use to fill in placeholders
      * @return the Component
      * @since 1.0.0-SNAPSHOT
      */
-    public static Component parse(@NotNull final String string, @NotNull final TagResolver... resolvers) {
+    public static Component parse(final String string, final TagResolver... resolvers) {
         return miniMessage.deserialize(string, TagResolver.resolver(resolvers));
     }
 
@@ -70,7 +71,7 @@ public final class PineappleChat {
      * @return the PineappleComponent
      * @since 1.0.0-SNAPSHOT
      */
-    public static PineappleComponent component(@NotNull final String source) {
+    public static PineappleComponent component(final String source) {
         return new PineappleComponent(source);
     }
 

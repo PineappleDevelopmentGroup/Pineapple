@@ -32,7 +32,8 @@ public final class ChunkTileCache implements Iterable<Map.Entry<ChunkRelPos, Til
     public void cache(final ChunkRelPos chunkPos, final Tile tile) throws IllegalStateException {
         if (cache.containsKey(chunkPos)) {
             throw new IllegalStateException(
-                "Two tiles can not exist at the same location. You must evict a tile before caching another one at the same location");
+                "Two tiles can not exist at the same location. You must evict a tile before caching another one at the same location"
+            );
         }
         cache.put(chunkPos, tile);
     }

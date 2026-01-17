@@ -1,6 +1,6 @@
 package sh.miles.pineapple.util.serialization.adapter;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.collection.registry.RegistryKey;
 import sh.miles.pineapple.util.serialization.SerializedDeserializeContext;
 import sh.miles.pineapple.util.serialization.SerializedElement;
@@ -15,6 +15,7 @@ import sh.miles.pineapple.util.serialization.exception.SerializedAdaptationExcep
  * @param <C> Code Type
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public interface SerializedAdapter<C> extends RegistryKey<Class<?>> {
 
     /**
@@ -26,8 +27,8 @@ public interface SerializedAdapter<C> extends RegistryKey<Class<?>> {
      * @throws SerializedAdaptationException thrown if an error occurs during the serialization process
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
-    SerializedElement serialize(@NotNull final C obj, @NotNull final SerializedSerializeContext context) throws SerializedAdaptationException;
+
+    SerializedElement serialize(final C obj, final SerializedSerializeContext context) throws SerializedAdaptationException;
 
     /**
      * Deserializes an element into a runtime object
@@ -38,6 +39,6 @@ public interface SerializedAdapter<C> extends RegistryKey<Class<?>> {
      * @throws SerializedAdaptationException thrown if an error occurs during the deserialization process
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
-    C deserialize(@NotNull final SerializedElement element, @NotNull final SerializedDeserializeContext context) throws SerializedAdaptationException;
+
+    C deserialize(final SerializedElement element, final SerializedDeserializeContext context) throws SerializedAdaptationException;
 }

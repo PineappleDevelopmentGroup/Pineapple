@@ -1,6 +1,6 @@
 package sh.miles.pineapple.util.serialization;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.util.serialization.exception.SerializedAdaptationException;
 import sh.miles.pineapple.util.serialization.exception.SerializedAdapterNotFoundException;
 
@@ -9,6 +9,7 @@ import sh.miles.pineapple.util.serialization.exception.SerializedAdapterNotFound
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public interface SerializedDeserializeContext {
 
     /**
@@ -21,6 +22,5 @@ public interface SerializedDeserializeContext {
      * @throws SerializedAdapterNotFoundException if no adapter for the type is found
      * @throws SerializedAdaptationException      if an error occurs during deserialization
      */
-    @NotNull
-    <C> C deserialize(@NotNull final SerializedElement element, Class<C> type) throws SerializedAdapterNotFoundException, SerializedAdaptationException;
+    <C> C deserialize(final SerializedElement element, final Class<C> type) throws SerializedAdapterNotFoundException, SerializedAdaptationException;
 }

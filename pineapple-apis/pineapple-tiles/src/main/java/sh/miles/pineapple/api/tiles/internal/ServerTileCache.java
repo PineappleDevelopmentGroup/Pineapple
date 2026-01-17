@@ -88,7 +88,6 @@ public class ServerTileCache implements Iterable<Map.Entry<ChunkRelPos, Tile>> {
      * @since 1.0.0-SNAPSHOT
      * @deprecated DO NOT USE THIS METHOD
      */
-    
     @Deprecated
     public ChunkTileCache getChunkCacheNaive(final ChunkPos chunkPos) {
         return cache.computeIfAbsent(chunkPos, (k) -> new ChunkTileCache());
@@ -144,7 +143,6 @@ public class ServerTileCache implements Iterable<Map.Entry<ChunkRelPos, Tile>> {
      * @return all entries in the cache
      * @since 1.0.0-SNAPSHOT
      */
-    
     public List<Map.Entry<ChunkRelPos, Tile>> evict(final Chunk chunk) {
         final ChunkTileCache chunkCache = cache.remove(ChunkPos.fromChunk(chunk));
         return chunkCache != null ? Streams.stream(chunkCache.iterator()).toList() : List.of();

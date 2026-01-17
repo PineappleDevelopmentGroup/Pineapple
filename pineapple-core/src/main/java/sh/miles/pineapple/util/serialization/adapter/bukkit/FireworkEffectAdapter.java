@@ -2,7 +2,6 @@ package sh.miles.pineapple.util.serialization.adapter.bukkit;
 
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
-import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.util.serialization.SerializedArray;
 import sh.miles.pineapple.util.serialization.SerializedDeserializeContext;
 import sh.miles.pineapple.util.serialization.SerializedElement;
@@ -23,35 +22,33 @@ final class FireworkEffectAdapter implements SerializedAdapter<FireworkEffect> {
     private static final String COLORS = "colors";
     private static final String FADE_COLORS = "fade_colors";
 
-    @NotNull
     @Override
-    public FireworkEffect deserialize(@NotNull final SerializedElement element, @NotNull final SerializedDeserializeContext context) throws SerializedAdaptationException {
+    public FireworkEffect deserialize(final SerializedElement element, final SerializedDeserializeContext context) throws SerializedAdaptationException {
         final SerializedObject parent = element.getAsObject();
         final boolean flicker = parent.getPrimitive(FLICKER).map(SerializedPrimitive::getAsBoolean).orElse(false);
         final boolean trail = parent.getPrimitive(TRAIL).map(SerializedPrimitive::getAsBoolean).orElse(false);
         final FireworkEffect.Type type = parent.getPrimitive(TYPE)
-                .map(SerializedPrimitive::getAsString)
-                .map(String::toUpperCase)
-                .map(FireworkEffect.Type::valueOf)
-                .orThrow("Missing required field %s".formatted(TYPE));
+            .map(SerializedPrimitive::getAsString)
+            .map(String::toUpperCase)
+            .map(FireworkEffect.Type::valueOf)
+            .orThrow("Missing required field %s".formatted(TYPE));
         final List<Color> colors = parent.getArray(COLORS).map((array) ->
-                array.stream().map((prim) -> context.deserialize(prim, Color.class)).toList()
+            array.stream().map((prim) -> context.deserialize(prim, Color.class)).toList()
         ).orElse(new ArrayList<>());
         final List<Color> fadeColors = parent.getArray(FADE_COLORS).map((array) ->
-                array.stream().map((prim) -> context.deserialize(prim, Color.class)).toList()
+            array.stream().map((prim) -> context.deserialize(prim, Color.class)).toList()
         ).orElse(new ArrayList<>());
         return FireworkEffect.builder()
-                .flicker(flicker)
-                .trail(trail)
-                .with(type)
-                .withColor(colors)
-                .withFade(fadeColors)
-                .build();
+            .flicker(flicker)
+            .trail(trail)
+            .with(type)
+            .withColor(colors)
+            .withFade(fadeColors)
+            .build();
     }
 
-    @NotNull
     @Override
-    public SerializedElement serialize(@NotNull final FireworkEffect obj, @NotNull final SerializedSerializeContext context) throws SerializedAdaptationException {
+    public SerializedElement serialize(final FireworkEffect obj, final SerializedSerializeContext context) throws SerializedAdaptationException {
         final SerializedObject parent = SerializedElement.object();
         if (obj.hasFlicker()) {
             parent.add(FLICKER, true);

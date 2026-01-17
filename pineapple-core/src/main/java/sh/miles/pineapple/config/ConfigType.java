@@ -1,5 +1,7 @@
 package sh.miles.pineapple.config;
 
+import org.jspecify.annotations.NullMarked;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import java.util.stream.Collectors;
  * @param <T> ClassType
  * @author Coll1234567/Jishuna
  */
+@NullMarked
 public class ConfigType<T> {
 
     private final Class<T> clazz;

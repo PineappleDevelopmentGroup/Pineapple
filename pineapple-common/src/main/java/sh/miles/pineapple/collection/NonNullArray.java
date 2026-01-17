@@ -258,18 +258,15 @@ public class NonNullArray<E> implements Collection<E> {
         return false;
     }
 
-
     @Override
     public Iterator<E> iterator() {
         return Arrays.stream(this.objects).map(o -> (E) o).iterator();
     }
 
-
     @Override
     public Object[] toArray() {
         return Arrays.stream(this.objects).toArray();
     }
-
 
     @Override
     public <T> T[] toArray(final T[] a) {
@@ -292,7 +289,8 @@ public class NonNullArray<E> implements Collection<E> {
     private void verifyIndex(final int index) throws IndexOutOfBoundsException {
         if (index >= objects.length || index < 0) {
             throw new IndexOutOfBoundsException(
-                "index %d is out of range for array of size %d".formatted(index, objects.length));
+                "index %d is out of range for array of size %d".formatted(index, objects.length)
+            );
         }
     }
 }

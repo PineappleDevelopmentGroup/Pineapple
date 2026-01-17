@@ -1,6 +1,6 @@
 package sh.miles.pineapple.util.serialization;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.util.serialization.exception.SerializedAdaptationException;
 import sh.miles.pineapple.util.serialization.exception.SerializedAdapterNotFoundException;
 
@@ -9,6 +9,7 @@ import sh.miles.pineapple.util.serialization.exception.SerializedAdapterNotFound
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public interface SerializedSerializeContext {
 
     /**
@@ -20,8 +21,7 @@ public interface SerializedSerializeContext {
      * @throws SerializedAdaptationException      if an exception occurs during serialization
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
-    SerializedElement serialize(@NotNull final Object object) throws SerializedAdapterNotFoundException, SerializedAdaptationException;
+    SerializedElement serialize(final Object object) throws SerializedAdapterNotFoundException, SerializedAdaptationException;
 
     /**
      * Serialized the given object down to a SerializedElement
@@ -30,9 +30,8 @@ public interface SerializedSerializeContext {
      * @param type   the type of the object more specifically
      * @return the non null SerializedElement
      * @throws SerializedAdapterNotFoundException if no adapter for the type is found
-     * @throws SerializedAdaptationException if an error occurs during serialization
+     * @throws SerializedAdaptationException      if an error occurs during serialization
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
-    SerializedElement serialize(@NotNull final Object object, Class<?> type) throws SerializedAdapterNotFoundException, SerializedAdaptationException;
+    SerializedElement serialize(final Object object, Class<?> type) throws SerializedAdapterNotFoundException, SerializedAdaptationException;
 }

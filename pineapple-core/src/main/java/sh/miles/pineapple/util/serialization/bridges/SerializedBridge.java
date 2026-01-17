@@ -1,5 +1,6 @@
 package sh.miles.pineapple.util.serialization.bridges;
 
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.util.serialization.adapter.SerializedAdapter;
 
 import java.util.Set;
@@ -9,6 +10,7 @@ import java.util.Set;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public interface SerializedBridge {
 
     /**
