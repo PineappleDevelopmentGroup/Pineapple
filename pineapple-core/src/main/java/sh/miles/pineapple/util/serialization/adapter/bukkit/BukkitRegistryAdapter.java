@@ -1,5 +1,7 @@
 package sh.miles.pineapple.util.serialization.adapter.bukkit;
 
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
@@ -22,9 +24,9 @@ class BukkitRegistryAdapter<R extends Keyed> implements SerializedAdapter<R> {
     private final Class<R> registryClass;
     private final Registry<R> registry;
 
-    public BukkitRegistryAdapter(Class<R> registryClass) {
+    public BukkitRegistryAdapter(Class<R> registryClass, RegistryKey<R> key) {
         this.registryClass = registryClass;
-        this.registry = Bukkit.getRegistry(registryClass);
+        this.registry = RegistryAccess.registryAccess().getRegistry(key);
     }
 
     @NotNull
@@ -54,11 +56,11 @@ class BukkitRegistryAdapter<R extends Keyed> implements SerializedAdapter<R> {
 
     static List<BukkitRegistryAdapter<?>> getRegistryAdapters() {
         final List<BukkitRegistryAdapter<?>> list = new ArrayList<>();
-
         try {
-            for (final Field field : Registry.class.getDeclaredFields()) {
-                if (field.getName().equals("MEMORY_MODULE_TYPE")) continue; // TODO handle generics here instead of skipping
-                list.add(new BukkitRegistryAdapter(ReflectionUtils.getParameterizedTypes(field).getFirst()));
+            for (final Field field : RegistryKey.class.getDeclaredFields()) {
+                list.add(new BukkitRegistryAdapter(ReflectionUtils.getParameterizedTypes(field).getFirst(),
+                    (RegistryKey) field.get(null)
+                ));
             }
         } catch (Exception ignored) { // while not usually advised we need to catch an exception here for Unit Test
             ignored.printStackTrace();

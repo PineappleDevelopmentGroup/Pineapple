@@ -321,16 +321,46 @@ public final class ReflectionUtils {
             return new ArrayList<>();
         }
         List<Class<?>> componentTypes = splitTypeName(typeName, ind + 1, typeName.length() - 1)
-                .stream()
-                .map((className) -> {
-                    try {
-                        return Class.forName(className);
-                    } catch (ClassNotFoundException e) {
-                        throw new RuntimeException(e);
-                    }
-                })
-                .collect(Collectors.toList());
+            .stream()
+            .map((className) -> {
+                try {
+                    return Class.forName(stripGenerics(className));
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            })
+            .collect(Collectors.toList());
         return componentTypes;
+    }
+
+    /**
+     * Strips out generics from the input class name
+     *
+     * @param str the string of fully qualified class name e.g. com.example.MyClass{@literal <?>} or com.example.MyClass
+     * @return the generic stripped string
+     * @since 1.0.0-SNAPSHOT
+     */
+    private static String stripGenerics(String str) {
+        final StringBuilder result = new StringBuilder();
+        int depth = 0;
+
+        char cur;
+        for (int i = 0; i < str.length(); i++) {
+            cur = str.charAt(i);
+            if (cur == '<') {
+                depth++;
+            } else if (cur == '>') {
+                depth--;
+            } else if (depth == 0) {
+                result.append(cur);
+            }
+        }
+
+        if (depth > 0) {
+            throw new IllegalArgumentException("Invalid generic sequence in string %s".formatted(str));
+        }
+
+        return result.toString();
     }
 
     /**
