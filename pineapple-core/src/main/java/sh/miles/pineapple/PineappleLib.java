@@ -112,7 +112,6 @@ public final class PineappleLib {
      * @return the logger
      * @since 1.0.0-SNAPSHOT
      */
-
     public static Logger getLogger() {
         return instance.plugin.getLogger();
     }

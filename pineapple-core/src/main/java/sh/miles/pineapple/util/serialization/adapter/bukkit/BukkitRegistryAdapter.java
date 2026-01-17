@@ -39,12 +39,14 @@ class BukkitRegistryAdapter<R extends Keyed> implements SerializedAdapter<R> {
             if (result == null) {
                 throw new SerializedAdaptationException(
                     "The registry for the type %s does not have an entry with the name %s".formatted(
-                        this.registryClass.getSimpleName(), key));
+                        this.registryClass.getSimpleName(), key)
+                );
             }
             return result;
         }
         throw new SerializedAdaptationException(
-            "%s's must be adapted from primitive strings".formatted(this.registryClass.getSimpleName()));
+            "%s's must be adapted from primitive strings".formatted(this.registryClass.getSimpleName())
+        );
     }
 
     @Override

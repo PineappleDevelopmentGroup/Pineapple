@@ -27,7 +27,6 @@ public interface SerializedAdapter<C> extends RegistryKey<Class<?>> {
      * @throws SerializedAdaptationException thrown if an error occurs during the serialization process
      * @since 1.0.0-SNAPSHOT
      */
-
     SerializedElement serialize(final C obj, final SerializedSerializeContext context) throws SerializedAdaptationException;
 
     /**
@@ -39,6 +38,5 @@ public interface SerializedAdapter<C> extends RegistryKey<Class<?>> {
      * @throws SerializedAdaptationException thrown if an error occurs during the deserialization process
      * @since 1.0.0-SNAPSHOT
      */
-
     C deserialize(final SerializedElement element, final SerializedDeserializeContext context) throws SerializedAdaptationException;
 }

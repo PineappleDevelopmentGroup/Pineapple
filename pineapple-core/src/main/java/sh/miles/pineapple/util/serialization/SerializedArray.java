@@ -118,11 +118,9 @@ public final class SerializedArray extends SerializedElement implements Iterable
      * @return a stream of elements
      * @since 1.0.0-SNAPSHOT
      */
-
     public Stream<SerializedElement> stream() {
         return StreamSupport.stream(spliterator(), false);
     }
-
 
     @Override
     public Iterator<SerializedElement> iterator() {

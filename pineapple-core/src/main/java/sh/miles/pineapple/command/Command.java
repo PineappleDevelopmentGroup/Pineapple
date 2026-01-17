@@ -57,7 +57,6 @@ public class Command implements BasicCommand {
         this(label, CommandSettings.DEFAULT_COMMAND_SETTINGS);
     }
 
-
     @Override
     public void execute(CommandSourceStack sourceStack, String[] args) {
         CommandSender executor = sourceStack.getExecutor();
@@ -123,7 +122,6 @@ public class Command implements BasicCommand {
      * @return command label
      * @since 1.0.0-SNAPSHOT
      */
-
     public CommandLabel getCommandLabel() {
         return this.label;
     }
@@ -134,7 +132,6 @@ public class Command implements BasicCommand {
      * @return command settings
      * @since 1.0.0-SNAPSHOT
      */
-
     public CommandSettings.Settings getSettings() {
         return settings;
     }
