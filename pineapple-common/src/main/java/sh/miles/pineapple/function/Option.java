@@ -1,6 +1,6 @@
 package sh.miles.pineapple.function;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -12,6 +12,7 @@ import java.util.function.Supplier;
  *
  * @param <E> the entry type
  */
+@NullMarked
 public sealed class Option<E> permits Option.None, Option.Some {
 
     /**
@@ -19,7 +20,7 @@ public sealed class Option<E> permits Option.None, Option.Some {
      *
      * @param consumer the operation on present
      */
-    public void ifPresent(@NotNull final Consumer<E> consumer) {
+    public void ifPresent(final Consumer<E> consumer) {
         if (this instanceof Option.Some<E> some) {
             consumer.accept(some.some);
         }
@@ -32,7 +33,7 @@ public sealed class Option<E> permits Option.None, Option.Some {
      * @param <R>    the returned type
      * @return the new option
      */
-    public <R> Option<R> map(@NotNull final Function<E, R> mapper) {
+    public <R> Option<R> map(final Function<E, R> mapper) {
         if (!(this instanceof Some<E> some)) {
             return new None<>();
         }
@@ -71,8 +72,8 @@ public sealed class Option<E> permits Option.None, Option.Some {
      * @param value the non null value to use instead
      * @return the value
      */
-    @NotNull
-    public E orElse(@NotNull final E value) {
+
+    public E orElse(final E value) {
         if (!(this instanceof Some<E> some)) {
             return Objects.requireNonNull(value);
         }
@@ -86,8 +87,8 @@ public sealed class Option<E> permits Option.None, Option.Some {
      * @param value the value function to run
      * @return the value
      */
-    @NotNull
-    public E orElse(@NotNull final Supplier<E> value) {
+
+    public E orElse(final Supplier<E> value) {
         if (!(this instanceof Some<E> some)) {
             return Objects.requireNonNull(value.get());
         }
@@ -102,7 +103,7 @@ public sealed class Option<E> permits Option.None, Option.Some {
      * @param <E>   the entry type
      * @return the Option
      */
-    public static <E> Option<E> some(@NotNull final E value) {
+    public static <E> Option<E> some(final E value) {
         return new Some<>(value);
     }
 

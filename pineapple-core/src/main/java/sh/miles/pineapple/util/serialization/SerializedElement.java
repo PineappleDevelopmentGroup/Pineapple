@@ -1,7 +1,7 @@
 package sh.miles.pineapple.util.serialization;
 
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.util.serialization.exception.InvalidSerializedTypeException;
 
 /**
@@ -9,6 +9,7 @@ import sh.miles.pineapple.util.serialization.exception.InvalidSerializedTypeExce
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public sealed class SerializedElement permits SerializedArray, SerializedObject, SerializedPrimitive {
 
     /**
@@ -18,7 +19,6 @@ public sealed class SerializedElement permits SerializedArray, SerializedObject,
      * @throws InvalidSerializedTypeException thrown if this is not actually a SerializedPrimitive
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public SerializedPrimitive getAsPrimitive() throws InvalidSerializedTypeException {
         if (this instanceof SerializedPrimitive) {
             return (SerializedPrimitive) this;
@@ -34,7 +34,6 @@ public sealed class SerializedElement permits SerializedArray, SerializedObject,
      * @throws InvalidSerializedTypeException thrown if this is not actually a SerializedArray
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public SerializedArray getAsArray() throws InvalidSerializedTypeException {
         if (this instanceof SerializedArray) {
             return (SerializedArray) this;
@@ -50,7 +49,6 @@ public sealed class SerializedElement permits SerializedArray, SerializedObject,
      * @throws InvalidSerializedTypeException thrown if this is not actually a SerializedObject
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public SerializedObject getAsObject() throws InvalidSerializedTypeException {
         if (this instanceof SerializedObject) {
             return (SerializedObject) this;
@@ -95,7 +93,6 @@ public sealed class SerializedElement permits SerializedArray, SerializedObject,
      * @return the new object
      * @since 1.0.0_SNAPSHOT
      */
-    @NotNull
     public static SerializedObject object() {
         return new SerializedObject();
     }
@@ -106,7 +103,6 @@ public sealed class SerializedElement permits SerializedArray, SerializedObject,
      * @return the new array
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public static SerializedArray array() {
         return new SerializedArray();
     }
@@ -118,7 +114,6 @@ public sealed class SerializedElement permits SerializedArray, SerializedObject,
      * @return the new array
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public static SerializedArray array(int capacity) {
         return new SerializedArray();
     }
@@ -130,7 +125,6 @@ public sealed class SerializedElement permits SerializedArray, SerializedObject,
      * @return the new primitive
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public static SerializedPrimitive primitive(int integer) {
         return new SerializedPrimitive(integer);
     }
@@ -142,7 +136,6 @@ public sealed class SerializedElement permits SerializedArray, SerializedObject,
      * @return the new primitive
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public static SerializedPrimitive primitive(double decimal) {
         return new SerializedPrimitive(decimal);
     }
@@ -154,7 +147,6 @@ public sealed class SerializedElement permits SerializedArray, SerializedObject,
      * @return the new primitive
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public static SerializedPrimitive primitive(long int64) {
         return new SerializedPrimitive(int64);
     }
@@ -166,7 +158,6 @@ public sealed class SerializedElement permits SerializedArray, SerializedObject,
      * @return the new primitive
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public static SerializedPrimitive primitive(boolean bool) {
         return new SerializedPrimitive(bool);
     }
@@ -178,8 +169,7 @@ public sealed class SerializedElement permits SerializedArray, SerializedObject,
      * @return the new primitive
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
-    public static SerializedPrimitive primitive(@NotNull final String string) {
+    public static SerializedPrimitive primitive(final String string) {
         return new SerializedPrimitive(string);
     }
 
@@ -198,8 +188,7 @@ public sealed class SerializedElement permits SerializedArray, SerializedObject,
      * @since 1.0.0-SNAPSHOT
      */
     @ApiStatus.Internal
-    @NotNull
-    public static SerializedPrimitive primitive(@NotNull final Object object) {
+    public static SerializedPrimitive primitive(final Object object) {
         return new SerializedPrimitive(object);
     }
 }

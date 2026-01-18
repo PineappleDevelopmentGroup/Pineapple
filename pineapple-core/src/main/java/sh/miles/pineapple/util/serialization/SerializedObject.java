@@ -2,8 +2,8 @@ package sh.miles.pineapple.util.serialization;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.internal.LinkedTreeMap;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import sh.miles.pineapple.function.Option;
 import sh.miles.pineapple.util.serialization.exception.InvalidSerializedTypeException;
 
@@ -16,6 +16,7 @@ import java.util.Set;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public final class SerializedObject extends SerializedElement {
 
     private static final String KEY_NULL_PRECONDITIONS_MESSAGE = "The given key must not be null";
@@ -34,7 +35,7 @@ public final class SerializedObject extends SerializedElement {
      * @since 1.0.0-SNAPSHOT
      */
     @Nullable
-    public SerializedElement getOrNull(@NotNull final String key) {
+    public SerializedElement getOrNull(final String key) {
         Preconditions.checkArgument(key != null, KEY_NULL_PRECONDITIONS_MESSAGE);
         return this.map.get(key);
     }
@@ -48,7 +49,7 @@ public final class SerializedObject extends SerializedElement {
      * @since 1.0.0-SNAPSHOT
      */
     @Nullable
-    public SerializedPrimitive getPrimitiveOrNull(@NotNull final String key) throws InvalidSerializedTypeException {
+    public SerializedPrimitive getPrimitiveOrNull(final String key) throws InvalidSerializedTypeException {
         final SerializedElement element = getOrNull(key);
         if (element == null) {
             return null;
@@ -70,7 +71,7 @@ public final class SerializedObject extends SerializedElement {
      * @since 1.0.0-SNAPSHOT
      */
     @Nullable
-    public SerializedArray getArrayOrNull(@NotNull final String key) throws InvalidSerializedTypeException {
+    public SerializedArray getArrayOrNull(final String key) throws InvalidSerializedTypeException {
         final SerializedElement element = getOrNull(key);
         if (element == null) {
             return null;
@@ -92,7 +93,7 @@ public final class SerializedObject extends SerializedElement {
      * @since 1.0.0-SNAPSHOT
      */
     @Nullable
-    public SerializedObject getObjectOrNull(@NotNull final String key) throws InvalidSerializedTypeException {
+    public SerializedObject getObjectOrNull(final String key) throws InvalidSerializedTypeException {
         final SerializedElement element = getOrNull(key);
         if (element == null) {
             return null;
@@ -112,8 +113,7 @@ public final class SerializedObject extends SerializedElement {
      * @return the possible serialized element wrapped in an option
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
-    public Option<SerializedElement> get(@NotNull final String key) {
+    public Option<SerializedElement> get(final String key) {
         final SerializedElement element = getOrNull(key);
         if (element == null) {
             return Option.none();
@@ -129,8 +129,7 @@ public final class SerializedObject extends SerializedElement {
      * @throws InvalidSerializedTypeException thrown if the key exists, but is not a SerializedPrimitive
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
-    public Option<SerializedPrimitive> getPrimitive(@NotNull final String key) throws InvalidSerializedTypeException {
+    public Option<SerializedPrimitive> getPrimitive(final String key) throws InvalidSerializedTypeException {
         final SerializedPrimitive primitive = getPrimitiveOrNull(key);
         if (primitive == null) {
             return Option.none();
@@ -146,8 +145,7 @@ public final class SerializedObject extends SerializedElement {
      * @throws InvalidSerializedTypeException thrown if the key exists, but is not a SerializedArray
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
-    public Option<SerializedArray> getArray(@NotNull final String key) throws InvalidSerializedTypeException {
+    public Option<SerializedArray> getArray(final String key) throws InvalidSerializedTypeException {
         final SerializedArray array = getArrayOrNull(key);
         if (array == null) {
             return Option.none();
@@ -163,8 +161,7 @@ public final class SerializedObject extends SerializedElement {
      * @throws InvalidSerializedTypeException thrown if the key exists, but is not a SerializedObject
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
-    public Option<SerializedObject> getObject(@NotNull final String key) throws InvalidSerializedTypeException {
+    public Option<SerializedObject> getObject(final String key) throws InvalidSerializedTypeException {
         final SerializedObject array = getObjectOrNull(key);
         if (array == null) {
             return Option.none();
@@ -179,7 +176,7 @@ public final class SerializedObject extends SerializedElement {
      * @param value the value
      * @since 1.0.0-SNAPSHOT
      */
-    public void add(@NotNull final String key, @NotNull final SerializedElement value) {
+    public void add(final String key, final SerializedElement value) {
         Preconditions.checkArgument(key != null && value != null, KEY_NULL_PRECONDITIONS_MESSAGE);
         this.map.put(key, value);
     }
@@ -191,7 +188,7 @@ public final class SerializedObject extends SerializedElement {
      * @param integer the integer
      * @since 1.0.0-SNAPSHOT
      */
-    public void add(@NotNull final String key, final int integer) {
+    public void add(final String key, final int integer) {
         Preconditions.checkArgument(key != null, KEY_NULL_PRECONDITIONS_MESSAGE);
         this.map.put(key, new SerializedPrimitive(integer));
     }
@@ -203,7 +200,7 @@ public final class SerializedObject extends SerializedElement {
      * @param decimal the decimal
      * @since 1.0.0-SNAPSHOT
      */
-    public void add(@NotNull final String key, final double decimal) {
+    public void add(final String key, final double decimal) {
         Preconditions.checkArgument(key != null, KEY_NULL_PRECONDITIONS_MESSAGE);
         this.map.put(key, new SerializedPrimitive(decimal));
     }
@@ -216,7 +213,7 @@ public final class SerializedObject extends SerializedElement {
      * @param int64 the long
      * @since 1.0.0-SNAPSHOT
      */
-    public void add(@NotNull final String key, final long int64) {
+    public void add(final String key, final long int64) {
         Preconditions.checkArgument(key != null, KEY_NULL_PRECONDITIONS_MESSAGE);
         this.map.put(key, new SerializedPrimitive(int64));
     }
@@ -228,7 +225,7 @@ public final class SerializedObject extends SerializedElement {
      * @param bool the bool
      * @since 1.0.0-SNAPSHOT
      */
-    public void add(@NotNull final String key, final boolean bool) {
+    public void add(final String key, final boolean bool) {
         Preconditions.checkArgument(key != null, KEY_NULL_PRECONDITIONS_MESSAGE);
         this.map.put(key, new SerializedPrimitive(bool));
     }
@@ -240,7 +237,7 @@ public final class SerializedObject extends SerializedElement {
      * @param string the string
      * @since 1.0.0-SNAPSHOT
      */
-    public void add(@NotNull final String key, @NotNull final String string) {
+    public void add(final String key, final String string) {
         Preconditions.checkArgument(key != null, KEY_NULL_PRECONDITIONS_MESSAGE);
         this.map.put(key, new SerializedPrimitive(string));
     }
@@ -252,7 +249,7 @@ public final class SerializedObject extends SerializedElement {
      * @return true if the map has the key, otherwise false
      * @since 1.0.0-SNAPSHOT
      */
-    public boolean has(@NotNull final String key) {
+    public boolean has(final String key) {
         Preconditions.checkArgument(key != null, KEY_NULL_PRECONDITIONS_MESSAGE);
         return this.map.containsKey(key);
     }
@@ -298,7 +295,8 @@ public final class SerializedObject extends SerializedElement {
         StringBuilder builder = new StringBuilder();
         builder.append("JsonObject(").append(this.map.size()).append(") {\n");
         for (final Map.Entry<String, SerializedElement> entry : map.entrySet()) {
-            builder.append("\"").append(entry.getKey()).append("\"").append(": ").append(entry.getValue()).append(",\n");
+            builder.append("\"").append(entry.getKey()).append("\"").append(": ").append(entry.getValue())
+                .append(",\n");
         }
         builder.append("}");
         return builder.toString();

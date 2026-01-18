@@ -1,8 +1,8 @@
 package sh.miles.pineapple.api.tiles.internal;
 
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.api.tiles.api.Tile;
 import sh.miles.pineapple.api.tiles.api.pos.ChunkRelPos;
 
@@ -16,6 +16,7 @@ import java.util.stream.Stream;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 @ApiStatus.Internal
 public final class ChunkTileCache implements Iterable<Map.Entry<ChunkRelPos, Tile>> {
     private final Map<ChunkRelPos, Tile> cache = new ConcurrentHashMap<>();
@@ -28,9 +29,11 @@ public final class ChunkTileCache implements Iterable<Map.Entry<ChunkRelPos, Til
      * @throws IllegalStateException thrown if a tile is already cached at the given location
      * @since 1.0.0-SNAPSHOT
      */
-    public void cache(@NotNull final ChunkRelPos chunkPos, @NotNull final Tile tile) throws IllegalStateException {
+    public void cache(final ChunkRelPos chunkPos, final Tile tile) throws IllegalStateException {
         if (cache.containsKey(chunkPos)) {
-            throw new IllegalStateException("Two tiles can not exist at the same location. You must evict a tile before caching another one at the same location");
+            throw new IllegalStateException(
+                "Two tiles can not exist at the same location. You must evict a tile before caching another one at the same location"
+            );
         }
         cache.put(chunkPos, tile);
     }
@@ -43,7 +46,7 @@ public final class ChunkTileCache implements Iterable<Map.Entry<ChunkRelPos, Til
      * @since 1.0.0-SNAPSHOT
      */
     @Nullable
-    public Tile get(@NotNull final ChunkRelPos chunkPos) {
+    public Tile get(final ChunkRelPos chunkPos) {
         return cache.get(chunkPos);
     }
 
@@ -55,7 +58,7 @@ public final class ChunkTileCache implements Iterable<Map.Entry<ChunkRelPos, Til
      * @since 1.0.0-SNAPSHOT
      */
     @Nullable
-    public Tile evict(@NotNull final ChunkRelPos chunkPos) {
+    public Tile evict(final ChunkRelPos chunkPos) {
         return cache.remove(chunkPos);
     }
 
@@ -73,12 +76,10 @@ public final class ChunkTileCache implements Iterable<Map.Entry<ChunkRelPos, Til
      * @return the stream
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public Stream<Map.Entry<ChunkRelPos, Tile>> stream() {
         return cache.entrySet().stream();
     }
 
-    @NotNull
     @Override
     public Iterator<Map.Entry<ChunkRelPos, Tile>> iterator() {
         return cache.entrySet().iterator();

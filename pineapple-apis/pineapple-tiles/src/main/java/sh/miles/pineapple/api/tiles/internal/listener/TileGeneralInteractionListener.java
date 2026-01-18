@@ -17,6 +17,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.collection.Pair;
 import sh.miles.pineapple.api.tiles.api.Tile;
 import sh.miles.pineapple.api.tiles.api.TileType;
@@ -33,12 +34,11 @@ import java.util.List;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 @ApiStatus.Internal
 public final class TileGeneralInteractionListener implements Listener {
 
-    @NotNull
     private final ServerTileCache cache;
-    @NotNull
     private final TileTypeRegistry registry;
     private final Cache<Location, Tile> broken = CacheBuilder.newBuilder().expireAfterWrite(Duration.ofMinutes(1)).build();
 
@@ -49,7 +49,7 @@ public final class TileGeneralInteractionListener implements Listener {
      * @param registry the registry
      * @since 1.0.0-SNAPSHOT
      */
-    public TileGeneralInteractionListener(@NotNull final ServerTileCache cache, @NotNull final TileTypeRegistry registry) {
+    public TileGeneralInteractionListener(final ServerTileCache cache, final TileTypeRegistry registry) {
         this.cache = cache;
         this.registry = registry;
     }
@@ -60,7 +60,7 @@ public final class TileGeneralInteractionListener implements Listener {
      * @param event _
      */
     @EventHandler
-    public void onBlockBreak(@NotNull final BlockBreakEvent event) {
+    public void onBlockBreak(final BlockBreakEvent event) {
         final Tile tile = cache.get(event.getBlock().getLocation());
         if (tile == null) {
             return;
@@ -80,7 +80,7 @@ public final class TileGeneralInteractionListener implements Listener {
      * @param event _
      */
     @EventHandler
-    public void onBlockPlace(@NotNull final BlockPlaceEvent event) {
+    public void onBlockPlace(final BlockPlaceEvent event) {
         final PersistentDataContainer container = event.getItemInHand().getItemMeta().getPersistentDataContainer();
         if (!container.has(TileKeys.getTileTypeKey())) {
             return;
@@ -105,7 +105,7 @@ public final class TileGeneralInteractionListener implements Listener {
      * @param event _
      */
     @EventHandler
-    public void onBlockDrop(@NotNull final BlockDropItemEvent event) {
+    public void onBlockDrop(final BlockDropItemEvent event) {
         final Tile dropping = broken.getIfPresent(event.getBlock().getLocation());
         if (dropping != null) {
             dropping.getTileType().onBlockDropItemEvent(event, dropping);
@@ -119,7 +119,7 @@ public final class TileGeneralInteractionListener implements Listener {
      * @param event _
      */
     @EventHandler
-    public void onBlockInteract(@NotNull final PlayerInteractEvent event) {
+    public void onBlockInteract(final PlayerInteractEvent event) {
         if (!event.hasBlock()) {
             return;
         }
@@ -135,7 +135,7 @@ public final class TileGeneralInteractionListener implements Listener {
      * @param event _
      */
     @EventHandler
-    public void onBlockExplode(@NotNull final BlockExplodeEvent event) {
+    public void onBlockExplode(final BlockExplodeEvent event) {
         final List<Pair<Tile, Block>> explodedTiles = event.blockList().stream()
                 .map((block) -> Pair.of(cache.get(block.getLocation()), block))
                 .filter((pair) -> pair.left() != null)
@@ -165,7 +165,7 @@ public final class TileGeneralInteractionListener implements Listener {
      * @param event _
      */
     @EventHandler
-    public void onEntityExplode(@NotNull final EntityExplodeEvent event) {
+    public void onEntityExplode(final EntityExplodeEvent event) {
         final List<Pair<Tile, Block>> explodedTiles = event.blockList().stream()
                 .map((block) -> Pair.of(cache.get(block.getLocation()), block))
                 .filter((pair) -> pair.left() != null)

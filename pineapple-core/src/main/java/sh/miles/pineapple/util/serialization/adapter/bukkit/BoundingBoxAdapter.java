@@ -1,7 +1,6 @@
 package sh.miles.pineapple.util.serialization.adapter.bukkit;
 
 import org.bukkit.util.BoundingBox;
-import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.util.serialization.SerializedDeserializeContext;
 import sh.miles.pineapple.util.serialization.SerializedElement;
 import sh.miles.pineapple.util.serialization.SerializedObject;
@@ -21,9 +20,9 @@ final class BoundingBoxAdapter implements SerializedAdapter<BoundingBox> {
 
     private static final String ERROR = "Missing required field for BoundingBox %s";
 
-    @NotNull
+
     @Override
-    public BoundingBox deserialize(@NotNull final SerializedElement element, @NotNull final SerializedDeserializeContext context) throws SerializedAdaptationException {
+    public BoundingBox deserialize(final SerializedElement element, final SerializedDeserializeContext context) throws SerializedAdaptationException {
         final SerializedObject parent = element.getAsObject();
         final var minX = parent.getPrimitive(MIN_X).map(SerializedPrimitive::getAsDouble).orThrow(ERROR.formatted(MIN_X));
         final var minY = parent.getPrimitive(MIN_Y).map(SerializedPrimitive::getAsDouble).orThrow(ERROR.formatted(MIN_Y));
@@ -35,9 +34,9 @@ final class BoundingBoxAdapter implements SerializedAdapter<BoundingBox> {
         return new BoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
-    @NotNull
+
     @Override
-    public SerializedElement serialize(@NotNull final BoundingBox box, @NotNull final SerializedSerializeContext context) throws SerializedAdaptationException {
+    public SerializedElement serialize(final BoundingBox box, final SerializedSerializeContext context) throws SerializedAdaptationException {
         final SerializedObject parent = SerializedElement.object();
         parent.add(MIN_X, box.getMinX());
         parent.add(MIN_Y, box.getMinY());

@@ -1,6 +1,6 @@
 package sh.miles.pineapple.util.serialization.adapter;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.collection.registry.WriteableRegistry;
 import sh.miles.pineapple.util.serialization.adapter.bukkit.BukkitAdapterPack;
 import sh.miles.pineapple.util.serialization.adapter.javalang.JavaLangAdapterPack;
@@ -15,6 +15,7 @@ import java.util.Set;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public final class SerializedAdapterRegistry extends WriteableRegistry<SerializedAdapter<?>, Class<?>> {
 
     public static final SerializedAdapterRegistry INSTANCE = new SerializedAdapterRegistry();
@@ -32,7 +33,7 @@ public final class SerializedAdapterRegistry extends WriteableRegistry<Serialize
     }
 
     @Override
-    public boolean register(@NotNull final SerializedAdapter<?> object) {
+    public boolean register(final SerializedAdapter<?> object) {
         boolean status = super.register(object);
         if (!status) {
             return false;
@@ -50,12 +51,12 @@ public final class SerializedAdapterRegistry extends WriteableRegistry<Serialize
      * @param bridge the bridge to register
      * @since 1.0.0-SNAPSHOT
      */
-    public void registerBridge(@NotNull final SerializedBridge bridge) {
+    public void registerBridge(final SerializedBridge bridge) {
         this.bridges.add(bridge);
         syncBridge(bridge);
     }
 
-    private void syncBridge(@NotNull final SerializedBridge bridge) {
+    private void syncBridge(final SerializedBridge bridge) {
         for (final SerializedAdapter<?> value : registry.values()) {
             bridge.register(value);
         }

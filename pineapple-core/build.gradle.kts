@@ -11,14 +11,13 @@ dependencies {
     compileOnly(projects.pineappleCommon)
     compileOnly(projects.pineappleNms.api)
 
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter)
+    testRuntimeOnly(libs.junit.launcher)
+
     testImplementation(libs.mockbukkit)
     testImplementation(libs.paper.api)
     testImplementation(projects.pineappleCommon)
-
-    testImplementation("com.google.code.gson:gson:2.11.0")
-    testImplementation(platform("org.junit:junit-bom:6.0.1"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks.test {

@@ -1,6 +1,6 @@
 package sh.miles.pineapple.collection.registry;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.function.Option;
 
 import java.util.Map;
@@ -14,6 +14,7 @@ import java.util.function.Supplier;
  * @param <T> the type
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public abstract class AbstractRegistry<T extends RegistryKey<K>, K> implements Registry<T, K> {
 
     protected final Map<K, T> registry;
@@ -23,7 +24,7 @@ public abstract class AbstractRegistry<T extends RegistryKey<K>, K> implements R
     }
 
     @Override
-    public Option<T> get(@NotNull final K key) {
+    public Option<T> get(final K key) {
         final T value = registry.get(key);
         if (value == null) {
             return Option.none();
@@ -33,19 +34,18 @@ public abstract class AbstractRegistry<T extends RegistryKey<K>, K> implements R
     }
 
     @Override
-    public T getOrNull(@NotNull final K key) {
+    public T getOrNull(final K key) {
         return registry.get(key);
     }
 
-    @NotNull
     @Override
-    public T getOrDefault(@NotNull final K key, @NotNull final T defaultValue) {
+    public T getOrDefault(final K key, final T defaultValue) {
         return registry.getOrDefault(key, Objects.requireNonNull(defaultValue));
     }
 
-    @NotNull
+
     @Override
-    public T getOrDefault(@NotNull final K key, @NotNull final Supplier<T> defaultValue) {
+    public T getOrDefault(final K key, final Supplier<T> defaultValue) {
         var temp = registry.get(key);
         if (temp == null) {
             return defaultValue.get();

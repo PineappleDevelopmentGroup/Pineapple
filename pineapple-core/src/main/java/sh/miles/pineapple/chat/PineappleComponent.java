@@ -2,7 +2,7 @@ package sh.miles.pineapple.chat;
 
 
 import net.kyori.adventure.text.Component;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Map;
 import java.util.Objects;
@@ -12,12 +12,13 @@ import java.util.Objects;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public class PineappleComponent {
 
     private final String source;
     private Component parsed;
 
-    PineappleComponent(@NotNull final String source) {
+    PineappleComponent(final String source) {
         this.source = source;
         this.parsed = null;
     }
@@ -29,7 +30,7 @@ public class PineappleComponent {
      * @return the Component
      * @since 1.0.0-SNAPSHOT
      */
-    public Component component(@NotNull final Map<String, Object> replacements) {
+    public Component component(final Map<String, Object> replacements) {
         return PineappleChat.parse(this.source, replacements);
     }
 

@@ -2,7 +2,7 @@ package sh.miles.pineapple.util.spec;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Represents a simple vector specification
@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * @param z the z of the vector
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public record VectorSpec(double x, double y, double z) {
 
     /**
@@ -21,8 +22,7 @@ public record VectorSpec(double x, double y, double z) {
      * @return the modified location
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
-    public Location modify(@NotNull final Location location) {
+    public Location modify(final Location location) {
         return location.clone().add(x, y, z);
     }
 
@@ -33,8 +33,7 @@ public record VectorSpec(double x, double y, double z) {
      * @return the modified vector
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
-    public Vector modify(@NotNull final Vector vector) {
+    public Vector modify(final Vector vector) {
         return vector.clone().add(new Vector(x, y, z));
     }
 }

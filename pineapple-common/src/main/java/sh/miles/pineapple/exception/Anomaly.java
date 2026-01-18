@@ -1,6 +1,6 @@
 package sh.miles.pineapple.exception;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.StringUtils;
 import sh.miles.pineapple.function.Option;
 import sh.miles.pineapple.function.Option.None;
@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 /**
  * Tracks "Anomalies" That occur in code and prettify any errors that they cause
  */
+@NullMarked
 public class Anomaly<R> {
     private Option<R> returnValue = Option.none();
     // display actions
@@ -31,7 +32,7 @@ public class Anomaly<R> {
      *
      * @param logger the logger
      */
-    public Anomaly(@NotNull final Logger logger) {
+    public Anomaly(final Logger logger) {
         this.logger = logger;
     }
 
@@ -41,7 +42,7 @@ public class Anomaly<R> {
      * @param message the message
      * @return a newly created anomaly
      */
-    public Anomaly<R> message(@NotNull final String message) {
+    public Anomaly<R> message(final String message) {
         var anomaly = copy(this);
         anomaly.message = Option.some(StringUtils.boxError(message));
         return anomaly;
@@ -53,7 +54,7 @@ public class Anomaly<R> {
      * @param onFail the onFail function
      * @return a newly created anomaly
      */
-    public Anomaly<R> onFail(@NotNull final Runnable onFail) {
+    public Anomaly<R> onFail(final Runnable onFail) {
         var anomaly = copy(this);
         anomaly.onFail = Option.some(onFail);
         return anomaly;
@@ -121,7 +122,7 @@ public class Anomaly<R> {
      * @param <T>      the type returned by the supplier
      * @return a newly created anomaly
      */
-    public <T> Anomaly<T> run(@NotNull final ThrowingSupplier<T> supplier) {
+    public <T> Anomaly<T> run(final ThrowingSupplier<T> supplier) {
         Anomaly<T> copy;
         try {
             var value = supplier.get();
@@ -149,7 +150,7 @@ public class Anomaly<R> {
      * @param method the method the anomaly was completed in
      * @return the possible return value
      */
-    public Option<R> soft(@NotNull final Class<?> clazz, @NotNull final String method) {
+    public Option<R> soft(final Class<?> clazz, final String method) {
         if (exception instanceof None<Exception>) {
             return this.returnValue;
         }
@@ -180,7 +181,7 @@ public class Anomaly<R> {
      * @return the possible return value
      * @throws RuntimeException the possible exception that occurred
      */
-    public Option<R> hard(@NotNull final Class<?> clazz, @NotNull final String method) throws RuntimeException {
+    public Option<R> hard(final Class<?> clazz, final String method) throws RuntimeException {
         if (this.exception instanceof None<Exception>) {
             return this.returnValue;
         }

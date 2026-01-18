@@ -1,6 +1,6 @@
 package sh.miles.pineapple.util.serialization.adapter.spec;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.util.serialization.adapter.SerializedAdapter;
 import sh.miles.pineapple.util.serialization.adapter.SerializedAdapterPack;
 
@@ -11,6 +11,7 @@ import java.util.function.Consumer;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public final class SpecAdapterPack implements SerializedAdapterPack {
 
     public static final SpecAdapterPack INSTANCE = new SpecAdapterPack();
@@ -18,9 +19,8 @@ public final class SpecAdapterPack implements SerializedAdapterPack {
     private SpecAdapterPack() {
     }
 
-
     @Override
-    public void bootstrap(@NotNull final Consumer<SerializedAdapter<?>> registrar) {
+    public void bootstrap(final Consumer<SerializedAdapter<?>> registrar) {
         registrar.accept(new FireworkSpecAdapter());
         registrar.accept(new HologramSpecAdapter());
         registrar.accept(new ItemSpecAdapter());

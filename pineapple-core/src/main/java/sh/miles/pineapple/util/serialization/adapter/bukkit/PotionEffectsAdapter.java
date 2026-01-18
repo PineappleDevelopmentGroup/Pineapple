@@ -2,7 +2,6 @@ package sh.miles.pineapple.util.serialization.adapter.bukkit;
 
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
 import sh.miles.pineapple.function.Option.Some;
 import sh.miles.pineapple.util.serialization.SerializedDeserializeContext;
 import sh.miles.pineapple.util.serialization.SerializedElement;
@@ -20,9 +19,8 @@ class PotionEffectsAdapter implements SerializedAdapter<PotionEffect> {
     static final String PARTICLES = "particles";
     static final String ICON = "icon";
 
-    @NotNull
     @Override
-    public SerializedElement serialize(@NotNull final PotionEffect effect, @NotNull final SerializedSerializeContext context) throws SerializedAdaptationException {
+    public SerializedElement serialize(final PotionEffect effect, final SerializedSerializeContext context) throws SerializedAdaptationException {
         final SerializedObject object = SerializedElement.object();
         object.add(TYPE, context.serialize(effect.getType()));
         object.add(DURATION, effect.getDuration());
@@ -32,15 +30,18 @@ class PotionEffectsAdapter implements SerializedAdapter<PotionEffect> {
         return object;
     }
 
-    @NotNull
     @Override
-    public PotionEffect deserialize(@NotNull final SerializedElement element, @NotNull final SerializedDeserializeContext context) throws SerializedAdaptationException {
+    public PotionEffect deserialize(final SerializedElement element, final SerializedDeserializeContext context) throws SerializedAdaptationException {
         final SerializedObject object = element.getAsObject();
         final PotionEffectType type = context.deserialize(object.get(TYPE).orThrow(), PotionEffectType.class);
-        final int duration = ((object.getPrimitive(DURATION)) instanceof Some<SerializedPrimitive> some) ? some.some().getAsInt() : 0;
-        final int amplifier = ((object.getPrimitive(AMPLIFIER)) instanceof Some<SerializedPrimitive> some) ? some.some().getAsInt() : 0;
-        final boolean particles = (object.getPrimitive(PARTICLES)) instanceof Some<SerializedPrimitive> some && some.some().getAsBoolean();
-        final boolean icon = (object.getPrimitive(ICON) instanceof Some<SerializedPrimitive> some && some.some().getAsBoolean());
+        final int duration = ((object.getPrimitive(DURATION)) instanceof Some<SerializedPrimitive> some) ? some.some()
+            .getAsInt() : 0;
+        final int amplifier = ((object.getPrimitive(AMPLIFIER)) instanceof Some<SerializedPrimitive> some) ? some.some()
+            .getAsInt() : 0;
+        final boolean particles = (object.getPrimitive(PARTICLES)) instanceof Some<SerializedPrimitive> some && some
+            .some().getAsBoolean();
+        final boolean icon = (object.getPrimitive(ICON) instanceof Some<SerializedPrimitive> some && some.some()
+            .getAsBoolean());
         return new PotionEffect(type, duration, amplifier, particles, icon);
     }
 

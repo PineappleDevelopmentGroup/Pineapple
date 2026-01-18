@@ -1,6 +1,6 @@
 package sh.miles.pineapple.function;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -11,6 +11,7 @@ import java.util.function.Consumer;
  * @param <L> the left value
  * @param <R> the right value
  */
+@NullMarked
 public sealed class Either<L, R> permits Either.Left, Either.Right {
 
     /**
@@ -131,7 +132,7 @@ public sealed class Either<L, R> permits Either.Left, Either.Right {
      * @param <R>  right type
      * @return the Either
      */
-    public static <L, R> Either<L, R> left(@NotNull final L left) {
+    public static <L, R> Either<L, R> left(final L left) {
         return new Left<>(left);
     }
 
@@ -143,14 +144,14 @@ public sealed class Either<L, R> permits Either.Left, Either.Right {
      * @param <R>   right type
      * @return the Either
      */
-    public static <L, R> Either<L, R> right(@NotNull final R right) {
+    public static <L, R> Either<L, R> right(final R right) {
         return new Right<>(right);
     }
 
     public static final class Left<L, R> extends Either<L, R> {
         private final L value;
 
-        Left(@NotNull final L left) {
+        Left(final L left) {
             this.value = Objects.requireNonNull(left);
         }
 
@@ -162,7 +163,7 @@ public sealed class Either<L, R> permits Either.Left, Either.Right {
     public static final class Right<L, R> extends Either<L, R> {
         private final R value;
 
-        Right(@NotNull final R right) {
+        Right(final R right) {
             this.value = Objects.requireNonNull(right);
         }
 

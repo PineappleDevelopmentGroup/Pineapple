@@ -3,6 +3,7 @@ package sh.miles.pineapple.api.tiles.api.pos;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Arrays;
 import java.util.UUID;
@@ -14,7 +15,8 @@ import java.util.UUID;
  *             location
  * @since 1.0.0-SNAPSHOT
  */
-public record ChunkPos(@NotNull long[] data) {
+@NullMarked
+public record ChunkPos(long[] data) {
 
     /**
      * Creates a ChunkPos from a easy set of parameters
@@ -23,7 +25,7 @@ public record ChunkPos(@NotNull long[] data) {
      * @param x     the chunk x
      * @param z     the chunk z
      */
-    public ChunkPos(@NotNull final UUID world, final int x, final int z) {
+    public ChunkPos(final UUID world, final int x, final int z) {
         this(new long[]{world.getMostSignificantBits(), world.getLeastSignificantBits(), (((long) x) << 32) | z & 0xFFFFFFFFL});
     }
 
@@ -32,7 +34,6 @@ public record ChunkPos(@NotNull long[] data) {
      *
      * @return the bukkit chunk
      */
-    @NotNull
     public Chunk toChunk() {
         final int x = (int) (data[2] >> 32);
         final int z = (int) data[2];
@@ -66,8 +67,7 @@ public record ChunkPos(@NotNull long[] data) {
      * @param chunk the chunk to use
      * @return the resulting ChunkPos
      */
-    @NotNull
-    public static ChunkPos fromChunk(@NotNull final Chunk chunk) {
+    public static ChunkPos fromChunk(final Chunk chunk) {
         return new ChunkPos(chunk.getWorld().getUID(), chunk.getX(), chunk.getZ());
     }
 }

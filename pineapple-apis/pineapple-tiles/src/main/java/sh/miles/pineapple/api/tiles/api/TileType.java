@@ -13,7 +13,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import sh.miles.pineapple.collection.registry.RegistryKey;
 import sh.miles.pineapple.item.ItemBuilder;
 import sh.miles.pineapple.api.tiles.internal.util.TileKeys;
@@ -27,6 +28,7 @@ import sh.miles.pineapple.api.tiles.internal.util.TileKeys;
  * @param <T> the type of tile this tile type represents behavior for
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public abstract class TileType<T extends Tile> implements RegistryKey<NamespacedKey> {
 
     public final boolean isTicking;
@@ -43,7 +45,7 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
      * @since 1.0.0-SNAPSHOT
      */
     @ApiStatus.Internal
-    public final void onBlockDropItemEvent(@NotNull final BlockDropItemEvent event, @NotNull final Tile tile) {
+    public final void onBlockDropItemEvent(final BlockDropItemEvent event, final Tile tile) {
         onDrop(event, (T) tile);
     }
 
@@ -56,7 +58,7 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
      * @since 1.0.0-SNAPSHOT
      */
     @ApiStatus.Internal
-    public final void onBlockExplodeEvent(@NotNull final BlockExplodeEvent event, @NotNull final Tile tile, @NotNull final Block tileBlock) {
+    public final void onBlockExplodeEvent(final BlockExplodeEvent event, final Tile tile, final Block tileBlock) {
         onBlockExplode(event, (T) tile, tileBlock);
     }
 
@@ -69,7 +71,7 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
      * @since 1.0.0-SNAPSHOT
      */
     @ApiStatus.Internal
-    public final void onEntityExplodeEvent(@NotNull final EntityExplodeEvent event, @NotNull final Tile tile, @NotNull final Block tileBlock) {
+    public final void onEntityExplodeEvent(final EntityExplodeEvent event, final Tile tile, final Block tileBlock) {
         onEntityExplode(event, (T) tile, tileBlock);
     }
 
@@ -81,7 +83,7 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
      * @since 1.0.0-SNAPSHOT
      */
     @ApiStatus.Internal
-    public final void onPlayerInteractEvent(@NotNull final PlayerInteractEvent event, @NotNull final Tile tile) {
+    public final void onPlayerInteractEvent(final PlayerInteractEvent event, final Tile tile) {
         onInteract(event, (T) tile);
     }
 
@@ -93,7 +95,7 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
      * @since 1.0.0-SNAPSHOT
      */
     @ApiStatus.Internal
-    public final void onBlockBreakEvent(@NotNull final BlockBreakEvent event, @NotNull final Tile tile) {
+    public final void onBlockBreakEvent(final BlockBreakEvent event, final Tile tile) {
         onBreak(event, (T) tile);
     }
 
@@ -105,7 +107,7 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
      * @since 1.0.0-SNAPSHOT
      */
     @ApiStatus.Internal
-    public final void onBlockPlaceEvent(@NotNull final BlockPlaceEvent event, @NotNull final Tile tile) {
+    public final void onBlockPlaceEvent(final BlockPlaceEvent event, final Tile tile) {
         onPlace(event, (T) tile);
     }
 
@@ -116,7 +118,7 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
      * @since 1.0.0-SNAPSHOT
      */
     @ApiStatus.Internal
-    public final void onTickLoop(@NotNull final Tile tile) {
+    public final void onTickLoop(final Tile tile) {
         tick((T) tile);
     }
 
@@ -140,7 +142,7 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
      * @param tile  the tile being dropped
      * @since 1.0.0-SNAPSHOT
      */
-    protected void onDrop(@NotNull final BlockDropItemEvent event, @NotNull final T tile) {
+    protected void onDrop(final BlockDropItemEvent event, final T tile) {
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
             return;
         }
@@ -158,7 +160,7 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
      * @param tileBlock the block the tile is
      * @since 1.0.0-SNAPSHOT
      */
-    protected void onBlockExplode(@NotNull final BlockExplodeEvent event, @NotNull final T tile, @NotNull final Block tileBlock) {
+    protected void onBlockExplode(final BlockExplodeEvent event, final T tile, final Block tileBlock) {
         event.blockList().remove(tileBlock);
     }
 
@@ -170,7 +172,7 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
      * @param tileBlock the block the tile is
      * @since 1.0.0-SNAPSHOT
      */
-    protected void onEntityExplode(@NotNull final EntityExplodeEvent event, @NotNull final T tile, @NotNull final Block tileBlock) {
+    protected void onEntityExplode(final EntityExplodeEvent event, final T tile, final Block tileBlock) {
         event.blockList().remove(tileBlock);
     }
 
@@ -181,7 +183,7 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
      * @param tile  the tile being interacted with
      * @since 1.0.0-SNAPSHOT
      */
-    protected void onInteract(@NotNull final PlayerInteractEvent event, @NotNull final T tile) {
+    protected void onInteract(final PlayerInteractEvent event, final T tile) {
     }
 
     /**
@@ -191,7 +193,7 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
      * @param tile  the tile being broken
      * @since 1.0.0-SNAPSHOT
      */
-    protected void onBreak(@NotNull final BlockBreakEvent event, @NotNull final T tile) {
+    protected void onBreak(final BlockBreakEvent event, final T tile) {
     }
 
     /**
@@ -201,7 +203,7 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
      * @param tile  the tile being place
      * @since 1.0.0-SNAPSHOT
      */
-    protected void onPlace(@NotNull final BlockPlaceEvent event, @NotNull final T tile) {
+    protected void onPlace(final BlockPlaceEvent event, final T tile) {
     }
 
     /**
@@ -213,7 +215,7 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
      * @param tile the tile being ticked
      * @since 1.0.0-SNAPSHOT
      */
-    protected void tick(@NotNull final T tile) {
+    protected void tick(final T tile) {
     }
 
     /**
@@ -225,7 +227,6 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
      * @return the item builder
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public abstract ItemBuilder createItemShell(@Nullable T tile);
 
     /**
@@ -234,7 +235,6 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
      * @return the created tile
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public abstract T createTile();
 
     /**
@@ -244,6 +244,5 @@ public abstract class TileType<T extends Tile> implements RegistryKey<Namespaced
      * @return the created tile
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
-    public abstract T createTile(@NotNull final ItemStack item);
+    public abstract T createTile(final ItemStack item);
 }

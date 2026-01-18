@@ -1,6 +1,6 @@
 package sh.miles.pineapple.util.serialization.bridges.yaml;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.ReflectionUtils;
 import sh.miles.pineapple.config.adapter.base.TypeAdapter;
 import sh.miles.pineapple.util.serialization.Serialized;
@@ -20,9 +20,11 @@ import static sh.miles.pineapple.util.serialization.SerializedElement.array;
 import static sh.miles.pineapple.util.serialization.SerializedElement.object;
 import static sh.miles.pineapple.util.serialization.SerializedElement.primitive;
 
+@NullMarked
 class SerializedAdapterToYamlAdapter<T> implements TypeAdapter<Object, T> {
 
-    private static final MethodHandle SERIALIZED_PRIMITIVE_OBJECT = ReflectionUtils.getFieldAsGetter(SerializedPrimitive.class, "object");
+    private static final MethodHandle SERIALIZED_PRIMITIVE_OBJECT = ReflectionUtils.getFieldAsGetter(
+        SerializedPrimitive.class, "object");
 
     private final Class<T> clazz;
 
@@ -56,7 +58,7 @@ class SerializedAdapterToYamlAdapter<T> implements TypeAdapter<Object, T> {
         return Serialized.INSTANCE.deserialize(element, this.clazz);
     }
 
-    private static SerializedElement fromObject(@NotNull final Object object) {
+    private static SerializedElement fromObject(final Object object) {
         if (object instanceof Map) {
             return fromMapObject((Map<String, Object>) object);
         } else if (object instanceof Collection) {
@@ -64,11 +66,13 @@ class SerializedAdapterToYamlAdapter<T> implements TypeAdapter<Object, T> {
         } else if (isPrimitive(object)) {
             return fromPrimitiveObject(object);
         } else {
-            throw new IllegalStateException("Object of type %s can not be permitted for conversion to SerializedElement".formatted(object.getClass()));
+            throw new IllegalStateException(
+                "Object of type %s can not be permitted for conversion to SerializedElement".formatted(
+                    object.getClass()));
         }
     }
 
-    private static SerializedObject fromMapObject(@NotNull final Map<String, Object> map) {
+    private static SerializedObject fromMapObject(final Map<String, Object> map) {
         final SerializedObject object = object();
         for (final Map.Entry<String, Object> entry : map.entrySet()) {
             object.add(entry.getKey(), fromObject(entry.getValue()));
@@ -77,7 +81,7 @@ class SerializedAdapterToYamlAdapter<T> implements TypeAdapter<Object, T> {
         return object;
     }
 
-    private static SerializedArray fromListObject(@NotNull final Collection<Object> collection) {
+    private static SerializedArray fromListObject(final Collection<Object> collection) {
         SerializedArray array = array();
         for (final Object o : collection) {
             array.add(fromObject(o));
@@ -86,25 +90,39 @@ class SerializedAdapterToYamlAdapter<T> implements TypeAdapter<Object, T> {
         return array;
     }
 
-    private static SerializedPrimitive fromPrimitiveObject(@NotNull final Object object) {
-        if ((object instanceof Byte || object.getClass().isAssignableFrom(byte.class)) || (object instanceof Short || object.getClass().isAssignableFrom(short.class)) || (object instanceof Integer || object.getClass().isAssignableFrom(int.class))) {
+    private static SerializedPrimitive fromPrimitiveObject(final Object object) {
+        if ((object instanceof Byte || object.getClass()
+            .isAssignableFrom(byte.class)) || (object instanceof Short || object.getClass()
+            .isAssignableFrom(short.class)) || (object instanceof Integer || object.getClass()
+            .isAssignableFrom(int.class))) {
             return primitive((int) object);
         } else if (object instanceof Long || object.getClass().isAssignableFrom(long.class)) {
             return primitive((long) object);
-        } else if (object instanceof  Float || object.getClass().isAssignableFrom(float.class) || object instanceof Double || object.getClass().isAssignableFrom(double.class)) {
+        } else if (object instanceof Float || object.getClass()
+            .isAssignableFrom(float.class) || object instanceof Double || object.getClass()
+            .isAssignableFrom(double.class)) {
             return primitive((double) object);
         } else if (object instanceof String) {
             return primitive((String) object);
         } else {
-            throw new IllegalStateException("Object of type %s can not be permitted for conversion to SerializedElement".formatted(object.getClass()));
+            throw new IllegalStateException(
+                "Object of type %s can not be permitted for conversion to SerializedElement".formatted(
+                    object.getClass()));
         }
     }
 
     private static boolean isPrimitive(Object object) {
-        return (object instanceof Byte || object.getClass().isAssignableFrom(byte.class)) || (object instanceof Short || object.getClass().isAssignableFrom(short.class)) || (object instanceof Integer || object.getClass().isAssignableFrom(int.class)) || (object instanceof Long || object.getClass().isAssignableFrom(long.class)) || (object instanceof Float || object.getClass().isAssignableFrom(float.class)) || (object instanceof Double || object.getClass().isAssignableFrom(double.class)) || (object instanceof Boolean || object.getClass().isAssignableFrom(boolean.class)) || (object instanceof String);
+        return (object instanceof Byte || object.getClass()
+            .isAssignableFrom(byte.class)) || (object instanceof Short || object.getClass()
+            .isAssignableFrom(short.class)) || (object instanceof Integer || object.getClass()
+            .isAssignableFrom(int.class)) || (object instanceof Long || object.getClass()
+            .isAssignableFrom(long.class)) || (object instanceof Float || object.getClass()
+            .isAssignableFrom(float.class)) || (object instanceof Double || object.getClass()
+            .isAssignableFrom(double.class)) || (object instanceof Boolean || object.getClass()
+            .isAssignableFrom(boolean.class)) || (object instanceof String);
     }
 
-    private static Object toObject(@NotNull final SerializedElement element) {
+    private static Object toObject(final SerializedElement element) {
         if (element.isObject()) {
             return toMapObject(element.getAsObject());
         } else if (element.isArray()) {
@@ -112,11 +130,12 @@ class SerializedAdapterToYamlAdapter<T> implements TypeAdapter<Object, T> {
         } else if (element.isPrimitive()) {
             return toPrimitiveObject(element.getAsPrimitive());
         } else {
-            throw new IllegalStateException("SerializedElement is not instance of object, array, or primitive! This is a bug!");
+            throw new IllegalStateException(
+                "SerializedElement is not instance of object, array, or primitive! This is a bug!");
         }
     }
 
-    private static List<Object> toListObject(@NotNull final SerializedArray array) {
+    private static List<Object> toListObject(final SerializedArray array) {
         final List<Object> list = new ArrayList<>();
         for (final SerializedElement element : array) {
             list.add(toObject(element));
@@ -125,7 +144,7 @@ class SerializedAdapterToYamlAdapter<T> implements TypeAdapter<Object, T> {
         return list;
     }
 
-    private static Map<String, Object> toMapObject(@NotNull final SerializedObject object) {
+    private static Map<String, Object> toMapObject(final SerializedObject object) {
         final Map<String, Object> map = new HashMap<>();
         for (final Map.Entry<String, SerializedElement> entry : object.entrySet()) {
             map.put(entry.getKey(), toObject(entry.getValue()));
@@ -134,7 +153,7 @@ class SerializedAdapterToYamlAdapter<T> implements TypeAdapter<Object, T> {
         return map;
     }
 
-    private static Object toPrimitiveObject(@NotNull final SerializedPrimitive primitive) {
+    private static Object toPrimitiveObject(final SerializedPrimitive primitive) {
         try {
             return SERIALIZED_PRIMITIVE_OBJECT.bindTo(primitive).invoke();
         } catch (Throwable e) {

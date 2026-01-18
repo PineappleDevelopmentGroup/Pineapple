@@ -2,8 +2,8 @@ package sh.miles.pineapple.config.type;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.PineappleLib;
 import sh.miles.pineapple.config.ConfigField;
 import sh.miles.pineapple.config.ConfigManager;
@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
+@NullMarked
 public class Configuration {
 
     private final File file;
@@ -31,11 +32,11 @@ public class Configuration {
     /**
      * Create a new configuration. Should only be used by ConfigManager
      *
-     * @param file the configs file
+     * @param file        the configs file
      * @param configClass the class to retrieve fields from
-     * @param instance the instance to retrieve values from if required
+     * @param instance    the instance to retrieve values from if required
      */
-    public Configuration(@NotNull File file, @NotNull Class<?> configClass, @Nullable Object instance) {
+    public Configuration(File file, Class<?> configClass, @Nullable Object instance) {
         this.file = file;
         this.clazz = configClass;
         this.instance = instance;
@@ -85,13 +86,13 @@ public class Configuration {
 
             boolean mapOnly = field.getRuntimeClass() == Map.class && path.isEmpty() && this.fields.size() == 1;
             TypeAdapter<Object, Object> typeAdapter = (TypeAdapter<Object, Object>) configManager.getTypeAdapter(
-                    ConfigType.get(field.getField()));
+                ConfigType.get(field.getField()));
 
             if (typeAdapter == null) {
                 PineappleLib.getLogger()
-                        .log(Level.WARNING, "Unable to find type adapter for field: {0} with path: {1} in {2}",
-                                objArr(field.getField().getName(), field.getPath(), this.file.getName())
-                        );
+                    .log(Level.WARNING, "Unable to find type adapter for field: {0} with path: {1} in {2}",
+                        objArr(field.getField().getName(), field.getPath(), this.file.getName())
+                    );
                 field.setHidden();
                 continue;
             }
@@ -123,9 +124,9 @@ public class Configuration {
 
             if (deserialized == null) {
                 PineappleLib.getLogger()
-                        .log(Level.WARNING, "Deserialized value for path: {0}, is null from TypeAdapter {1}",
-                                objArr(path, typeAdapter.getClass().getTypeName())
-                        );
+                    .log(Level.WARNING, "Deserialized value for path: {0}, is null from TypeAdapter {1}",
+                        objArr(path, typeAdapter.getClass().getTypeName())
+                    );
                 field.setHidden();
                 return this;
             }
@@ -161,9 +162,13 @@ public class Configuration {
                 config.setComments(path, field.getComments());
             }
 
-            TypeAdapter<Object, Object> adapter = (TypeAdapter<Object, Object>) configManager.getTypeAdapter(ConfigType.get(field.getField()));
+            TypeAdapter<Object, Object> adapter = (TypeAdapter<Object, Object>) configManager.getTypeAdapter(
+                ConfigType.get(field.getField()));
             if (adapter == null) {
-                PineappleLib.getLogger().log(Level.WARNING, "Unable to find type adapter for field: {0} with path: {1} in {2}", objArr(field.getField().getName(), field.getPath(), this.file.getName()));
+                PineappleLib.getLogger()
+                    .log(Level.WARNING, "Unable to find type adapter for field: {0} with path: {1} in {2}",
+                        objArr(field.getField().getName(), field.getPath(), this.file.getName())
+                    );
                 field.setHidden();
                 continue;
             }
@@ -171,7 +176,10 @@ public class Configuration {
 
             Object toSave = this.getValue(field.getField());
             if (toSave == null) {
-                PineappleLib.getLogger().log(Level.WARNING, "Found null value while trying to save for field name: {0}, path: {1} in config {2}", objArr(field.getField().getName(), path, this.file.getName()));
+                PineappleLib.getLogger().log(Level.WARNING,
+                    "Found null value while trying to save for field name: {0}, path: {1} in config {2}",
+                    objArr(field.getField().getName(), path, this.file.getName())
+                );
             }
 
             Object existing = config.get(path);
@@ -187,7 +195,10 @@ public class Configuration {
 
             Object value = adapter.write(toSave, existing, replace);
             if (value == null) {
-                PineappleLib.getLogger().log(Level.WARNING, "Found null value from TypeAdapter: {0} while trying to save config {1}", objArr(adapter.getClass().getTypeName(), this.file.getName()));
+                PineappleLib.getLogger()
+                    .log(Level.WARNING, "Found null value from TypeAdapter: {0} while trying to save config {1}",
+                        objArr(adapter.getClass().getTypeName(), this.file.getName())
+                    );
                 field.setHidden();
                 continue;
             }
@@ -209,7 +220,8 @@ public class Configuration {
         try {
             config.save(this.file);
         } catch (IOException ex) {
-            PineappleLib.getLogger().log(Level.WARNING, ex, () -> "Unable to save config %s".formatted(this.file.getName()));
+            PineappleLib.getLogger()
+                .log(Level.WARNING, ex, () -> "Unable to save config %s".formatted(this.file.getName()));
         }
         return this;
     }

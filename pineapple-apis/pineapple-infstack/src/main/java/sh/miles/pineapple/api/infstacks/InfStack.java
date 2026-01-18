@@ -3,11 +3,12 @@ package sh.miles.pineapple.api.infstacks;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * An ItemStack wrapper which allows the growth and shrinking beyond the
  */
+@NullMarked
 public class InfStack {
 
     private ItemStack display;
@@ -23,7 +24,7 @@ public class InfStack {
      * @param stackSize  the stack current size
      * @param settings   all related settings
      */
-    InfStack(@NotNull final ItemStack display, @NotNull final ItemStack comparator, final long stackSize, @NotNull final InfStackSettings settings) {
+    InfStack(final ItemStack display, final ItemStack comparator, final long stackSize, final InfStackSettings settings) {
         this.display = display.clone();
         this.comparator = comparator.clone();
         this.settings = settings;
@@ -36,7 +37,7 @@ public class InfStack {
      * @param item the item to grow with
      * @return true if the InfStack could be grown
      */
-    public boolean grow(@NotNull final ItemStack item) {
+    public boolean grow(final ItemStack item) {
         if (isAir()) {
             return false;
         }
@@ -54,7 +55,6 @@ public class InfStack {
      * @param amount the size of the ItemStack to extract
      * @return the expected extraction or air
      */
-    @NotNull
     public ItemStack extract(int amount) {
         if (isAir()) {
             return new ItemStack(Material.AIR);
@@ -115,7 +115,8 @@ public class InfStack {
     }
 
     private void update() {
-        this.display = this.settings.loreApplier().apply(this.settings.lore(), this.stackSize, this.display, this.comparator, true);
+        this.display = this.settings.loreApplier()
+            .apply(this.settings.lore(), this.stackSize, this.display, this.comparator, true);
 
         var meta = this.display.getItemMeta();
         assert meta != null;
@@ -130,7 +131,7 @@ public class InfStack {
      * @param other the other item
      * @return true if the items are similar, otherwise false
      */
-    public boolean isSimilar(@NotNull final ItemStack other) {
+    public boolean isSimilar(final ItemStack other) {
         return this.comparator.isSimilar(other);
     }
 
@@ -166,7 +167,6 @@ public class InfStack {
      *
      * @return the display item stack
      */
-    @NotNull
     public ItemStack getDisplay() {
         return this.display.clone();
     }
@@ -176,7 +176,6 @@ public class InfStack {
      *
      * @return the comparator item stack
      */
-    @NotNull
     public ItemStack getComparator() {
         return this.comparator.clone();
     }

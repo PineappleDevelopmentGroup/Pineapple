@@ -1,12 +1,13 @@
 package sh.miles.pineapple.exception;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.logging.Logger;
 
 /**
  * A Factory for creating anomalies
  */
+@NullMarked
 public class AnomalyFactory {
 
     private final Logger logger;
@@ -16,7 +17,7 @@ public class AnomalyFactory {
      *
      * @param logger the logger to use
      */
-    public AnomalyFactory(@NotNull final Logger logger) {
+    public AnomalyFactory(final Logger logger) {
         this.logger = logger;
     }
 
@@ -36,9 +37,9 @@ public class AnomalyFactory {
      * @param <R>         the return type
      * @return the new anomaly
      */
-    public <R> Anomaly<R> create(@NotNull final R returnValue) {
+    public <R> Anomaly<R> create(final R returnValue) {
         return new Anomaly<R>(this.logger)
-                .run(() -> returnValue);
+            .run(() -> returnValue);
     }
 
 }

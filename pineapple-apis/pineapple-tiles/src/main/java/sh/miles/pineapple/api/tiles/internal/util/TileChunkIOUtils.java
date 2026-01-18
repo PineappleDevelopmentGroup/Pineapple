@@ -8,6 +8,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.api.tiles.api.Tile;
 import sh.miles.pineapple.api.tiles.api.TileType;
 import sh.miles.pineapple.api.tiles.api.TileTypeRegistry;
@@ -22,6 +23,7 @@ import java.util.Map;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 @ApiStatus.Internal
 public final class TileChunkIOUtils {
 
@@ -38,7 +40,7 @@ public final class TileChunkIOUtils {
      * @throws IllegalStateException thrown if there is no found TileType for the a given loaded tile
      * @since 1.0.0-SNAPSHOT
      */
-    public static void loadTiles(@NotNull final ServerTileCache cache, @NotNull final TileTypeRegistry registry, @NotNull final Chunk chunk) throws IllegalStateException {
+    public static void loadTiles(final ServerTileCache cache, final TileTypeRegistry registry, final Chunk chunk) throws IllegalStateException {
         final PersistentDataContainer container = chunk.getPersistentDataContainer().get(TileKeys.getTileContainerKey(), PersistentDataType.TAG_CONTAINER);
         assert container != null;
         for (final NamespacedKey key : container.getKeys()) {
@@ -66,7 +68,7 @@ public final class TileChunkIOUtils {
      * @param chunk the chunk
      * @since 1.0.0-SNAPSHOT
      */
-    public static void saveTiles(@NotNull final ServerTileCache cache, @NotNull final Chunk chunk) {
+    public static void saveTiles(final ServerTileCache cache, final Chunk chunk) {
         final var tiles = cache.evict(chunk);
         final PersistentDataContainer chunkContainer = chunk.getPersistentDataContainer();
         final PersistentDataContainer tilesContainer;
@@ -97,7 +99,7 @@ public final class TileChunkIOUtils {
      * @param hard  whether or not to delete the tile even if it is not cached
      * @return true if the tile was successfully deleted
      */
-    public static boolean deleteTile(@NotNull final ServerTileCache cache, @NotNull final Chunk chunk, @NotNull final ChunkRelPos pos, boolean hard) {
+    public static boolean deleteTile(final ServerTileCache cache, final Chunk chunk, final ChunkRelPos pos, boolean hard) {
         final Tile tile = cache.evict(chunk, pos);
         if (tile == null && !hard) {
             return false;
@@ -128,7 +130,7 @@ public final class TileChunkIOUtils {
      * @param hard     whether or not to delete the tile even if it is not cached
      * @return true if the tile was successfully deleted
      */
-    public static boolean deleteTile(@NotNull final ServerTileCache cache, @NotNull final Location location, boolean hard) {
+    public static boolean deleteTile(final ServerTileCache cache, final Location location, boolean hard) {
         return deleteTile(cache, location.getChunk(), ChunkRelPos.fromLocation(location), hard);
     }
 }

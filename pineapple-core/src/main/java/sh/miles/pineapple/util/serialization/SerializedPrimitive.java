@@ -1,7 +1,7 @@
 package sh.miles.pineapple.util.serialization;
 
 import com.google.common.base.Preconditions;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.util.serialization.exception.InvalidSerializedTypeException;
 
 import java.lang.reflect.Type;
@@ -14,14 +14,17 @@ import java.util.Objects;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public final class SerializedPrimitive extends SerializedElement {
 
     private final Object object;
 
-    SerializedPrimitive(@NotNull final Object object) {
+    SerializedPrimitive(final Object object) {
         Preconditions.checkArgument(object != null, "The given object mustn't be null");
         this.object = object;
-        Preconditions.checkArgument(isAny(), "The given object does not match any required primitive type. Found type %s".formatted(object.getClass()));
+        Preconditions.checkArgument(isAny(),
+            "The given object does not match any required primitive type. Found type %s".formatted(object.getClass())
+        );
     }
 
     /**
@@ -93,7 +96,7 @@ public final class SerializedPrimitive extends SerializedElement {
      * @throws InvalidSerializedTypeException thrown if the type is not actually a string
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
+
     public String getAsString() throws InvalidSerializedTypeException {
         if (isString()) {
             return (String) this.object;
@@ -161,7 +164,6 @@ public final class SerializedPrimitive extends SerializedElement {
      * @return the type
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public Type getTypeOfPrimitive() {
         return this.object.getClass();
     }

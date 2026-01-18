@@ -1,7 +1,7 @@
 package sh.miles.pineapple.collection;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,6 +17,7 @@ import java.util.function.UnaryOperator;
  *
  * @param <E> the type of element
  */
+@NullMarked
 @SuppressWarnings("unchecked")
 public class NonNullArray<E> implements Collection<E> {
 
@@ -29,7 +30,7 @@ public class NonNullArray<E> implements Collection<E> {
      * @param size      the size of the array
      * @param nullValue the null value
      */
-    public NonNullArray(final int size, @NotNull final Supplier<E> nullValue) {
+    public NonNullArray(final int size, final Supplier<E> nullValue) {
         this.objects = new Object[size];
         this.nullValue = nullValue;
         for (int i = 0; i < objects.length; i++) {
@@ -71,7 +72,7 @@ public class NonNullArray<E> implements Collection<E> {
      * @param value the value to add
      * @return true if the value could be added, otherwise false
      */
-    public boolean add(@NotNull final E value) {
+    public boolean add(final E value) {
         Objects.requireNonNull(value);
         E defaultValue = this.nullValue.get();
         for (int i = 0; i < this.objects.length; i++) {
@@ -91,7 +92,6 @@ public class NonNullArray<E> implements Collection<E> {
      * @return the removed item
      * @throws IndexOutOfBoundsException if the index is out of bounds
      */
-    @NotNull
     public E remove(final int index) throws IndexOutOfBoundsException {
         verifyIndex(index);
         var temp = this.objects[index];
@@ -106,7 +106,7 @@ public class NonNullArray<E> implements Collection<E> {
      * @return true if the value was removed, otherwise false
      */
     @Override
-    public boolean remove(@NotNull final Object value) {
+    public boolean remove(final Object value) {
         Objects.requireNonNull(value);
         for (int i = 0; i < this.objects.length; i++) {
             Object object = this.objects[i];
@@ -193,7 +193,7 @@ public class NonNullArray<E> implements Collection<E> {
     }
 
     @Override
-    public boolean containsAll(@NotNull final Collection<?> c) {
+    public boolean containsAll(final Collection<?> c) {
         for (final Object o : c) {
             if (!contains(o)) {
                 return false;
@@ -203,7 +203,7 @@ public class NonNullArray<E> implements Collection<E> {
     }
 
     @Override
-    public boolean addAll(@NotNull final Collection<? extends E> c) {
+    public boolean addAll(final Collection<? extends E> c) {
         final List<Integer> openIndexes = new ArrayList<>();
         var baseValue = this.nullValue.get();
         for (int i = 0; i < this.objects.length; i++) {
@@ -226,7 +226,7 @@ public class NonNullArray<E> implements Collection<E> {
     }
 
     @Override
-    public boolean removeAll(@NotNull final Collection<?> c) {
+    public boolean removeAll(final Collection<?> c) {
         for (final Object o : c) {
             remove(o);
         }
@@ -234,7 +234,7 @@ public class NonNullArray<E> implements Collection<E> {
     }
 
     @Override
-    public boolean retainAll(@NotNull final Collection<?> c) {
+    public boolean retainAll(final Collection<?> c) {
         throw new UnsupportedOperationException("retainAll is not currently supported by NonNullArray");
     }
 
@@ -258,21 +258,18 @@ public class NonNullArray<E> implements Collection<E> {
         return false;
     }
 
-    @NotNull
     @Override
     public Iterator<E> iterator() {
         return Arrays.stream(this.objects).map(o -> (E) o).iterator();
     }
 
-    @NotNull
     @Override
     public Object[] toArray() {
         return Arrays.stream(this.objects).toArray();
     }
 
-    @NotNull
     @Override
-    public <T> T[] toArray(@NotNull final T[] a) {
+    public <T> T[] toArray(final T[] a) {
         if (a.length < objects.length) {
             return (T[]) Arrays.copyOf(this.objects, this.objects.length, a.getClass());
         }
@@ -291,7 +288,9 @@ public class NonNullArray<E> implements Collection<E> {
      */
     private void verifyIndex(final int index) throws IndexOutOfBoundsException {
         if (index >= objects.length || index < 0) {
-            throw new IndexOutOfBoundsException("index %d is out of range for array of size %d".formatted(index, objects.length));
+            throw new IndexOutOfBoundsException(
+                "index %d is out of range for array of size %d".formatted(index, objects.length)
+            );
         }
     }
 }

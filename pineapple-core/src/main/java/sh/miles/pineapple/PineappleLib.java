@@ -2,7 +2,8 @@ package sh.miles.pineapple;
 
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import sh.miles.pineapple.command.Command;
 import sh.miles.pineapple.command.CommandLabel;
 import sh.miles.pineapple.command.internal.PineappleCommandManager;
@@ -28,15 +29,19 @@ import java.util.logging.Logger;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public final class PineappleLib {
 
+    @Nullable
     private static PineappleLib instance;
 
     private final Plugin plugin;
+    @Nullable
     private PineappleNMS nmsProvider;
     private final ConfigManager configurationManager;
     private final GuiManager guiManager;
     private final AnomalyFactory anomalyFactory;
+    @Nullable
     private String version;
 
     /**
@@ -64,7 +69,6 @@ public final class PineappleLib {
      * @return the configuration manager
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public static ConfigManager getConfigurationManager() {
         return instance.configurationManager;
     }
@@ -73,7 +77,6 @@ public final class PineappleLib {
      * @return the gui manager
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public static GuiManager getGuiManager() {
         return instance.guiManager;
     }
@@ -109,7 +112,6 @@ public final class PineappleLib {
      * @return the logger
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public static Logger getLogger() {
         return instance.plugin.getLogger();
     }
@@ -128,7 +130,7 @@ public final class PineappleLib {
      * @param plugin the plugin
      * @since 1.0.0-SNAPSHOT
      */
-    public static void initialize(@NotNull final Plugin plugin) {
+    public static void initialize(final Plugin plugin) {
         instance = new PineappleLib(plugin, false);
     }
 
@@ -139,7 +141,7 @@ public final class PineappleLib {
      * @param useNms decides whether or not to use NMS
      * @since 1.0.0-SNAPSHOT
      */
-    public static void initialize(@NotNull final Plugin plugin, final boolean useNms) {
+    public static void initialize(final Plugin plugin, final boolean useNms) {
         instance = new PineappleLib(plugin, useNms);
     }
 
@@ -149,12 +151,13 @@ public final class PineappleLib {
      * @param command the command to register
      * @since 1.0.0-SNAPSHOT
      */
-    public static void registerCommand(@NotNull final Command command) {
+    public static void registerCommand(final Command command) {
         final CommandLabel label = command.getCommandLabel();
 
-        instance.plugin.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> commands.registrar()
-            .register(label.getName(), label.getDescription(), label.getAliases(), command)
-        );
+        instance.plugin.getLifecycleManager()
+            .registerEventHandler(LifecycleEvents.COMMANDS, commands -> commands.registrar()
+                .register(label.getName(), label.getDescription(), label.getAliases(), command)
+            );
     }
 
     /**
@@ -172,7 +175,7 @@ public final class PineappleLib {
      * @param commandSuffix the suffix
      * @since 1.0.0-SNAPSHOT
      */
-    public void registerInternalCommands(@NotNull String commandSuffix) {
+    public void registerInternalCommands(String commandSuffix) {
         registerCommand(new PineappleCommandManager(this.plugin, commandSuffix.toLowerCase()));
     }
 
@@ -185,7 +188,7 @@ public final class PineappleLib {
 
     private void loadVersion() {
         try (final BufferedReader reader = new BufferedReader(
-                new InputStreamReader(getClass().getResourceAsStream("/pineapple.version"), StandardCharsets.UTF_8)
+            new InputStreamReader(getClass().getResourceAsStream("/pineapple.version"), StandardCharsets.UTF_8)
         )) {
             this.version = reader.readLine();
         } catch (IOException ignored) {

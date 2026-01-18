@@ -1,8 +1,8 @@
 package sh.miles.pineapple;
 
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.function.ThrowingSupplier;
 
 import java.lang.invoke.MethodHandle;
@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public final class ReflectionUtils {
 
     private static final MethodHandles.Lookup lookup;
@@ -47,7 +48,7 @@ public final class ReflectionUtils {
      * @return a new instance of the class with the parameters or null if errors occur
      * @since 1.0.0-SNAPSHOT
      */
-    public static <T> T newInstance(@NotNull final Class<T> clazz, @NotNull final Object[] params) {
+    public static <T> T newInstance(final Class<T> clazz, final Object[] params) {
         Objects.requireNonNull(clazz);
         Objects.requireNonNull(params);
 
@@ -73,7 +74,7 @@ public final class ReflectionUtils {
      * @since 1.0.0-SNAPSHOT
      */
     @SuppressWarnings("unchecked")
-    public static <T> T newInstance(@NotNull final String classPath, @NotNull final Object[] params) {
+    public static <T> T newInstance(final String classPath, final Object[] params) {
         Objects.requireNonNull(classPath);
         Objects.requireNonNull(params);
 
@@ -95,7 +96,7 @@ public final class ReflectionUtils {
      * @return the value of the field or null if errors occur or the field is null
      * @since 1.0.0-SNAPSHOT
      */
-    public static <T> T getField(@NotNull final Object instance, @NotNull final String fieldName, @NotNull final Class<T> fieldType) {
+    public static <T> T getField(final Object instance, final String fieldName, final Class<T> fieldType) {
         return getField(instance.getClass(), instance, fieldName, fieldType);
     }
 
@@ -109,7 +110,7 @@ public final class ReflectionUtils {
      * @return the value of the field or null if errors occur or the field is null
      * @since 1.0.0-SNAPSHOT
      */
-    public static <T> T getField(@NotNull final Class<?> parentClass, @NotNull final String fieldName, @NotNull final Class<T> fieldType) {
+    public static <T> T getField(final Class<?> parentClass, final String fieldName, final Class<T> fieldType) {
         return getField(parentClass, null, fieldName, fieldType);
     }
 
@@ -124,7 +125,7 @@ public final class ReflectionUtils {
      * @return the value of the field or null if errors occur or the field is null
      * @since 1.0.0-SNAPSHOT
      */
-    private static <T> T getField(@NotNull final Class<?> parentClass, @Nullable final Object instance, @NotNull final String fieldName, @NotNull final Class<T> fieldType) {
+    private static <T> T getField(final Class<?> parentClass, @Nullable final Object instance, final String fieldName, final Class<T> fieldType) {
         Objects.requireNonNull(parentClass);
         Objects.requireNonNull(fieldName);
         Objects.requireNonNull(fieldType);
@@ -148,7 +149,7 @@ public final class ReflectionUtils {
      * @since 1.0.0-SNAPSHOT
      */
     @Contract("_ -> new")
-    public static Class<?>[] classesFromParameters(@NotNull final Object[] parameters) {
+    public static Class<?>[] classesFromParameters(final Object[] parameters) {
         Objects.requireNonNull(parameters);
 
         final Class<?>[] clazzes = new Class[parameters.length];
@@ -236,7 +237,7 @@ public final class ReflectionUtils {
      * @return the newly created VarHandle from the field
      * @since 1.0.0-SNAPSHOT
      */
-    public static VarHandle getFieldAsVarHandle(@NotNull final Field field) {
+    public static VarHandle getFieldAsVarHandle(final Field field) {
         try {
             field.setAccessible(true);
             var handle = lookup.unreflectVarHandle(field);
@@ -256,8 +257,8 @@ public final class ReflectionUtils {
      * @return the fields as MethodHandle's in the class
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
-    public static List<VarHandle> getAllFields(@NotNull final Class<?> clazz, Predicate<Field> filter) {
+
+    public static List<VarHandle> getAllFields(final Class<?> clazz, Predicate<Field> filter) {
         final List<VarHandle> handles = new ArrayList<>();
         for (final Field field : clazz.getDeclaredFields()) {
             if (filter.test(field)) {
@@ -314,13 +315,13 @@ public final class ReflectionUtils {
      * @return a list of parameterized types
      * @since 1.0.0-SNAPSHOT
      */
-    public static List<Class<?>> getParameterizedTypes(@NotNull final Field field) {
+    public static List<Class<?>> getParameterizedTypes(final Field field) {
         final String typeName = field.getGenericType().getTypeName();
         int ind = typeName.indexOf('<');
         if (ind == -1) {
             return new ArrayList<>();
         }
-        List<Class<?>> componentTypes = splitTypeName(typeName, ind + 1, typeName.length() - 1)
+        return splitTypeName(typeName, ind + 1, typeName.length() - 1)
             .stream()
             .map((className) -> {
                 try {
@@ -330,7 +331,6 @@ public final class ReflectionUtils {
                 }
             })
             .collect(Collectors.toList());
-        return componentTypes;
     }
 
     /**
@@ -398,7 +398,7 @@ public final class ReflectionUtils {
             current.append(c);
         }
         String last = current.toString().trim();
-        if (last.length() != 0) {
+        if (!last.isEmpty()) {
             split.add(last);
         }
         return split;

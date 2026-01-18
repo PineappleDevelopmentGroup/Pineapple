@@ -6,6 +6,7 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import sh.miles.pineapple.api.tiles.api.TileTypeRegistry;
 import sh.miles.pineapple.api.tiles.internal.ServerTileCache;
 import sh.miles.pineapple.api.tiles.internal.util.TileChunkIOUtils;
@@ -16,12 +17,11 @@ import sh.miles.pineapple.api.tiles.internal.util.TileKeys;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 @ApiStatus.Internal
 public final class TileChunkIOListener implements Listener {
 
-    @NotNull
     private final ServerTileCache cache;
-    @NotNull
     private final TileTypeRegistry registry;
 
     /**
@@ -31,7 +31,7 @@ public final class TileChunkIOListener implements Listener {
      * @param registry the registry
      * @since 1.0.0-SNAPSHOT
      */
-    public TileChunkIOListener(@NotNull final ServerTileCache cache, @NotNull final TileTypeRegistry registry) {
+    public TileChunkIOListener(final ServerTileCache cache, final TileTypeRegistry registry) {
         this.cache = cache;
         this.registry = registry;
     }
@@ -42,7 +42,7 @@ public final class TileChunkIOListener implements Listener {
      * @param event _
      */
     @EventHandler
-    public void onChunkLoad(@NotNull final ChunkLoadEvent event) {
+    public void onChunkLoad(final ChunkLoadEvent event) {
         if (!event.getChunk().getPersistentDataContainer().has(TileKeys.getTileContainerKey())) {
             return;
         }
@@ -55,7 +55,7 @@ public final class TileChunkIOListener implements Listener {
      * @param event _
      */
     @EventHandler
-    public void onChunkUnload(@NotNull final ChunkUnloadEvent event) {
+    public void onChunkUnload(final ChunkUnloadEvent event) {
         TileChunkIOUtils.saveTiles(cache, event.getChunk());
     }
 }

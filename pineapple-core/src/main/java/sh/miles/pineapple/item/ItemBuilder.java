@@ -22,7 +22,8 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.profile.PlayerTextures;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -37,11 +38,14 @@ import java.util.function.Consumer;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public class ItemBuilder {
 
     private static final String TEXTURE_URL = "http://textures.minecraft.net/texture/";
 
+    @Nullable
     private ItemStack stack;
+    @Nullable
     private ItemMeta meta;
 
     /**
@@ -160,7 +164,7 @@ public class ItemBuilder {
      * @return the ItemBuilder
      * @since 1.0.0-SNAPSHOT
      */
-    public ItemBuilder name(@NotNull final Component name) {
+    public ItemBuilder name(final Component name) {
         this.meta.displayName(name);
 
         return this;
@@ -173,7 +177,7 @@ public class ItemBuilder {
      * @return the ItemBuilder
      * @since 1.0.0-SNAPSHOT
      */
-    public ItemBuilder lore(@NotNull final List<Component> lore) {
+    public ItemBuilder lore(final List<Component> lore) {
         List<Component> itemLore = getLore();
         itemLore.addAll(lore);
 
@@ -330,17 +334,17 @@ public class ItemBuilder {
      */
     public ItemBuilder skullTexture(String texture) {
         return modify(SkullMeta.class, meta -> {
-                    PlayerProfile profile = Bukkit.createProfile(UUID.nameUUIDFromBytes(texture.getBytes()));
-                    PlayerTextures textures = profile.getTextures();
-                    try {
-                        textures.setSkin((new URI(TEXTURE_URL + texture)).toURL());
-                    } catch (Exception ignored) {
-                        return;
-                    }
-
-                    profile.setTextures(textures);
-                    ((SkullMeta) this.meta).setPlayerProfile(profile);
+                PlayerProfile profile = Bukkit.createProfile(UUID.nameUUIDFromBytes(texture.getBytes()));
+                PlayerTextures textures = profile.getTextures();
+                try {
+                    textures.setSkin((new URI(TEXTURE_URL + texture)).toURL());
+                } catch (Exception ignored) {
+                    return;
                 }
+
+                profile.setTextures(textures);
+                ((SkullMeta) this.meta).setPlayerProfile(profile);
+            }
         );
     }
 

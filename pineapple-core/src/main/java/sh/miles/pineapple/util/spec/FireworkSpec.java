@@ -7,7 +7,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -18,7 +18,8 @@ import java.util.function.Consumer;
  * @param effects the effects the firework has
  * @since 1.0.0-SNAPSHOT
  */
-public record FireworkSpec(@NotNull List<FireworkEffect> effects, int power) {
+@NullMarked
+public record FireworkSpec(List<FireworkEffect> effects, int power) {
 
     public FireworkSpec {
         effects = ImmutableList.copyOf(effects);
@@ -30,7 +31,7 @@ public record FireworkSpec(@NotNull List<FireworkEffect> effects, int power) {
      * @param item the item apply to
      * @since 1.0.0-SNAPSHOT
      */
-    public void apply(@NotNull final ItemStack item) {
+    public void apply(final ItemStack item) {
         item.setItemMeta(buildSpecMeta((FireworkMeta) item.getItemMeta()));
     }
 
@@ -41,10 +42,10 @@ public record FireworkSpec(@NotNull List<FireworkEffect> effects, int power) {
      * @return the firework spawned
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
-    public Firework spawn(@NotNull final Location location) {
+    public Firework spawn(final Location location) {
         return spawn(location, (__) -> {
-        });
+            }
+        );
     }
 
     /**
@@ -55,13 +56,13 @@ public record FireworkSpec(@NotNull List<FireworkEffect> effects, int power) {
      * @return the firework spawned
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
-    public Firework spawn(@NotNull final Location location, Consumer<Firework> configuration) {
+    public Firework spawn(final Location location, Consumer<Firework> configuration) {
         final World world = location.getWorld();
         return world.spawn(location, Firework.class, (firework) -> {
-            firework.setFireworkMeta(buildSpecMeta(firework.getFireworkMeta()));
-            configuration.accept(firework);
-        });
+                firework.setFireworkMeta(buildSpecMeta(firework.getFireworkMeta()));
+                configuration.accept(firework);
+            }
+        );
     }
 
     /**

@@ -26,12 +26,9 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.TropicalFishBucketMeta;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.potion.PotionEffect;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import sh.miles.pineapple.PineappleLib;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import sh.miles.pineapple.chat.PineappleChat;
-import sh.miles.pineapple.nms.annotations.NMS;
-import sh.miles.pineapple.nms.api.PineappleNMS;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -45,14 +42,17 @@ import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+@NullMarked
 public class ItemSpec {
 
     public static final int INT_DATA_UNSET = -999;
 
+    @Nullable
     private Material itemType;
     private int amount = 1;
 
     // Display Data
+    @Nullable
     private String name;
     private Function<String, Component> nameMutator = null;
     private final List<String> lore = new ArrayList<>(0);
@@ -150,7 +150,7 @@ public class ItemSpec {
      * @param itemType the itemType to use for this spec
      * @since 1.0.0-SNAPSHOT
      */
-    public ItemSpec(@NotNull final Material itemType) {
+    public ItemSpec(final Material itemType) {
         checkArgument(itemType.isItem(), "The provided itemType of %s is not an item".formatted(itemType));
         this.itemType = itemType;
     }
@@ -161,7 +161,7 @@ public class ItemSpec {
      * @param other the other item spec to copy form
      * @since 1.0.0-SNAPSHOT
      */
-    public ItemSpec(@NotNull final ItemSpec other) {
+    public ItemSpec(final ItemSpec other) {
         checkArgument(other != null, "The provided spec must not be null");
         final Class<?> specClass = this.getClass();
         for (final Field field : specClass.getDeclaredFields()) {
@@ -175,9 +175,9 @@ public class ItemSpec {
                     final Object otherObject = field.get(other);
                     final Object thisObject = field.get(this);
                     final Method findPutOrAddAll = Arrays.stream(thisObject.getClass().getMethods())
-                            .filter(method -> method.getName().equals("putAll") || method.getName().equals("addAll"))
-                            .filter(method -> method.getParameterCount() == 1)
-                            .findFirst().orElseThrow();
+                        .filter(method -> method.getName().equals("putAll") || method.getName().equals("addAll"))
+                        .filter(method -> method.getParameterCount() == 1)
+                        .findFirst().orElseThrow();
                     findPutOrAddAll.setAccessible(true);
                     findPutOrAddAll.invoke(thisObject, otherObject);
                     findPutOrAddAll.setAccessible(false);
@@ -207,7 +207,6 @@ public class ItemSpec {
      * @return the item type
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public Material getItemType() {
         return itemType;
     }
@@ -219,7 +218,9 @@ public class ItemSpec {
      * @since 1.0.0-SNAPSHOT
      */
     public void setAmount(final int amount) {
-        checkArgument(amount > 0 && amount < 65, "The given amount must be between 0 and 65 exclusively %d is not in this range".formatted(amount));
+        checkArgument(amount > 0 && amount < 65,
+            "The given amount must be between 0 and 65 exclusively %d is not in this range".formatted(amount)
+        );
         this.amount = amount;
     }
 
@@ -239,7 +240,7 @@ public class ItemSpec {
      * @param loreLine the lore line
      * @since 1.0.0-SNAPSHOT
      */
-    public void addLoreLine(@NotNull final String loreLine) {
+    public void addLoreLine(final String loreLine) {
         checkArgument(loreLine != null, "the given loreLine must not be null");
         this.lore.add(loreLine);
     }
@@ -250,7 +251,7 @@ public class ItemSpec {
      * @param lore the lore to set
      * @since 1.0.0-SNAPSHOT
      */
-    public void setLore(@NotNull final List<String > lore) {
+    public void setLore(final List<String> lore) {
         checkArgument(lore != null, "The given lore must not be null");
         this.lore.clear();
         this.lore.addAll(lore);
@@ -262,7 +263,7 @@ public class ItemSpec {
      * @param name the name to set
      * @since 1.0.0-SNAPSHOT
      */
-    public void setName(@NotNull final String name) {
+    public void setName(final String name) {
         checkArgument(name != null, "The given name must not be null");
         this.name = name;
     }
@@ -284,7 +285,7 @@ public class ItemSpec {
      * @param nameMutator the name mutator
      * @since 1.0.0-SNAPSHOT
      */
-    public void setNameMutator(@NotNull final Function<String, Component> nameMutator) {
+    public void setNameMutator(final Function<String, Component> nameMutator) {
         checkArgument(nameMutator != null, "The name mutator must not be null");
         this.nameMutator = nameMutator;
     }
@@ -295,7 +296,6 @@ public class ItemSpec {
      * @return the lore
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public List<String> getLore() {
         return new ArrayList<>(lore);
     }
@@ -306,7 +306,7 @@ public class ItemSpec {
      * @param loreMutator the lore mutator
      * @since 1.0.0-SNAPSHOT
      */
-    public void setLoreMutator(@NotNull final Function<String, Component> loreMutator) {
+    public void setLoreMutator(final Function<String, Component> loreMutator) {
         checkArgument(loreMutator != null, "The lore mutator must not be null");
         this.loreMutator = loreMutator;
     }
@@ -318,7 +318,7 @@ public class ItemSpec {
      * @param defaultTextMutator the mutation to apply to transition a string to a Component
      * @since 1.0.0-SNAPSHOT
      */
-    public void setDefaultTextMutator(@NotNull final Function<String, Component> defaultTextMutator) {
+    public void setDefaultTextMutator(final Function<String, Component> defaultTextMutator) {
         checkArgument(defaultTextMutator != null, "The default text mutator must not be null");
         this.defaultTextMutator = defaultTextMutator;
     }
@@ -329,7 +329,7 @@ public class ItemSpec {
      * @param tooltip the tooltip to add
      * @since 1.0.0-SNAPSHOT
      */
-    public void addHideToolTip(@NotNull final ItemFlag tooltip) {
+    public void addHideToolTip(final ItemFlag tooltip) {
         checkArgument(tooltip != null, "The tooltip must not be null");
         this.hideToolTips.add(tooltip);
     }
@@ -340,7 +340,7 @@ public class ItemSpec {
      * @param tooltips the tooltips
      * @since 1.0.0-SNAPSHOT
      */
-    public void setHideToolTips(@NotNull final List<ItemFlag> tooltips) {
+    public void setHideToolTips(final List<ItemFlag> tooltips) {
         checkArgument(tooltips != null, "The given tooltips must not be null");
         this.hideToolTips.clear();
         this.hideToolTips.addAll(tooltips);
@@ -352,7 +352,6 @@ public class ItemSpec {
      * @return the hidden tooltips
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public List<ItemFlag> getHideToolTips() {
         return new ArrayList<>(hideToolTips);
     }
@@ -382,7 +381,7 @@ public class ItemSpec {
      * @param attributeModifier the attribute modifier to add
      * @since 1.0.0-SNAPSHOT
      */
-    public void addAttributeModifier(@NotNull final Attribute attribute, @NotNull final AttributeModifier attributeModifier) {
+    public void addAttributeModifier(final Attribute attribute, final AttributeModifier attributeModifier) {
         checkArgument(attributeModifier != null, "the given attribute modifier must not be null");
         this.attributeModifiers.put(attribute, attributeModifier);
     }
@@ -393,7 +392,7 @@ public class ItemSpec {
      * @param attributeModifiers the attribute modifiers to set
      * @since 1.0.0-SNAPSHOT
      */
-    public void setAttributeModifiers(@NotNull final Multimap<Attribute, AttributeModifier> attributeModifiers) {
+    public void setAttributeModifiers(final Multimap<Attribute, AttributeModifier> attributeModifiers) {
         checkArgument(attributeModifiers != null, "the given attribute modifiers must not be null");
         this.attributeModifiers.clear();
         this.attributeModifiers.putAll(attributeModifiers);
@@ -405,7 +404,6 @@ public class ItemSpec {
      * @return the attribute modifiers
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers() {
         return ArrayListMultimap.create(this.attributeModifiers);
     }
@@ -417,7 +415,7 @@ public class ItemSpec {
      * @param level       the level
      * @since 1.0.0-SNAPSHOT
      */
-    public void addEnchantment(@NotNull final Enchantment enchantment, final int level) {
+    public void addEnchantment(final Enchantment enchantment, final int level) {
         checkArgument(enchantment != null, "The enchantment must not be null");
         checkArgument(level > 0 && level < 256, "the level must be greater than 0");
         this.enchantments.put(enchantment, level);
@@ -429,7 +427,7 @@ public class ItemSpec {
      * @param enchantments the enchantments
      * @since 1.0.0-SNAPSHOT
      */
-    public void setEnchantments(@NotNull final Map<Enchantment, Integer> enchantments) {
+    public void setEnchantments(final Map<Enchantment, Integer> enchantments) {
         checkArgument(enchantments != null, "The enchantments must not be null");
         this.enchantments.clear();
         this.enchantments.putAll(enchantments);
@@ -441,7 +439,6 @@ public class ItemSpec {
      * @return the enchantments
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public Map<Enchantment, Integer> getEnchantments() {
         return new HashMap<>(enchantments);
     }
@@ -490,7 +487,7 @@ public class ItemSpec {
      * @param effect the effect to add
      * @since 1.0.0-SNAPSHOT
      */
-    public void addPotionEffect(@NotNull final PotionEffect effect) {
+    public void addPotionEffect(final PotionEffect effect) {
         checkArgument(effect != null, "The given effect must not be null");
         this.effects.add(effect);
     }
@@ -501,7 +498,7 @@ public class ItemSpec {
      * @param effects the effects to set
      * @since 1.0.0-SNAPSHOT
      */
-    public void setPotionEffects(@NotNull final List<PotionEffect> effects) {
+    public void setPotionEffects(final List<PotionEffect> effects) {
         checkArgument(effects != null, "The given effects must not be null");
     }
 
@@ -511,7 +508,7 @@ public class ItemSpec {
      * @return the effects
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
+
     public List<PotionEffect> getEffects() {
         return new ArrayList<>(effects);
     }
@@ -522,7 +519,7 @@ public class ItemSpec {
      * @param potionColor potion color
      * @since 1.0.0-SNAPSHOT
      */
-    public void setPotionColor(@NotNull final Color potionColor) {
+    public void setPotionColor(final Color potionColor) {
         checkArgument(potionColor != null, "potion color must not be null");
         this.potionColor = potionColor;
     }
@@ -544,7 +541,7 @@ public class ItemSpec {
      * @param armorTrim the armor trim to set
      * @since 1.0.0-SNAPSHOT
      */
-    public void setArmorTrim(@NotNull final ArmorTrim armorTrim) {
+    public void setArmorTrim(final ArmorTrim armorTrim) {
         checkArgument(armorTrim != null, "the armor trim must not be null");
         this.armorTrim = armorTrim;
     }
@@ -565,7 +562,7 @@ public class ItemSpec {
      *
      * @param armorColor armor color
      */
-    public void setArmorColor(@NotNull final Color armorColor) {
+    public void setArmorColor(final Color armorColor) {
         checkArgument(armorColor != null, "armor color must not be null");
         this.armorColor = armorColor;
     }
@@ -588,7 +585,7 @@ public class ItemSpec {
      * @param level       the level
      * @since 1.0.0-SNAPSHOT
      */
-    public void addStoredEnchantment(@NotNull final Enchantment enchantment, final int level) {
+    public void addStoredEnchantment(final Enchantment enchantment, final int level) {
         checkArgument(enchantment != null, "The enchantment must not be null");
         checkArgument(level > 0 && level < 256, "the level must be greater than 0");
         this.storedEnchantments.put(enchantment, level);
@@ -600,7 +597,7 @@ public class ItemSpec {
      * @param enchantments the enchantments
      * @since 1.0.0-SNAPSHOT
      */
-    public void setStoredEnchantments(@NotNull final Map<Enchantment, Integer> enchantments) {
+    public void setStoredEnchantments(final Map<Enchantment, Integer> enchantments) {
         checkArgument(enchantments != null, "The enchantments must not be null");
         this.storedEnchantments.clear();
         this.storedEnchantments.putAll(enchantments);
@@ -611,7 +608,6 @@ public class ItemSpec {
      *
      * @return stored enchantments
      */
-    @NotNull
     public Map<Enchantment, Integer> getStoredEnchantments() {
         return new HashMap<>(storedEnchantments);
     }
@@ -622,7 +618,7 @@ public class ItemSpec {
      * @param fishPattern fish pattern
      * @since 1.0.0-SNAPSHOT
      */
-    public void setFishPattern(@NotNull final TropicalFish.Pattern fishPattern) {
+    public void setFishPattern(final TropicalFish.Pattern fishPattern) {
         checkArgument(fishPattern != null, "the fish pattern must not be null");
         this.fishPattern = fishPattern;
     }
@@ -631,8 +627,7 @@ public class ItemSpec {
      * @return get fish pattern
      * @since 1.0.0-SNAPSHOT
      */
-    @Nullable
-    public TropicalFish.Pattern getFishPattern() {
+    public TropicalFish.@Nullable Pattern getFishPattern() {
         return fishPattern;
     }
 
@@ -642,7 +637,7 @@ public class ItemSpec {
      * @param fishPatternColor fish pattern color
      * @since 1.0.0-SNAPSHOT
      */
-    public void setFishPatternColor(@NotNull final DyeColor fishPatternColor) {
+    public void setFishPatternColor(final DyeColor fishPatternColor) {
         checkArgument(fishPatternColor != null, "the fish pattern color must not be null");
         this.fishPatternColor = fishPatternColor;
     }
@@ -661,7 +656,7 @@ public class ItemSpec {
      *
      * @param fishBodyColor fish body color
      */
-    public void setFishBodyColor(@NotNull final DyeColor fishBodyColor) {
+    public void setFishBodyColor(final DyeColor fishBodyColor) {
         checkArgument(fishBodyColor != null, "fish body color must not be null");
         this.fishBodyColor = fishBodyColor;
     }
@@ -699,7 +694,7 @@ public class ItemSpec {
      * @param lodestoneLocation lcoation
      * @since 1.0.0-SNAPSHOT
      */
-    public void setLodestoneLocation(@NotNull final Location lodestoneLocation) {
+    public void setLodestoneLocation(final Location lodestoneLocation) {
         checkArgument(lodestoneLocation != null, "the location must not be null");
         this.lodestoneLocation = lodestoneLocation;
     }
@@ -721,7 +716,7 @@ public class ItemSpec {
      * @param chargedProjectile the projectile to add
      * @since 1.0.0-SNAPSHOT
      */
-    public void addChargedProjectile(@NotNull final ItemStack chargedProjectile) {
+    public void addChargedProjectile(final ItemStack chargedProjectile) {
         checkArgument(chargedProjectile != null, "the projectile must not be null");
         this.chargedProjectiles.add(chargedProjectile);
     }
@@ -732,7 +727,7 @@ public class ItemSpec {
      * @param chargedProjectiles the charged projectiles
      * @since 1.0.0-SNAPSHOT
      */
-    public void setChargedProjectiles(@NotNull final List<ItemStack> chargedProjectiles) {
+    public void setChargedProjectiles(final List<ItemStack> chargedProjectiles) {
         checkArgument(chargedProjectiles != null, "the projectiles list must not be null");
         this.chargedProjectiles.clear();
         this.chargedProjectiles.addAll(chargedProjectiles);
@@ -744,7 +739,6 @@ public class ItemSpec {
      * @return charged projectiles
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public List<ItemStack> getChargedProjectiles() {
         return new ArrayList<>(chargedProjectiles);
     }
@@ -754,7 +748,6 @@ public class ItemSpec {
      *
      * @return the ItemStack result
      */
-    @NotNull
     public ItemStack buildSpec() {
         ItemStack item = new ItemStack(this.itemType, this.amount);
         final ItemMeta meta = item.getItemMeta();
@@ -763,7 +756,6 @@ public class ItemSpec {
         meta.displayName(this.nameMutator != null ? this.nameMutator.apply(name) : this.defaultTextMutator.apply(name));
 
         meta.lore(lore.stream().map(this.loreMutator != null ? this.loreMutator : this.defaultTextMutator).toList());
-
 
 
         meta.addItemFlags(this.hideToolTips.toArray(ItemFlag[]::new));
@@ -900,7 +892,7 @@ public class ItemSpec {
      * @return the ItemSpec
      * @since 1.0.0-SNAPSHOT
      */
-    public static ItemSpec fromStack(@NotNull final ItemStack item) {
+    public static ItemSpec fromStack(final ItemStack item) {
         final ItemSpec spec = new ItemSpec(item.getType());
         spec.amount = item.getAmount();
 
@@ -908,13 +900,16 @@ public class ItemSpec {
 
         // Display Data
         spec.name = meta.hasDisplayName() ? MiniMessage.miniMessage().serialize(meta.displayName()) : null;
-        spec.lore.addAll(meta.hasLore() ? meta.lore().stream().map((component) -> MiniMessage.miniMessage().serialize(component)).toList() : new ArrayList<>());
+        spec.lore.addAll(
+            meta.hasLore() ? meta.lore().stream().map((component) -> MiniMessage.miniMessage().serialize(component))
+                .toList() : new ArrayList<>());
         spec.hideToolTips.addAll(meta.getItemFlags());
         spec.customModelData = meta.hasCustomModelData() ? meta.getCustomModelData() : INT_DATA_UNSET;
         // Display Data end
 
         // Attributes
-        spec.attributeModifiers.putAll(meta.hasAttributeModifiers() ? meta.getAttributeModifiers() : ArrayListMultimap.create());
+        spec.attributeModifiers.putAll(
+            meta.hasAttributeModifiers() ? meta.getAttributeModifiers() : ArrayListMultimap.create());
         // Attributes end
 
         // Enchantments
@@ -983,7 +978,8 @@ public class ItemSpec {
 
         // Crossbows
         if (meta instanceof CrossbowMeta cmeta) {
-            spec.chargedProjectiles.addAll(cmeta.hasChargedProjectiles() ? cmeta.getChargedProjectiles() : new ArrayList<>());
+            spec.chargedProjectiles.addAll(
+                cmeta.hasChargedProjectiles() ? cmeta.getChargedProjectiles() : new ArrayList<>());
         }
         // Crossbows end
 

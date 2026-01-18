@@ -1,8 +1,8 @@
 package sh.miles.pineapple.util.serialization;
 
 import com.google.common.base.Preconditions;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,6 +15,7 @@ import java.util.stream.StreamSupport;
  *
  * @since 1.0.0-SNAPSHOT
  */
+@NullMarked
 public final class SerializedArray extends SerializedElement implements Iterable<SerializedElement> {
     private final ArrayList<SerializedElement> elements;
 
@@ -32,7 +33,7 @@ public final class SerializedArray extends SerializedElement implements Iterable
      * @param primitive the primitive to add
      * @since 1.0.0-SNAPSHOT
      */
-    public void add(@NotNull final SerializedElement primitive) {
+    public void add(final SerializedElement primitive) {
         Preconditions.checkArgument(primitive != null, "the given primitive must not be null");
         this.elements.add(primitive);
     }
@@ -43,7 +44,7 @@ public final class SerializedArray extends SerializedElement implements Iterable
      * @param string the string to add
      * @since 1.0.0-SNAPSHOT
      */
-    public void add(@NotNull final String string) {
+    public void add(final String string) {
         this.elements.add(new SerializedPrimitive(string));
     }
 
@@ -106,7 +107,7 @@ public final class SerializedArray extends SerializedElement implements Iterable
      * @return true if it is contained, otherwise false
      * @since 1.0.0-SNAPSHOT
      */
-    public boolean contains(@NotNull final SerializedElement primitive) {
+    public boolean contains(final SerializedElement primitive) {
         Preconditions.checkArgument(primitive != null, "The given primitive must not be null");
         return this.elements.contains(primitive);
     }
@@ -117,12 +118,10 @@ public final class SerializedArray extends SerializedElement implements Iterable
      * @return a stream of elements
      * @since 1.0.0-SNAPSHOT
      */
-    @NotNull
     public Stream<SerializedElement> stream() {
         return StreamSupport.stream(spliterator(), false);
     }
 
-    @NotNull
     @Override
     public Iterator<SerializedElement> iterator() {
         return elements.iterator();
