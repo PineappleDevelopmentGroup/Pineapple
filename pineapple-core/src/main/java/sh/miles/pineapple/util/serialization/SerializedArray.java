@@ -113,6 +113,16 @@ public final class SerializedArray extends SerializedElement implements Iterable
     }
 
     /**
+     * Gets the size of this SerializedArray
+     *
+     * @return the array size
+     * @since 1.0.0-SNAPSHOT
+     */
+    public int size() {
+        return this.elements.size();
+    }
+
+    /**
      * Streams over this serialized elements
      *
      * @return a stream of elements
