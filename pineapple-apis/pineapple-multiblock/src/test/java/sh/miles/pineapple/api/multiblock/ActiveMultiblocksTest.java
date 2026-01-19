@@ -137,10 +137,10 @@ class ActiveMultiblocksTest {
 
             // Verify PDC state
             PersistentDataContainer pdc = chunk.getPersistentDataContainer();
-            NamespacedKey anchorsKey = new NamespacedKey("stratus", "multiblock_anchors");
+            NamespacedKey anchorsKey = new NamespacedKey("pineapple", "multiblock_anchors");
             assertTrue(pdc.has(anchorsKey, PersistentDataType.LIST.longs()), "Chunk should have anchor list");
 
-            NamespacedKey specificKey = PdcUtils.locationKey("stratus", 10, 64, 10);
+            NamespacedKey specificKey = PdcUtils.locationKey("pineapple", 10, 64, 10);
             assertTrue(pdc.has(specificKey, PersistentDataType.TAG_CONTAINER), "Chunk should have specific multiblock data");
 
             assertTrue(mb.onDisk, "Multiblock should be marked as onDisk");
@@ -183,7 +183,7 @@ class ActiveMultiblocksTest {
             registry.destroy(mb);
 
             // Verify PDC is empty for this block
-            NamespacedKey key = PdcUtils.locationKey("stratus", 10, 64, 10);
+            NamespacedKey key = PdcUtils.locationKey("pineapple", 10, 64, 10);
             assertFalse(loc.getChunk().getPersistentDataContainer().has(key, PersistentDataType.TAG_CONTAINER));
         }
 
@@ -201,11 +201,11 @@ class ActiveMultiblocksTest {
 
             // Chunk 0,0 has data
             assertTrue(loc1.getChunk().getPersistentDataContainer().has(
-                new NamespacedKey("stratus", "multiblock_anchors"), PersistentDataType.LIST.longs()));
+                new NamespacedKey("pineapple", "multiblock_anchors"), PersistentDataType.LIST.longs()));
 
             // Chunk 6,6 is empty
             assertFalse(loc2.getChunk().getPersistentDataContainer().has(
-                new NamespacedKey("stratus", "multiblock_anchors"), PersistentDataType.LIST.longs()));
+                new NamespacedKey("pineapple", "multiblock_anchors"), PersistentDataType.LIST.longs()));
         }
     }
 
@@ -240,10 +240,10 @@ class ActiveMultiblocksTest {
 
             // Verify data inside chunk
             PersistentDataContainer chunkPdc = loc.getChunk().getPersistentDataContainer();
-            PersistentDataContainer mbPdc = chunkPdc.get(PdcUtils.locationKey("stratus", 10, 64, 10), PersistentDataType.TAG_CONTAINER);
-            PersistentDataContainer storage = mbPdc.get(new NamespacedKey("stratus", "multiblock_data"), PersistentDataType.TAG_CONTAINER);
+            PersistentDataContainer mbPdc = chunkPdc.get(PdcUtils.locationKey("pineapple", 10, 64, 10), PersistentDataType.TAG_CONTAINER);
+            PersistentDataContainer storage = mbPdc.get(new NamespacedKey("pineapple", "multiblock_data"), PersistentDataType.TAG_CONTAINER);
 
-            assertTrue(storage.has(new NamespacedKey("plugin", "data"), PersistentDataType.TAG_CONTAINER));
+            assertTrue(storage.has(new NamespacedKey("pineapple", "data"), PersistentDataType.TAG_CONTAINER));
         }
 
         @Test

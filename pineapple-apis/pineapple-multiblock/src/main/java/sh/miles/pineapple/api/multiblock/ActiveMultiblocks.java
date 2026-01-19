@@ -34,10 +34,10 @@ import java.util.UUID;
 @NullMarked
 public final class ActiveMultiblocks {
 
-    private static final NamespacedKey STORAGE_KEY = new NamespacedKey("stratus", "multiblock_data");
-    private static final NamespacedKey ANCHORS_KEY = new NamespacedKey("stratus", "multiblock_anchors");
-    private static final NamespacedKey PATTERN_KEY = new NamespacedKey("stratus", "multiblock_pattern");
-    private static final NamespacedKey ROTATION_KEY = new NamespacedKey("stratus", "multiblock_rotation");
+    private static final NamespacedKey STORAGE_KEY = new NamespacedKey("pineapple", "multiblock_data");
+    private static final NamespacedKey ANCHORS_KEY = new NamespacedKey("pineapple", "multiblock_anchors");
+    private static final NamespacedKey PATTERN_KEY = new NamespacedKey("pineapple", "multiblock_pattern");
+    private static final NamespacedKey ROTATION_KEY = new NamespacedKey("pineapple", "multiblock_rotation");
 
     private final Map<Location, ActiveMultiblock> activeMultiblocks = new HashMap<>();
     private final Map<UUID, Long2ObjectOpenHashMap<ActiveMultiblock>> lookup = new HashMap<>();
@@ -116,7 +116,7 @@ public final class ActiveMultiblocks {
 
         final Location loc = multiblock.anchor();
         PersistentDataContainer container = loc.getChunk().getPersistentDataContainer();
-        container.remove(PdcUtils.locationKey("stratus", loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+        container.remove(PdcUtils.locationKey("pineapple", loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
     }
 
     /**
@@ -171,7 +171,7 @@ public final class ActiveMultiblocks {
 
         for (final Long anchor : anchors) {
             Component3 loc = ByteUtils.unpackX24Z24Y16(anchor);
-            final NamespacedKey key = PdcUtils.locationKey("stratus", loc.c1(), loc.c3(), loc.c2());
+            final NamespacedKey key = PdcUtils.locationKey("pineapple", loc.c1(), loc.c3(), loc.c2());
 
             if (!chunkPdc.has(key, PersistentDataType.TAG_CONTAINER)) {
                 continue;
@@ -222,7 +222,7 @@ public final class ActiveMultiblocks {
                 continue;
             }
 
-            final NamespacedKey key = PdcUtils.locationKey("stratus", loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+            final NamespacedKey key = PdcUtils.locationKey("pineapple", loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
             locs.add(ByteUtils.packX24Z24Y16(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
 
             if (!chunkPdc.has(key, PersistentDataType.TAG_CONTAINER)) {
