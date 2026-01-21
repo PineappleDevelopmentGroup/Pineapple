@@ -19,7 +19,7 @@ public final class InfStackUtils {
     /**
      * Gathers the size of the stack from the InfStack
      */
-    public static final NamespacedKey STACK_SIZE_KEY = NamespacedKey.fromString("crown_infstacks:stack_size");
+    public static final NamespacedKey STACK_SIZE_KEY = NamespacedKey.fromString("pineapple:stack_size");
 
     private InfStackUtils() {
         throw new UnsupportedOperationException("Can not instantiate utility class");
