@@ -20,7 +20,7 @@ public class InfStackFactoryTest extends AbstractPluginTest {
     @BeforeEach
     public void setup() {
         super.setup();
-        this.factory = new InfStackFactory(new InfStackSettings(List.of(PineappleChat.component("Amount %s")), Long.MAX_VALUE,
+        this.factory = new InfStackFactory(new InfStackSettings(List.of(PineappleChat.component("Amount %s")), Long.MAX_VALUE, false,
                 (lore, amount, item, display, removeOldLore) -> {
                     final ItemMeta meta = item.getItemMeta();
                     final var list = new ArrayList<String>();

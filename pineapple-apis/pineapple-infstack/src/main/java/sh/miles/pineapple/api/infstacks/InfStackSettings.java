@@ -10,13 +10,14 @@ import java.util.List;
 /**
  * Settings for {@link InfStack}
  *
- * @param lore         the lore style
- * @param maxStackSize the max stack size
- * @param loreApplier  should apply lore using the pineapple component and returns a modified ItemStack
+ * @param lore          the lore style
+ * @param maxStackSize  the max stack size
+ * @param defaultManual true if by default all InfStacks are updated manually instead of automatically via their respective methods
+ * @param loreApplier   should apply lore using the pineapple component and returns a modified ItemStack
  */
 @NullMarked
 public record InfStackSettings(List<PineappleComponent> lore, long maxStackSize,
-                               LoreApplier loreApplier) {
+                               boolean defaultManual, LoreApplier loreApplier) {
 
     public interface LoreApplier {
         @NotNull
