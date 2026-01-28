@@ -15,6 +15,7 @@ public class InfStack {
     private final ItemStack comparator;
     private final InfStackSettings settings;
     private long stackSize;
+    private boolean manualUpdate;
 
     /**
      * Creates a new InfStack from the following data
@@ -29,6 +30,32 @@ public class InfStack {
         this.comparator = comparator.clone();
         this.settings = settings;
         this.stackSize = stackSize;
+        this.manualUpdate = settings.defaultManual();
+    }
+
+    /**
+     * Stores as much of the given ItemStack as possible
+     *
+     * @param item the item to try to fit
+     * @return the remaining item that was able to fit, or the same item stack if it could not fit at all
+     */
+    public ItemStack fit(final ItemStack item) {
+        if (!isAir()) {
+            return item;
+        }
+        if (!this.comparator.isSimilar(item)) {
+            return item;
+        }
+
+        final int amount = item.getAmount();
+        int remaining = (int) fit(amount);
+        if (remaining == 0) {
+            return ItemStack.empty();
+        }
+
+        final ItemStack clone = item.clone();
+        clone.setAmount(remaining);
+        return clone;
     }
 
     /**
@@ -75,6 +102,27 @@ public class InfStack {
     }
 
     /**
+     * Fits as much of the specified amount into the stack as possible
+     * and returns a long in the amount that could not fit
+     *
+     * @param amount the amount to try to fit into this stack
+     * @return the amount unable to fit
+     */
+    public long fit(final long amount) {
+        if (isAir() || isEmpty()) {
+            return amount;
+        }
+        long potentialTotal = this.stackSize + amount;
+        long amountToAdd = amount;
+        if (potentialTotal > this.settings.maxStackSize()) {
+            amountToAdd = this.settings.maxStackSize() - this.stackSize;
+        }
+        this.stackSize += amountToAdd;
+        update(false);
+        return amount - amountToAdd;
+    }
+
+    /**
      * Grows the stack by a specified amount
      *
      * @param amount the amount to grow by
@@ -90,7 +138,7 @@ public class InfStack {
         }
 
         this.stackSize = finalAmount;
-        update();
+        update(false);
         return true;
     }
 
@@ -110,11 +158,19 @@ public class InfStack {
         }
 
         this.stackSize = finalAmount;
-        update();
+        update(false);
         return true;
     }
 
-    private void update() {
+    public void update() {
+        update(true);
+    }
+
+    private void update(boolean force) {
+        if (this.manualUpdate && !force) {
+            return;
+        }
+
         this.display = this.settings.loreApplier()
             .apply(this.settings.lore(), this.stackSize, this.display, this.comparator, true);
 
@@ -123,6 +179,15 @@ public class InfStack {
         var container = meta.getPersistentDataContainer();
         container.set(InfStackUtils.STACK_SIZE_KEY, PersistentDataType.LONG, this.stackSize);
         this.display.setItemMeta(meta);
+    }
+
+    /**
+     * Toggle whether or not this InfStack should be manually updated
+     *
+     * @param manualUpdate true to make it manual update only, otherwise false to toggle automatic updates
+     */
+    public void manualUpdates(boolean manualUpdate) {
+        this.manualUpdate = manualUpdate;
     }
 
     /**
@@ -179,6 +244,5 @@ public class InfStack {
     public ItemStack getComparator() {
         return this.comparator.clone();
     }
-
 
 }
